@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Pritish Chakraborty</title>
+  <title>Postgres Setup - Pritish Chakraborty</title>
   <meta name="author" content="Pritish Chakraborty">
 
   
@@ -19,7 +19,7 @@ It is necessary for Tryton. In effect, this article is merely filler, &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://PritishC.github.io">
+  <link rel="canonical" href="http://PritishC.github.io/blog/2014/10/19/postgres-setup">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Pritish Chakraborty" type="application/atom+xml">
@@ -50,7 +50,7 @@ It is necessary for Tryton. In effect, this article is merely filler, &hellip;">
 
 <div class="header-right">
   <ul class="main-navigation">
- <div class="selected"> 
+ <div> 
   <li><a href="/">blog</a></li></div><div class="spacer"></div>
      <div> 
   <li><a href="/projects">projects</a></li></div><div class="spacer"></div>
@@ -65,15 +65,12 @@ It is necessary for Tryton. In effect, this article is merely filler, &hellip;">
 </header>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/10/19/postgres-setup/">Postgres Setup</a></h1>
+      <h1 class="entry-title">Postgres Setup</h1>
     
     
       <p class="meta">
@@ -96,7 +93,7 @@ It is necessary for Tryton. In effect, this article is merely filler, &hellip;">
   </header>
 
 
-  <div class="entry-content"><p>This article offers a simple introduction to PostgreSQL and how to install it.
+<div class="entry-content"><p>This article offers a simple introduction to PostgreSQL and how to install it.
 It is necessary for Tryton. In effect, this article is merely filler, and one can
 skip it if one wishes so.</p>
 
@@ -130,137 +127,16 @@ might often have to view a specific table inside the DB that you create for Tryt
 
 <p>And that&rsquo;s that. Soon, we shall be on a functioning Tryton setup!</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/10/16/virtualenv-setup-for-tryton/">Virtualenv Setup for Tryton</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Pritish Chakraborty</span></span>
 
-<time datetime="2014-10-16T22:31:26+05:30" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In this post, we shall learn how to setup a virtualenv for Tryton. Any new developer
-who wishes to develop on Tryton needs to know a few basic things.</p>
-
-<p>Tryton is not for the faint-hearted. A new person can possibly take a long time to get adjusted
-to the workflow.</p>
-
-<ul>
-<li>Have pip/setuptools ready. Use your package manager to get pip (apt, pacman, emerge
-etc).</li>
-<li>Install virtualenvwrapper. It is essential for any serious Python developer.
-Follow the steps given in the virtualenvwrapper <a href="http://virtualenvwrapper.readthedocs.org/en/latest/install.html">docs</a>
-to setup everything - thing such as the <code>WORKON_HOME</code> variable.</li>
-<li><p>Now, before you make a virtualenv, make absolutely sure that you have a minimal
-set of site packages. Site packages are those Python packages that have been
-installed system-wide. Here is a list of packages that I have (via <code>pip freeze</code>) -:</p>
-
-<pre><code class="bash [global pip freeze]">CDApplet==1.0
-CDBashApplet==1.0
-Cython==0.20.1post0
-apt-xapian-index==0.45
-arandr==0.1.7.1
-argparse==1.2.1
-chardet==2.0.1
-colorama==0.2.5
-defer==1.0.6
-gyp==0.1
-html5lib==0.999
-mercurial==2.8.2
-psutil==1.2.1
-pycups==1.9.66
-pycurl==7.19.3
-pygobject==3.12.0
-pysmbc==1.0.14.1
-pysqlite==2.6.3
-python-apt==0.9.3.5
-python-debian==0.1.21-nmu2ubuntu2
-python-sql==0.3
-pyxdg==0.25
-requests==2.2.1
-six==1.8.0
-stevedore==1.0.0
-urllib3==1.7.1
-virtualenv==1.11.6
-virtualenv-clone==0.2.5
-virtualenvwrapper==4.3.1
-wsgiref==0.1.2
-</code></pre></li>
-<li>One particular package that you will find to give you headaches during the installation
-is <code>pygtk</code>. This package cannot be installed via pip. Why? Because screw you, that&rsquo;s why.
-Now you have two options.
-
-<ul>
-<li>Follow the steps given <a href="https://gist.github.com/ches/1094799">here</a> to install <code>pygtk</code>
-inside a virtualenv. However, you will find that doing this over and over again would
-be tedious.</li>
-<li>What about the package that has been installed system-wide? Could we possibly use it?
-Well, it turns out we can! The next step details on this method.<br/>
-PS: If you don&rsquo;t have it installed system-wide, do it bruh. Use your favorite package manager,
-I&rsquo;m not judgin&#8217;.</li>
-</ul>
-</li>
-<li><p>If you listened to me two steps ago and didn&rsquo;t fall asleep - the reason I said that
-one must keep a minimal set of site packages is because these shall be incorporated
-into the virtualenv. These are the absolute bare-minimum requirements that every
-virtualenv will get. Now issue the following command in your terminal, in whichever
-directory you&rsquo;ve readied for this purpose -:</p>
-
-<pre><code class="[bash] [virtualenv]">mkproject --system-site-packages myenv
-</code></pre>
-
-<p>Substitute myenv with any name you wish. And voila, you have your newly commissioned
-virtualenv.</p></li>
-<li>What does this have to do with <code>pygtk</code>, you ask? Well, since it was system-wide,
-it gets incorporated into your virtualenv and you don&rsquo;t have to bother about it.</li>
-</ul>
-
-
-<p>And that&rsquo;s that folks! In the next post, we shall set up Postgres as Tryton uses
-Postgres databases. Following that, we shall learn how to actually install Tryton,
-both the client and the server.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/10/15/the-first-post/">The First Post</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -272,29 +148,44 @@ both the client and the server.</p>
   
 
 
-<time datetime="2014-10-15T22:40:55+05:30" pubdate data-updated="true"></time>
-        
-      </p>
+<time datetime="2014-10-19T20:27:55+05:30" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/postgresql/'>postgresql</a>, <a class='category' href='/blog/categories/tryton/'>tryton,</a>
+  
+</span>
+
+
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><p>I will begin with some posts to get n00bs to set up Tryton properly.</p>
-
-<p>Stay tuned!</p>
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://PritishC.github.io/blog/2014/10/19/postgres-setup/" data-via="Crank7" data-counturl="http://PritishC.github.io/blog/2014/10/19/postgres-setup/" >Tweet</a>
+  
+  
+  
 </div>
-  
-  
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/10/16/virtualenv-setup-for-tryton/" title="Previous Post: Virtualenv Setup for Tryton">&laquo; Virtualenv Setup for Tryton</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
+  </section>
+
+</div>
+
 <aside class="sidebar">
   <section>
   <h1><a href="#">pritishc.com</a></h1>
@@ -380,6 +271,7 @@ both the client and the server.</p>
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -397,7 +289,10 @@ both the client and the server.</p>
       var disqus_shortname = 'pritishc';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://PritishC.github.io/blog/2014/10/19/postgres-setup/';
+        var disqus_url = 'http://PritishC.github.io/blog/2014/10/19/postgres-setup/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
