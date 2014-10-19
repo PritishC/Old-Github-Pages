@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: General | My Octopress Blog]]></title>
+  <link href="http://yoursite.com/blog/categories/general/atom.xml" rel="self"/>
+  <link href="http://yoursite.com/"/>
+  <updated>2014-10-19T13:02:40+05:30</updated>
+  <id>http://yoursite.com/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The First Post]]></title>
+    <link href="http://yoursite.com/blog/2014/10/15/the-first-post/"/>
+    <updated>2014-10-15T22:40:55+05:30</updated>
+    <id>http://yoursite.com/blog/2014/10/15/the-first-post</id>
+    <content type="html"><![CDATA[<h1>The First Post</h1>
+
+<p>I will begin with some posts to get n00bs to set up Tryton properly.</p>
+
+<p>Stay tuned!</p>
+]]></content>
+  </entry>
+  
+</feed>
