@@ -4,7 +4,7 @@
   <title><![CDATA[Category: General | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/general/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2014-10-19T18:37:06+05:30</updated>
+  <updated>2014-10-19T18:39:25+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -18,9 +18,7 @@
     <link href="http://PritishC.github.io/blog/2014/10/15/the-first-post/"/>
     <updated>2014-10-15T22:40:55+05:30</updated>
     <id>http://PritishC.github.io/blog/2014/10/15/the-first-post</id>
-    <content type="html"><![CDATA[<h1>The First Post</h1>
-
-<p>I will begin with some posts to get n00bs to set up Tryton properly.</p>
+    <content type="html"><![CDATA[<p>I will begin with some posts to get n00bs to set up Tryton properly.</p>
 
 <p>Stay tuned!</p>
 ]]></content>
