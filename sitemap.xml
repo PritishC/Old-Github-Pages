@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://PritishC.github.io/blog/2014/10/19/postgres-setup/</loc>
+    <lastmod>2014-10-19T20:27:55+05:30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton/</loc>
     <lastmod>2014-10-16T22:31:26+05:30</lastmod>
     <priority>0.8</priority>
@@ -12,31 +17,31 @@
   </url>
   <url>
     <loc>http://PritishC.github.io/blog/archives/</loc>
-    <lastmod>2014-10-19T19:26:11+05:30</lastmod>
+    <lastmod>2014-10-19T20:39:56+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://PritishC.github.io/</loc>
-    <lastmod>2014-10-19T19:26:11+05:30</lastmod>
+    <lastmod>2014-10-19T20:39:56+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://PritishC.github.io/work/</loc>
-    <lastmod>2014-10-19T19:26:11+05:30</lastmod>
+    <lastmod>2014-10-19T20:39:56+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://PritishC.github.io/projects/</loc>
-    <lastmod>2014-10-19T19:26:11+05:30</lastmod>
+    <lastmod>2014-10-19T20:39:56+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://PritishC.github.io/about/</loc>
-    <lastmod>2014-10-19T19:26:11+05:30</lastmod>
+    <lastmod>2014-10-19T20:39:56+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

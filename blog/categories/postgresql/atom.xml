@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Tryton, | Pritish Chakraborty]]></title>
-  <link href="http://PritishC.github.io/blog/categories/tryton/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Postgresql | Pritish Chakraborty]]></title>
+  <link href="http://PritishC.github.io/blog/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
   <updated>2014-10-19T20:39:56+05:30</updated>
   <id>http://PritishC.github.io/</id>
