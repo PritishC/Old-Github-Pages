@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Virtualenv | My Octopress Blog]]></title>
-  <link href="http://yoursite.com/blog/categories/virtualenv/atom.xml" rel="self"/>
-  <link href="http://yoursite.com/"/>
-  <updated>2014-10-19T13:02:40+05:30</updated>
-  <id>http://yoursite.com/</id>
+  <title><![CDATA[Category: Virtualenv | Pritish Chakraborty]]></title>
+  <link href="http://PritishC.github.io/blog/categories/virtualenv/atom.xml" rel="self"/>
+  <link href="http://PritishC.github.io/"/>
+  <updated>2014-10-19T13:09:10+05:30</updated>
+  <id>http://PritishC.github.io/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Pritish Chakraborty]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Virtualenv Setup for Tryton]]></title>
-    <link href="http://yoursite.com/blog/2014/10/16/virtualenv-setup-for-tryton/"/>
+    <link href="http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton/"/>
     <updated>2014-10-16T22:31:26+05:30</updated>
-    <id>http://yoursite.com/blog/2014/10/16/virtualenv-setup-for-tryton</id>
+    <id>http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton</id>
     <content type="html"><![CDATA[<p>In this post, we shall learn how to setup a virtualenv for Tryton. Any new developer
 who wishes to develop on Tryton needs to know a few basic things.</p>
 
