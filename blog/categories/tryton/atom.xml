@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tryton | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/tryton/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2014-10-21T18:48:00+05:30</updated>
+  <updated>2014-10-21T18:59:16+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -170,7 +170,7 @@ one for ours too. Picked up from the Gentoo wiki -:
 </span><span class='line'>db_host = localhost
 </span><span class='line'>db_port = 5432
 </span><span class='line'>db_user = postgres
-</span><span class='line'>db_password = cr@p123
+</span><span class='line'>db_password = dbpassword
 </span><span class='line'>db_minconn = 1
 </span><span class='line'>db_maxconn = 64
 </span><span class='line'>
