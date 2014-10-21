@@ -1,26 +1,103 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Pritish Chakraborty]]></title>
-  <link href="http://PritishC.github.io/atom.xml" rel="self"/>
-  <link href="http://PritishC.github.io/"/>
-  <updated>2014-10-21T18:36:31+05:30</updated>
-  <id>http://PritishC.github.io/</id>
-  <author>
-    <name><![CDATA[Pritish Chakraborty]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Beginning Tryton - Pritish Chakraborty</title>
+  <meta name="author" content="Pritish Chakraborty">
 
   
-  <entry>
-    <title type="html"><![CDATA[Beginning Tryton]]></title>
-    <link href="http://PritishC.github.io/blog/2014/10/21/beginning-tryton/"/>
-    <updated>2014-10-21T12:05:18+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/10/21/beginning-tryton</id>
-    <content type="html"><![CDATA[<p>Before we go through the setup of the Tryton client and server, one should go
-through setting up the <a href="http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton/">virtualenv</a>
-and <a href="http://PritishC.github.io/blog/2014/10/19/postgres-setup/">postgres</a>.
+  <meta name="description" content="Before we go through the setup of the Tryton client and server, one should go
+through setting up the virtualenv
+and postgres.
+Also, install libxslt- &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://PritishC.github.io/blog/2014/10/21/beginning-tryton">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Pritish Chakraborty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><div class="header-left">
+  <hgroup>
+  <h1><a href="/">Pritish Chakraborty</a></h1>
+  
+  <div class="subtitle">
+    <h2>Work and Everything Else</h2>
+  </div>
+  
+  </hgroup>
+  
+</div>
+
+<div class="header-right">
+  <ul class="main-navigation">
+ <div> 
+  <li><a href="/">blog</a></li></div><div class="spacer"></div>
+     <div> 
+  <li><a href="/projects">projects</a></li></div><div class="spacer"></div>
+       <div> 
+  <li><a href="/work">work</a></li></div><div class="spacer"></div>
+         <div> 
+  <li><a href="/about">about</a></li></div>
+</ul>
+  
+
+</div>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Beginning Tryton</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-21T12:05:18+05:30" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Before we go through the setup of the Tryton client and server, one should go
+through setting up the <a href="/blog/2014/10/16/virtualenv-setup-for-tryton/">virtualenv</a>
+and <a href="/blog/2014/10/19/postgres-setup/">postgres</a>.
 Also, install <code>libxslt-dev</code> (and perhaps <code>libz-dev</code> as well) with your package
 manager because the <code>lxml</code> package needs it.</p>
 
@@ -44,7 +121,7 @@ manager because the <code>lxml</code> package needs it.</p>
 and <code>tryton</code> is the client. Any server needs a configuration file, and we have
 one for ours too. Picked up from the Gentoo wiki -:</p>
 
-<figure class='code'><figcaption><span>sample trytond.conf  (trytond.conf)</span> <a href='http://PritishC.github.io/downloads/code/trytond.conf'>download</a></figcaption>
+<figure class='code'><figcaption><span>sample trytond.conf  (trytond.conf)</span> <a href='/downloads/code/trytond.conf'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -256,168 +333,205 @@ the default. One could remove this field if they wished.</p>
 
 <p>Congratulations, you&rsquo;ve created your very first Tryton database. Now you can login
 to it and install the necessary Tryton modules.</p>
-]]></content>
-  </entry>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-  <entry>
-    <title type="html"><![CDATA[Postgres Setup]]></title>
-    <link href="http://PritishC.github.io/blog/2014/10/19/postgres-setup/"/>
-    <updated>2014-10-19T20:27:55+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/10/19/postgres-setup</id>
-    <content type="html"><![CDATA[<p>This article offers a simple introduction to PostgreSQL and how to install it.
-It is necessary for Tryton. In effect, this article is merely filler, and one can
-skip it if one wishes so.</p>
 
-<!--more-->
+<span class="byline author vcard">Posted by <span class="fn">Pritish Chakraborty</span></span>
+
+      
 
 
-<p><a href="http://www.postgresql.org/">PostgreSQL</a> is an open-source ORDBMS which is a hardcore
-programmer&rsquo;s paradise. Since it is community-developed, it adheres to strict standards
-and supports DB best practices. For more information, Google is your friend.</p>
-
-<p>Now the installation of Postgres on your setup depends on the operating system you
-have installed. For most Linux distros, Postgres has a distro-specific bundle which
-can easily be installed using the particular package manager. It is usually advised
-to install this distro-specific bundle rather then going down the generic route.</p>
-
-<p>I had faced several problems setting up Postgres on Linux Mint because I downloaded
-and executed the generic bundle. You can find some mention of those problems here
-at the <a href="https://github.com/PritishC/nereid-erms/wiki">wiki</a> of a project which I
-wrote as part of a company induction task. I am currently on Lubuntu, and this
-time, I used the package manager. Lesson learned.</p>
-
-<p>Another thing you ideally should do is install <a href="http://www.pgadmin.org/">PGAdmin</a>.
-It is a very useful tool for management and administration of your databases. You
-might often have to view a specific table inside the DB that you create for Tryton.</p>
-
-<p>For Debian derivatives such as mine,</p>
-
-<figure class='code'><figcaption><span>bash snippet</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install postgresql postgresql-contrib
-</span><span class='line'><span class="nv">$ </span>sudo apt-get install pgadmin3
-</span></code></pre></td></tr></table></div></figure>
 
 
-<p>There is also the <code>postgres</code> user setup. After one is done installing the above,
-one should fire up a terminal and set the <code>postgres</code> user&rsquo;s password.</p>
-
-<figure class='code'><figcaption><span>postgres user</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u postgres psql postgres
-</span><span class='line'><span class="nv">$ </span><span class="se">\p</span>assword postgres
-</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Equivalently, one could do <code>sudo su - postgres</code> to get into the postgres account,
-and then run <code>psql -u postgres -h localhost</code> or something similar.
-The second line in the above snippet sets a password for the postgres database
-role.</p>
 
-<p>And that&rsquo;s that. Soon, we shall be on a functioning Tryton setup!</p>
-]]></content>
-  </entry>
+
   
-  <entry>
-    <title type="html"><![CDATA[Virtualenv Setup for Tryton]]></title>
-    <link href="http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton/"/>
-    <updated>2014-10-16T22:31:26+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton</id>
-    <content type="html"><![CDATA[<p>In this post, we shall learn how to setup a virtualenv for Tryton. Any new developer
-who wishes to develop on Tryton needs to know a few basic things.</p>
-
-<!--more-->
 
 
-<p>Tryton is not for the faint-hearted. A new person can possibly take a long time to get adjusted
-to the workflow.</p>
+<time datetime="2014-10-21T12:05:18+05:30" pubdate data-updated="true"></time>
+      
 
-<ul>
-<li>Have pip/setuptools ready. Use your package manager to get pip (apt, pacman, emerge
-etc).</li>
-<li>Install virtualenvwrapper. It is essential for any serious Python developer.
-Follow the steps given in the virtualenvwrapper <a href="http://virtualenvwrapper.readthedocs.org/en/latest/install.html">docs</a>
-to setup everything - thing such as the <code>WORKON_HOME</code> variable.</li>
-<li><p>Now, before you make a virtualenv, make absolutely sure that you have a minimal
-set of site packages. Site packages are those Python packages that have been
-installed system-wide. Here is a list of packages that I have (via <code>pip freeze</code>) -:</p>
-
-<pre><code class="bash global pip freeze">CDApplet==1.0
-CDBashApplet==1.0
-Cython==0.20.1post0
-apt-xapian-index==0.45
-arandr==0.1.7.1
-argparse==1.2.1
-chardet==2.0.1
-colorama==0.2.5
-defer==1.0.6
-gyp==0.1
-html5lib==0.999
-mercurial==2.8.2
-psutil==1.2.1
-pycups==1.9.66
-pycurl==7.19.3
-pygobject==3.12.0
-pysmbc==1.0.14.1
-pysqlite==2.6.3
-python-apt==0.9.3.5
-python-debian==0.1.21-nmu2ubuntu2
-python-sql==0.3
-pyxdg==0.25
-requests==2.2.1
-six==1.8.0
-stevedore==1.0.0
-urllib3==1.7.1
-virtualenv==1.11.6
-virtualenv-clone==0.2.5
-virtualenvwrapper==4.3.1
-wsgiref==0.1.2
-</code></pre></li>
-<li>One particular package that you will find to give you headaches during the installation
-is <code>pygtk</code>. This package cannot be installed via pip. Why? Because screw you, that&rsquo;s why.
-Now you have two options.
-
-<ul>
-<li>Follow the steps given <a href="https://gist.github.com/ches/1094799">here</a> to install <code>pygtk</code>
-inside a virtualenv. However, you will find that doing this over and over again would
-be tedious.</li>
-<li>What about the package that has been installed system-wide? Could we possibly use it?
-Well, it turns out we can! The next step details on this method.<br/>
-PS: If you don&rsquo;t have it installed system-wide, do it bruh. Use your favorite package manager,
-I&rsquo;m not judgin&#8217;.</li>
-</ul>
-</li>
-<li><p>If you listened to me two steps ago and didn&rsquo;t fall asleep - the reason I said that
-one must keep a minimal set of site packages is because these shall be incorporated
-into the virtualenv. These are the absolute bare-minimum requirements that every
-virtualenv will get. Now issue the following command in your terminal, in whichever
-directory you&rsquo;ve readied for this purpose -:</p>
-
-<pre><code class="bash [virtualenv]">mkproject --system-site-packages myenv
-</code></pre>
-
-<p>Substitute myenv with any name you wish. And voila, you have your newly commissioned
-virtualenv.</p></li>
-<li>What does this have to do with <code>pygtk</code>, you ask? Well, since it was system-wide,
-it gets incorporated into your virtualenv and you don&rsquo;t have to bother about it.</li>
-</ul>
-
-
-<p>And that&rsquo;s that folks! In the next post, we shall set up Postgres as Tryton uses
-Postgres databases. Following that, we shall learn how to actually install Tryton,
-both the client and the server.</p>
-]]></content>
-  </entry>
+<span class="categories">
   
-  <entry>
-    <title type="html"><![CDATA[The First Post]]></title>
-    <link href="http://PritishC.github.io/blog/2014/10/15/the-first-post/"/>
-    <updated>2014-10-15T22:40:55+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/10/15/the-first-post</id>
-    <content type="html"><![CDATA[<p>I will begin with some posts to get n00bs to set up Tryton properly.</p>
-
-<p>Stay tuned!</p>
-]]></content>
-  </entry>
+    <a class='category' href='/blog/categories/tryton/'>tryton</a>
   
-</feed>
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://PritishC.github.io/blog/2014/10/21/beginning-tryton/" data-via="Crank7" data-counturl="http://PritishC.github.io/blog/2014/10/21/beginning-tryton/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/10/19/postgres-setup/" title="Previous Post: Postgres Setup">&laquo; Postgres Setup</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  <section>
+  <h1><a href="#">pritishc.com</a></h1>
+  <p>Welcome to my website. <a href="https://google.com/+PritishChakraborty08">Pritish Chakraborty</a> here!</p>
+  <p>To know more about me, check out my <a href="/about/">about</a> page. For stuff I work on, check out my GitHub page <a href="https://github.com/PritishC">here</a>.</p>
+  <p>DISCLAIMER: Most of the stuff on this blog, other than stuff sourced from outside, is my personal opinion. If you don&#8217;t like what you see, you are free to browse to a different page!</p>
+  <div class="social-icons">
+    
+
+    
+
+    
+  <a href="https://google.com/+PritishChakraborty08"><img src="/images/social/googleplus.png" alt="Google+" /></a>
+
+
+    
+  <a href="https://github.com/PritishC"><img src="/images/social/github.png" alt="Github" /></a>
+
+
+    
+  <a href="https://twitter.com/Crank7"><img src="/images/social/twitter.png" alt="Twitter" /></a>
+
+
+    <a href="/atom.xml"><img src="/images/social/rss.png" alt="RSS" /></a>
+  </div>
+</section>
+
+  <section>
+  <h1>Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/10/21/beginning-tryton/">Beginning Tryton</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/19/postgres-setup/">Postgres Setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/16/virtualenv-setup-for-tryton/">Virtualenv Setup for Tryton</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/15/the-first-post/">The First Post</a>
+      </li>
+    
+  </ul>
+</section>
+
+  
+    <section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/general'>general (1)</a></li><li><a href='/blog/categories/postgresql'>postgresql (1)</a></li><li><a href='/blog/categories/tryton'>tryton (3)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/PritishC">@PritishC</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'PritishC',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Pritish Chakraborty -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+<p>
+<span class="credit">Powered by <a href="http://octopress.org">Octopress</a> using the <a href="https://github.com/fapper/classic-martinb">classic-martinb</a> theme</span>
+</p>
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'pritishc';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://PritishC.github.io/blog/2014/10/21/beginning-tryton/';
+        var disqus_url = 'http://PritishC.github.io/blog/2014/10/21/beginning-tryton/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
