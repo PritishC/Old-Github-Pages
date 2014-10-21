@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgresql | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2014-10-19T21:04:49+05:30</updated>
+  <updated>2014-10-21T10:30:31+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -43,9 +43,21 @@ might often have to view a specific table inside the DB that you create for Tryt
 
 <p>For Debian derivatives such as mine,</p>
 
-<pre><code class="bash bash snippet">$ sudo apt-get install postgresql
+<pre><code class="bash bash snippet">$ sudo apt-get install postgresql postgresql-contrib
 $ sudo apt-get install pgadmin3
 </code></pre>
+
+<p>There is also the <code>postgres</code> user setup. After one is done installing the above,
+one should fire up a terminal and set the <code>postgres</code> user&rsquo;s password.</p>
+
+<pre><code class="bash postgres user">$ sudo -u postgres psql postgres
+$ \password postgres
+</code></pre>
+
+<p>Equivalently, one could do <code>sudo su - postgres</code> to get into the postgres account,
+and then run <code>psql -u postgres -h localhost</code> or something similar.
+The second line in the above snippet sets a password for the postgres database
+role.</p>
 
 <p>And that&rsquo;s that. Soon, we shall be on a functioning Tryton setup!</p>
 ]]></content>
