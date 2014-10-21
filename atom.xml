@@ -4,7 +4,7 @@
   <title><![CDATA[Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2014-10-21T18:36:31+05:30</updated>
+  <updated>2014-10-21T18:39:50+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -252,7 +252,7 @@ to File->Database->New Database. Note that the default administrator password
 for Tryton is <code>admin</code>. Here, the <code>admin_passwd</code> field has been inserted to change
 the default. One could remove this field if they wished.</p>
 
-<p><img class="Tryton DB Creation" src="images/tryton-createdb.png"></p>
+<p><img class="Tryton DB Creation" src="http://PritishC.github.io/images/tryton-createdb.png"></p>
 
 <p>Congratulations, you&rsquo;ve created your very first Tryton database. Now you can login
 to it and install the necessary Tryton modules.</p>
