@@ -4,7 +4,7 @@
   <title><![CDATA[Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2014-10-22T11:30:30+05:30</updated>
+  <updated>2014-10-26T19:12:28+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -12,6 +12,56 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Overcoming SD Card Write Restrictions]]></title>
+    <link href="http://PritishC.github.io/blog/2014/10/24/overcoming-sd-card-write-restrictions/"/>
+    <updated>2014-10-24T13:19:42+05:30</updated>
+    <id>http://PritishC.github.io/blog/2014/10/24/overcoming-sd-card-write-restrictions</id>
+    <content type="html"><![CDATA[<p>I think all of us have encountered the SD card write restrictions on Android
+KitKat devices at some time or the other. What makes it really annoying is that
+it is necessary for security, and cannot be bypassed without root access.</p>
+
+<!--more-->
+
+
+<p>What I am going to propose here is a kind of long hack. One needs some knowledge
+of SSH/SCP file transfers to attempt this procedure.</p>
+
+<p>(If you have a SD card reader, you could just use that instead)</p>
+
+<p>First of all, install the <a href="https://play.google.com/store/apps/details?id=berserker.android.apps.sshdroid&amp;hl=en">SSHDroid</a> app on your device.
+This allows you to run a SSH server on your device, which can be accessed from
+your computer. Once this is done, just open the app to start running the server.</p>
+
+<p>It should look something like this -:</p>
+
+<p><img src="http://PritishC.github.io/images/sshdroid.png"/></p>
+
+<p>If you are on Linux, fire up your file manager (Nautilus/PCManFM/etc), and search
+for the option to connect to a server. For example, PCManFM has the following -:</p>
+
+<p><img src="http://PritishC.github.io/images/pcmanfm.png"/></p>
+
+<p>Choose the SSH/SFTP protocol, enter the server details, and connect to the server.
+The default credentials are <code>root</code> and password <code>admin</code>. Now look for the path
+<code>/sdcard</code> or <code>/sdcard0</code>. This is a symlink to the internal memory of the Android
+device.</p>
+
+<p>Now the procedure is simple: copy/move all the files that you wish to move to the SD
+card to your PC (which is connected to the SSH server). Once you are done, close
+the connection. Now connect your device via USB to get access to the SD card.
+Copy all your files to the SD card from your PC.</p>
+
+<p>And there you have it! Admittedly this is a bit long, but for someone used to
+doing it all the time, it wasn&rsquo;t much of a problem for me. If you are even more
+terminal savvy, I would suggest keeping the device connected via USB the whole
+time, and using the terminal (scp command) to transfer files directly to the SD
+card from the internal memory (I haven&rsquo;t tested this as of yet).</p>
+
+<p>Or you could just root. That too.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[An Ode to Nokia]]></title>
@@ -456,17 +506,6 @@ it gets incorporated into your virtualenv and you don&rsquo;t have to bother abo
 <p>And that&rsquo;s that folks! In the next post, we shall set up Postgres as Tryton uses
 Postgres databases. Following that, we shall learn how to actually install Tryton,
 both the client and the server.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The First Post]]></title>
-    <link href="http://PritishC.github.io/blog/2014/10/15/the-first-post/"/>
-    <updated>2014-10-15T22:40:55+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/10/15/the-first-post</id>
-    <content type="html"><![CDATA[<p>I will begin with some posts to get n00bs to set up Tryton properly.</p>
-
-<p>Stay tuned!</p>
 ]]></content>
   </entry>
   
