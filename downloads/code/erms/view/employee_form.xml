@@ -1,0 +1,28 @@
+<data>
+    <xpath expr="/form/field[@name='company']" position="after">
+        <group col="20" colspan="2" id="checkboxes">
+            <label name="active"/>
+            <field name="active" xexpand="0" width="25"/>
+        </group>
+        <notebook colspan="6">
+            <page string="General" id="general">
+                <label name="gender"/>
+                <field name="gender"/>
+                <label name="designation" />
+                <field name="designation" widget="selection" />
+                <label name="department" />
+                <field name="department" widget="selection" />
+            </page>
+            <page string="Personal Details" id="personal">
+                <label name="dob" />
+                <field name="dob" />
+                <label name="pan" />
+                <field name="pan" />
+                <label name="passport" />
+                <field name="passport" />
+                <label name="driver_id" />
+                <field name="driver_id" />
+            </page>
+        </notebook>
+    </xpath>
+</data>

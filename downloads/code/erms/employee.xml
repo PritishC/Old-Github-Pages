@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="employee_view_tree">
+            <field name="model">company.employee</field>
+            <field name="inherit" ref="company.employee_view_tree" />
+            <field name="name">employee_tree</field>
+        </record>
+        <record model="ir.ui.view" id="employee_view_form">
+            <field name="model">company.employee</field>
+            <field name="inherit" ref="company.employee_view_form" />
+            <field name="name">employee_form</field>
+    	</record>
+        <menuitem parent="party.menu_party" action="company.act_employee_form"
+            id="menu_employee_form"/>
+    </data>
+</tryton>

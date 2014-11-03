@@ -1,0 +1,6 @@
+<form string="Designation">
+    <label name="department" />
+    <field name="department" />
+    <label name="name" />
+    <field name="name" /> 
+</form>

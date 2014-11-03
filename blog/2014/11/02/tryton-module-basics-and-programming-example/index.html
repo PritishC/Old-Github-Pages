@@ -1,58 +1,134 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Tryton | Pritish Chakraborty]]></title>
-  <link href="http://PritishC.github.io/blog/categories/tryton/atom.xml" rel="self"/>
-  <link href="http://PritishC.github.io/"/>
-  <updated>2014-11-03T12:30:17+05:30</updated>
-  <id>http://PritishC.github.io/</id>
-  <author>
-    <name><![CDATA[Pritish Chakraborty]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Tryton Module Basics and Programming Example - Pritish Chakraborty</title>
+  <meta name="author" content="Pritish Chakraborty">
 
   
-  <entry>
-    <title type="html"><![CDATA[Tryton Module Basics and Programming Example]]></title>
-    <link href="http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example/"/>
-    <updated>2014-11-02T19:22:17+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example</id>
-    <content type="html"><![CDATA[This article will cover the basics of developing a module for Tryton. After having
+  <meta name="description" content="This article will cover the basics of developing a module for Tryton. After having
+gone through the setup, it is finally time to make your own module &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Pritish Chakraborty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><div class="header-left">
+  <hgroup>
+  <h1><a href="/">Pritish Chakraborty</a></h1>
+  
+  <div class="subtitle">
+    <h2>Work and Everything Else</h2>
+  </div>
+  
+  </hgroup>
+  
+</div>
+
+<div class="header-right">
+  <ul class="main-navigation">
+ <div> 
+  <li><a href="/">blog</a></li></div><div class="spacer"></div>
+     <div> 
+  <li><a href="/projects">projects</a></li></div><div class="spacer"></div>
+       <div> 
+  <li><a href="/work">work</a></li></div><div class="spacer"></div>
+         <div> 
+  <li><a href="/about">about</a></li></div>
+</ul>
+  
+
+</div>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Tryton Module Basics and Programming Example</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-02T19:22:17+05:30" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This article will cover the basics of developing a module for Tryton. After having
 gone through the setup, it is finally time to make your own module. This might
-turn out to be a longer post than all my previous ones, so hang in there.
+turn out to be a longer post than all my previous ones, so hang in there.</p>
 
 <!--more-->
 
-## Introduction
 
-I will use the [module](https://github.com/PritishC/nereid-erms/tree/develop) I developed as part of an initial assignment to explain. 
-The Tryton [documentation](http://docs.tryton.org/) tells us that the basic 
-components of a Tryton module are its models and its views.
+<h2>Introduction</h2>
 
-The models define the backend of the application. Much like in any other ORM, they
+<p>I will use the <a href="https://github.com/PritishC/nereid-erms/tree/develop">module</a> I developed as part of an initial assignment to explain.
+The Tryton <a href="http://docs.tryton.org/">documentation</a> tells us that the basic
+components of a Tryton module are its models and its views.</p>
+
+<p>The models define the backend of the application. Much like in any other ORM, they
 will map to tables in a database, which in this case is controlled by the Postgres
 server. The views are written in XML and they define what the user sees in the
 Tryton client. Views can even be inherited and this makes for a very clever design -
-_it supports reusability_.
+<em>it supports reusability</em>.</p>
 
-Each model can have a set of fields - similar to that of a table in a DB. The fields can have types such as Integer, Char, Text, etc. as well as special relationship
-types such as Many2One and One2Many. Refer the docs for more information.
+<p>Each model can have a set of fields - similar to that of a table in a DB. The fields can have types such as Integer, Char, Text, etc. as well as special relationship
+types such as Many2One and One2Many. Refer the docs for more information.</p>
 
-Each view is defined in the view directory and these views are brought together
-in a ModelName.xml file which is at the project&#8217;s root.
+<p>Each view is defined in the view directory and these views are brought together
+in a ModelName.xml file which is at the project&rsquo;s root.</p>
 
-Now suppose we wish to build an Employee Record Management system in Tryton. The
+<p>Now suppose we wish to build an Employee Record Management system in Tryton. The
 first thing to do is to design the models, and then we would go about designing
-the views. I designed models for an Employee, a Department and a Designation.
+the views. I designed models for an Employee, a Department and a Designation.</p>
 
-## The Models
+<h2>The Models</h2>
 
-One may choose to have a model be stand-alone or be &#8216;part&#8217; of another model.
+<p>One may choose to have a model be stand-alone or be &lsquo;part&rsquo; of another model.
 Tryton also has an easy mechanism for models which need to be customized in down-
 stream modules, similar to inheritance. For example, I know that the Employee
-model is already present in Tryton with the `__name__` set as `company.employee`. 
-I wish to customize this model and I have done so as follows -:
+model is already present in Tryton with the <code>__name__</code> set as <code>company.employee</code>.
+I wish to customize this model and I have done so as follows -:</p>
 
 <figure class='code'><figcaption><span>employee.py  (employee.py)</span> <a href='/downloads/code/erms/employee.py'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -261,56 +337,57 @@ I wish to customize this model and I have done so as follows -:
 </span><span class='line'>    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-There&#8217;s a lot going on here, so let&#8217;s take it step by step. We can see two models
-that we wish to be in the Employee &#8216;namespace&#8217;, `Employee` and `Designation`.
-If you think about it, after all, it is an employee who has a designation!
 
-Our first field in `Employee` is a selection field - the user can select from the
+<p>There&rsquo;s a lot going on here, so let&rsquo;s take it step by step. We can see two models
+that we wish to be in the Employee &lsquo;namespace&rsquo;, <code>Employee</code> and <code>Designation</code>.
+If you think about it, after all, it is an employee who has a designation!</p>
+
+<p>Our first field in <code>Employee</code> is a selection field - the user can select from the
 options that we present to them. The options are written as a list of two-tuples.
-Each two-tuple is of the format `(name_of_option, option_string_to_be_displayed)`.
+Each two-tuple is of the format <code>(name_of_option, option_string_to_be_displayed)</code>.
 The other options provided to the field type constructor are the name of the field
 to be displayed, the option of making the field mandatory or required, the possible
-states of the field and other fields that this one may depend on. We&#8217;ll get to
-`states` and `depends` in a moment.
+states of the field and other fields that this one may depend on. We&rsquo;ll get to
+<code>states</code> and <code>depends</code> in a moment.</p>
 
-The next field is an interesting one - it defines a many to one relationship to
-the `Department` model. This means that multiple employees can belong to a single
-department. The constructor arguments are quite simple to grasp - the `__name__`
-of the model being related with, the string to be displayed, and so on.
+<p>The next field is an interesting one - it defines a many to one relationship to
+the <code>Department</code> model. This means that multiple employees can belong to a single
+department. The constructor arguments are quite simple to grasp - the <code>__name__</code>
+of the model being related with, the string to be displayed, and so on.</p>
 
-The third field - `designation` - is very similar to `department`. The only difference 
+<p>The third field - <code>designation</code> - is very similar to <code>department</code>. The only difference
 here is that we have also set a domain argument. Domains are lists of three-tuples
 that can be used to form a particular selection over the records of a model.
 In this case, we wish to comb through the records of a designation and select
-those which belong to the department specified by the field `department`.`Eval`
-is a PYSON statement which gives us a boolean value. Domains are used alot when 
-searching records, and they contain [`PYSON`](http://doc.tryton.org/3.4/trytond/doc/topics/pyson.html#topics-pyson) statements.
+those which belong to the department specified by the field <code>department</code>.<code>Eval</code>
+is a PYSON statement which gives us a boolean value. Domains are used alot when
+searching records, and they contain <a href="http://doc.tryton.org/3.4/trytond/doc/topics/pyson.html#topics-pyson"><code>PYSON</code></a> statements.</p>
 
-Since we have just covered PYSON, we may as well check out those global variables
-now - `STATES` and `DEPENDS`. The former is a dict whose keys are state names,
-and whose values are PYSON statements. In this case, the `readonly` state is
-activated if we find that the `active` field of the model has been set to false.
+<p>Since we have just covered PYSON, we may as well check out those global variables
+now - <code>STATES</code> and <code>DEPENDS</code>. The former is a dict whose keys are state names,
+and whose values are PYSON statements. In this case, the <code>readonly</code> state is
+activated if we find that the <code>active</code> field of the model has been set to false.</p>
 
-The rest of the fields are simple Char fields and I shall not cover them in detail.
+<p>The rest of the fields are simple Char fields and I shall not cover them in detail.</p>
 
-Let us come down to the remaining parts of the `Employee` class. `_sql_error_messages`
+<p>Let us come down to the remaining parts of the <code>Employee</code> class. <code>_sql_error_messages</code>
 is a dict whose keys are names of error messages and whose values are the strings
-to be displayed in case such an error occurs. `_unique` is a list of three-tuples
-which define some uniqueness constraints on the model table.
+to be displayed in case such an error occurs. <code>_unique</code> is a list of three-tuples
+which define some uniqueness constraints on the model table.</p>
 
-The `__setup__` method is an incredibly useful classmethod. Note how I am updating
-the `party` and `company` fields of our custom Employee class (these fields are
-present in the parent Employee model, and thus, need to have their `states` and
-`depends` set, for which I have made a method) here - these fields need not be
+<p>The <code>__setup__</code> method is an incredibly useful classmethod. Note how I am updating
+the <code>party</code> and <code>company</code> fields of our custom Employee class (these fields are
+present in the parent Employee model, and thus, need to have their <code>states</code> and
+<code>depends</code> set, for which I have made a method) here - these fields need not be
 rewritten here. I am also setting the SQL constraints of the table here. All sorts
-of field updation and customization can be done in `__setup__`.
+of field updation and customization can be done in <code>__setup__</code>.</p>
 
-The `default` methods are pretty self-explanatory - they return default values
-for a field. We also have methods such as `on_change` and `on_change_with` -
-they are quite interesting and one should browse the docs to see what they do.
+<p>The <code>default</code> methods are pretty self-explanatory - they return default values
+for a field. We also have methods such as <code>on_change</code> and <code>on_change_with</code> -
+they are quite interesting and one should browse the docs to see what they do.</p>
 
-Let&#8217;s cover one more model class - `Department`. It has a Many2One field relating 
-it to the `Company` class. One may check that out here -:
+<p>Let&rsquo;s cover one more model class - <code>Department</code>. It has a Many2One field relating
+it to the <code>Company</code> class. One may check that out here -:</p>
 
 <figure class='code'><figcaption><span>company.py  (company.py)</span> <a href='/downloads/code/erms/company.py'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -357,24 +434,25 @@ it to the `Company` class. One may check that out here -:
 </span><span class='line'>        <span class="k">return</span> <span class="n">Transaction</span><span class="p">()</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;company&#39;</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-Note how model classes that are new to the hierarchy have to specifically inherit
-from classes such as `ModelSQL`, but classes which are already present and are
-being customized - such as `Employee` - need not have this explicit inheritance.
-The `__name__` field does this magic for us.
 
-Now the `Department` is a part of the `Company` model. It has a Many2One field
-relating it to `Company`. How must we obtain the company that this department
-is associated with, or more precisely, the _active record_ of the `Company` model,
-for our default method?
+<p>Note how model classes that are new to the hierarchy have to specifically inherit
+from classes such as <code>ModelSQL</code>, but classes which are already present and are
+being customized - such as <code>Employee</code> - need not have this explicit inheritance.
+The <code>__name__</code> field does this magic for us.</p>
 
-We do so by looking for it in the transaction context. `context` is a dict which
-has such keys.
+<p>Now the <code>Department</code> is a part of the <code>Company</code> model. It has a Many2One field
+relating it to <code>Company</code>. How must we obtain the company that this department
+is associated with, or more precisely, the <em>active record</em> of the <code>Company</code> model,
+for our default method?</p>
 
-And that wraps up model basics! Let us now move to views.
+<p>We do so by looking for it in the transaction context. <code>context</code> is a dict which
+has such keys.</p>
 
-## The Views
+<p>And that wraps up model basics! Let us now move to views.</p>
 
-Let&#8217;s check out the view for our `Employee` model. The root xml is as follows -:
+<h2>The Views</h2>
+
+<p>Let&rsquo;s check out the view for our <code>Employee</code> model. The root xml is as follows -:</p>
 
 <figure class='code'><figcaption><span>employee.xml  (employee.xml)</span> <a href='/downloads/code/erms/employee.xml'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -408,28 +486,29 @@ Let&#8217;s check out the view for our `Employee` model. The root xml is as foll
 </span><span class='line'>            <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;model&quot;</span><span class="nt">&gt;</span>company.employee<span class="nt">&lt;/field&gt;</span>
 </span><span class='line'>            <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;inherit&quot;</span> <span class="na">ref=</span><span class="s">&quot;company.employee_view_form&quot;</span> <span class="nt">/&gt;</span>
 </span><span class='line'>            <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>employee_form<span class="nt">&lt;/field&gt;</span>
-</span><span class='line'>    	<span class="nt">&lt;/record&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/record&gt;</span>
 </span><span class='line'>        <span class="nt">&lt;menuitem</span> <span class="na">parent=</span><span class="s">&quot;party.menu_party&quot;</span> <span class="na">action=</span><span class="s">&quot;company.act_employee_form&quot;</span>
 </span><span class='line'>            <span class="na">id=</span><span class="s">&quot;menu_employee_form&quot;</span><span class="nt">/&gt;</span>
 </span><span class='line'>    <span class="nt">&lt;/data&gt;</span>
 </span><span class='line'><span class="nt">&lt;/tryton&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
-Views can be of two main types - tree and form. Form views are used to enter 
-data while tree views are used to display them. The first two record tags deal 
-with, in a sense, instances of the model class with the `__name__` `ir.ui.view`. 
-The first is for a tree and the second for a form. Note how they are inheriting 
-from tree and form views which are already present in the parent Employee model.
 
-The `menuitem` tag allows us to create a new menu item for an existing menu. In
-this case, we add `Employees` to the `Party` menu. `company.act_employee_form` is
+<p>Views can be of two main types - tree and form. Form views are used to enter
+data while tree views are used to display them. The first two record tags deal
+with, in a sense, instances of the model class with the <code>__name__</code> <code>ir.ui.view</code>.
+The first is for a tree and the second for a form. Note how they are inheriting
+from tree and form views which are already present in the parent Employee model.</p>
+
+<p>The <code>menuitem</code> tag allows us to create a new menu item for an existing menu. In
+this case, we add <code>Employees</code> to the <code>Party</code> menu. <code>company.act_employee_form</code> is
 predefined in the parent model and we need not worry about defining it. act stands
-for &#8220;action&#8221;, and the action here is to open the form view.
+for &ldquo;action&rdquo;, and the action here is to open the form view.</p>
 
-We may have to define our form and tree views separately, especially if they are
+<p>We may have to define our form and tree views separately, especially if they are
 inheriting from a parent model, to add any extra details, or just to create from
 scratch. For example, here are the form and tree views which were defined in the
-employee xml -:
+employee xml -:</p>
 
 <figure class='code'><figcaption><span>form view  (employee_form.xml)</span> <a href='/downloads/code/erms/view/employee_form.xml'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -490,6 +569,9 @@ employee xml -:
 </span><span class='line'><span class="nt">&lt;/data&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+
+
 <figure class='code'><figcaption><span>tree view  (employee_tree.xml)</span> <a href='/downloads/code/erms/view/employee_tree.xml'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -517,440 +599,258 @@ employee xml -:
 </span><span class='line'><span class="nt">&lt;/data&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
-These views use the newer xpath syntax that the Tryton community has incorporated.
+
+<p>These views use the newer xpath syntax that the Tryton community has incorporated.
 In effect, the xpath statement here tells Tryton to put our custom Employee fields
 after the company field. The active field is designated as a checkbox by putting
 it in a group for checkboxes.
-The `notebook` tag allows one to create tabs in the form view which can be used
+The <code>notebook</code> tag allows one to create tabs in the form view which can be used
 to categorize or classify details according to some criterion. Notebooks have
-pages which contain fields in a particular category. For example, we have two pages - 
-`General Details` and `Personal Details`. The form view needs a label to show in
-Tryton for each field name. The tree view needs no such thing.
+pages which contain fields in a particular category. For example, we have two pages -
+<code>General Details</code> and <code>Personal Details</code>. The form view needs a label to show in
+Tryton for each field name. The tree view needs no such thing.</p>
 
-Also, note how the `designation` and `department` fields are defined as selection
+<p>Also, note how the <code>designation</code> and <code>department</code> fields are defined as selection
 widgets. They will appear as drop-down menus in Tryton, and the values in these
-menus will correspond to the list of active records for the `Designation` and
-`Department` models, if the user has created any. I would recommend checking out
-the other views at my project&#8217;s github page. 
+menus will correspond to the list of active records for the <code>Designation</code> and
+<code>Department</code> models, if the user has created any. I would recommend checking out
+the other views at my project&rsquo;s github page.</p>
 
-Now we are left with module boilerplate and installation.
+<p>Now we are left with module boilerplate and installation.</p>
 
-## Module Installation
+<h2>Module Installation</h2>
 
-We have the raw materials for our Tryton module - but we still have no idea how
+<p>We have the raw materials for our Tryton module - but we still have no idea how
 to set things up and finally install the module. My colleagues over at the company
 have created a nifty command-line application which automates the process - it
-can be found [here](https://github.com/openlabs/trytond-cookiecutter).
+can be found <a href="https://github.com/openlabs/trytond-cookiecutter">here</a>.</p>
 
-In your project&#8217;s root directory, clone the cookiecutter module as is given in
+<p>In your project&rsquo;s root directory, clone the cookiecutter module as is given in
 the readme. We will be prompted to enter project configuration details, and these
-may be changed anytime by modifying `cookiecutter.json`.
+may be changed anytime by modifying <code>cookiecutter.json</code>.</p>
 
-Once this is done, we can install our Tryton module&#8217;s various dependencies and 
-write the module to the `trytond/modules` directory by running the following
-command - `python setup.py install`. We have our Tryton database which we created
-earlier - we shall install the module using this DB.
+<p>Once this is done, we can install our Tryton module&rsquo;s various dependencies and
+write the module to the <code>trytond/modules</code> directory by running the following
+command - <code>python setup.py install</code>. We have our Tryton database which we created
+earlier - we shall install the module using this DB.</p>
 
 <figure class='code'><figcaption><span>installing your module</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>trytond -c path/to/trytond.conf -i module_name -d db_name
 </span></code></pre></td></tr></table></div></figure>
 
-One should replace module_name with &#8216;all&#8217; for first time installation. The -i
+
+<p>One should replace module_name with &lsquo;all&rsquo; for first time installation. The -i
 option can be replaced with -u to update a particular module. Module updation is
-usually done when we change or add a model(s) in that module.
+usually done when we change or add a model(s) in that module.</p>
 
-And now we should have a fully functional module in Tryton. Check it out by running
-the Tryton client. 
+<p>And now we should have a fully functional module in Tryton. Check it out by running
+the Tryton client.</p>
 
-I hope you enjoyed reading this post as much as I did writing it, folks! Until
-next time then.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Beginning Tryton]]></title>
-    <link href="http://PritishC.github.io/blog/2014/10/21/beginning-tryton/"/>
-    <updated>2014-10-21T12:05:18+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/10/21/beginning-tryton</id>
-    <content type="html"><![CDATA[Before we go through the setup of the Tryton client and server, one should go
-through setting up the [virtualenv](/blog/2014/10/16/virtualenv-setup-for-tryton/)
-and [postgres](/blog/2014/10/19/postgres-setup/).
-Also, install `libxslt-dev` (and perhaps `libz-dev` as well) with your package 
-manager because the `lxml` package needs it.
+<p>I hope you enjoyed reading this post as much as I did writing it, folks! Until
+next time then.</p>
+</div>
 
-<!--more-->
 
-Right, now let&#8217;s activate our virtualenv and install the requisite packages.
-
-<figure class='code'><figcaption><span>installing tryton/trytond</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>workon trytonenv
-</span><span class='line'><span class="nv">$ </span>pip install trytond trytond-party trytond-company trytond-country trytond-currency
-</span><span class='line'><span class="nv">$ </span>pip install tryton
-</span><span class='line'><span class="nv">$ </span>pip install psycopg2 <span class="c"># Required for DB connectivity.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-The packages that follow `trytond` are Tryton modules. `trytond` is the server
-and `tryton` is the client. Any server needs a configuration file, and we have
-one for ours too. Picked up from the Gentoo wiki -:
-
-<figure class='code'><figcaption><span>sample trytond.conf  (trytond.conf)</span> <a href='/downloads/code/trytond.conf'>download</a></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>#This file is part of Tryton.  The COPYRIGHT file at the top level of
-</span><span class='line'>#this repository contains the full copyright notices and license terms.
-</span><span class='line'>[options]
-</span><span class='line'>
-</span><span class='line'># Activate the json-rpc protocol
-</span><span class='line'>jsonrpc = *:8000
-</span><span class='line'>#ssl_jsonrpc = False
-</span><span class='line'>
-</span><span class='line'># This is the hostname used when generating tryton URI
-</span><span class='line'>#hostname_jsonrpc =
-</span><span class='line'>
-</span><span class='line'># Configure the path of json-rpc data
-</span><span class='line'>#jsondata_path = /var/www/localhost/tryton
-</span><span class='line'>
-</span><span class='line'># Activate the xml-rpc protocol
-</span><span class='line'>#xmlrpc = *:8069
-</span><span class='line'>#ssl_xmlrpc = False
-</span><span class='line'>
-</span><span class='line'># Activate the webdav protocol
-</span><span class='line'>#webdav = *:8080
-</span><span class='line'>#ssl_webdav = False
-</span><span class='line'>
-</span><span class='line'># This is the hostname used when generating WebDAV URI
-</span><span class='line'>#hostname_webdav =
-</span><span class='line'>
-</span><span class='line'># Configure the database type
-</span><span class='line'># allowed values are postgresql, sqlite, mysql
-</span><span class='line'>db_type = postgresql
-</span><span class='line'>
-</span><span class='line'># Configure the database connection
-</span><span class='line'>## Note: Only databases owned by db_user will be displayed in the connection dialog
-</span><span class='line'>## of the Tryton client. db_user must have create permission for new databases
-</span><span class='line'>## to be able to use automatic database creation with the Tryton client.
-</span><span class='line'>db_host = localhost
-</span><span class='line'>db_port = 5432
-</span><span class='line'>db_user = postgres
-</span><span class='line'>db_password = dbpassword
-</span><span class='line'>db_minconn = 1
-</span><span class='line'>db_maxconn = 64
-</span><span class='line'>
-</span><span class='line'># Configure the postgresql path for the executable
-</span><span class='line'>#pg_path = None
-</span><span class='line'>
-</span><span class='line'># Configure the Tryton server password
-</span><span class='line'>admin_passwd = admin
-</span><span class='line'>
-</span><span class='line'># Configure the path of the files for the pid and the logs
-</span><span class='line'>#pidfile = False
-</span><span class='line'>#logfile = False
-</span><span class='line'>
-</span><span class='line'>#privatekey = server.pem
-</span><span class='line'>#certificate = server.pem
-</span><span class='line'>
-</span><span class='line'># Configure the SMTP connection
-</span><span class='line'>#smtp_server = localhost
-</span><span class='line'>#smtp_port = 25
-</span><span class='line'>#smtp_ssl = False
-</span><span class='line'>#smtp_tls = False
-</span><span class='line'>#smtp_password = False
-</span><span class='line'>#smtp_user = False
-</span><span class='line'>
-</span><span class='line'># Configure the path to store attachments and sqlite database
-</span><span class='line'>#data_path = /var/lib/trytond
-</span><span class='line'>
-</span><span class='line'># Allow to run more than one instance of trytond
-</span><span class='line'>#multi_server = False
-</span><span class='line'>
-</span><span class='line'># Configure the session timeout (inactivity of the client in sec)
-</span><span class='line'>#session_timeout = 600
-</span><span class='line'>
-</span><span class='line'># Enable auto-reload of modules if changed
-</span><span class='line'>#auto_reload = True
-</span><span class='line'>
-</span><span class='line'># Prevent database listing
-</span><span class='line'>#prevent_dblist = False
-</span><span class='line'>
-</span><span class='line'># Enable cron
-</span><span class='line'># cron = True
-</span><span class='line'>
-</span><span class='line'># unoconv connection
-</span><span class='line'>#unoconv = pipe,name=trytond;urp;StarOffice.ComponentContext
-</span><span class='line'>
-</span><span class='line'># Number of retries on database operational error
-</span><span class='line'># retry = 5
-</span><span class='line'>
-</span><span class='line'># Default database language code
-</span><span class='line'># language = en_US
-</span><span class='line'>language = es_ES
-</span><span class='line'>
-</span><span class='line'># Timezone of the server
-</span><span class='line'># timezone = False
-</span></code></pre></td></tr></table></div></figure>
-
-You might want to change the value of the `db_password` field there, to the pass
-that you had set for the postgres role earlier. You will be using this pass to
-login to a database in Tryton.
-
-Now, fire up two terminal windows or tabs, and run the following commands separately
-in each -:
-
-<figure class='code'><figcaption><span>tryton start</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>trytond -c path/to/trytond.conf
-</span><span class='line'><span class="nv">$ </span>tryton -dv
-</span></code></pre></td></tr></table></div></figure>
-
-The `-dv` switch will allow you to see errors and other messages on the command
-line for the Tryton client in a verbose manner.
-
-You will arrive at a screen to login to the demo profile. Close that, and head
-to File->Database->New Database. Note that the default administrator password
-for Tryton is `admin`. Here, the `admin_passwd` field has been inserted to change
-the default. One could remove this field if they wished.
-
-<img src="/images/tryton-createdb.png" />
-
-Congratulations, you&#8217;ve created your very first Tryton database. Now you can login
-to it and install the necessary Tryton modules.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Postgres Setup]]></title>
-    <link href="http://PritishC.github.io/blog/2014/10/19/postgres-setup/"/>
-    <updated>2014-10-19T20:27:55+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/10/19/postgres-setup</id>
-    <content type="html"><![CDATA[This article offers a simple introduction to PostgreSQL and how to install it.
-It is necessary for Tryton. In effect, this article is merely filler, and one can
-skip it if one wishes so.
-
-<!--more-->
-
-[PostgreSQL](http://www.postgresql.org/) is an open-source ORDBMS which is a hardcore
-programmer&#8217;s paradise. Since it is community-developed, it adheres to strict standards
-and supports DB best practices. For more information, Google is your friend.
-
-Now the installation of Postgres on your setup depends on the operating system you
-have installed. For most Linux distros, Postgres has a distro-specific bundle which
-can easily be installed using the particular package manager. It is usually advised 
-to install this distro-specific bundle rather then going down the generic route.
-
-I had faced several problems setting up Postgres on Linux Mint because I downloaded
-and executed the generic bundle. You can find some mention of those problems here 
-at the [wiki](https://github.com/PritishC/nereid-erms/wiki) of a project which I 
-wrote as part of a company induction task. I am currently on Lubuntu, and this 
-time, I used the package manager. Lesson learned.
-
-Another thing you ideally should do is install [PGAdmin](http://www.pgadmin.org/). 
-It is a very useful tool for management and administration of your databases. You
-might often have to view a specific table inside the DB that you create for Tryton.
-
-For Debian derivatives such as mine, 
-
-<figure class='code'><figcaption><span>bash snippet</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install postgresql postgresql-contrib
-</span><span class='line'><span class="nv">$ </span>sudo apt-get install pgadmin3
-</span></code></pre></td></tr></table></div></figure>
-
-There is also the `postgres` user setup. After one is done installing the above,
-one should fire up a terminal and set the `postgres` user&#8217;s password.
-
-<figure class='code'><figcaption><span>postgres user</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u postgres psql postgres
-</span><span class='line'><span class="nv">$ </span><span class="se">\p</span>assword postgres
-</span></code></pre></td></tr></table></div></figure>
-
-Equivalently, one could do `sudo su - postgres` to get into the postgres account,
-and then run `psql -u postgres -h localhost` or something similar.
-The second line in the above snippet sets a password for the postgres database 
-role.
-
-And that&#8217;s that. Soon, we shall be on a functioning Tryton setup!
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Virtualenv Setup for Tryton]]></title>
-    <link href="http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton/"/>
-    <updated>2014-10-16T22:31:26+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton</id>
-    <content type="html"><![CDATA[In this post, we shall learn how to setup a virtualenv for Tryton. Any new developer
-who wishes to develop on Tryton needs to know a few basic things.
-
-<!--more-->
-
-Tryton is not for the faint-hearted. A new person can possibly take a long time to get adjusted
-to the workflow.
-
-* Have pip/setuptools ready. Use your package manager to get pip (apt, pacman, emerge
-  etc).
-* Install virtualenvwrapper. It is essential for any serious Python developer.
-  Follow the steps given in the virtualenvwrapper [docs](http://virtualenvwrapper.readthedocs.org/en/latest/install.html)
-  to setup everything - thing such as the `WORKON_HOME` variable.
-* Now, before you make a virtualenv, make absolutely sure that you have a minimal
-  set of site packages. Site packages are those Python packages that have been
-  installed system-wide. Here is a list of packages that I have (via `pip freeze`) -:
-
-  &#8220;` bash global pip freeze
-  CDApplet==1.0
-  CDBashApplet==1.0
-  Cython==0.20.1post0
-  apt-xapian-index==0.45
-  arandr==0.1.7.1
-  argparse==1.2.1
-  chardet==2.0.1
-  colorama==0.2.5
-  defer==1.0.6
-  gyp==0.1
-  html5lib==0.999
-  mercurial==2.8.2
-  psutil==1.2.1
-  pycups==1.9.66
-  pycurl==7.19.3
-  pygobject==3.12.0
-  pysmbc==1.0.14.1
-  pysqlite==2.6.3
-  python-apt==0.9.3.5
-  python-debian==0.1.21-nmu2ubuntu2
-  python-sql==0.3
-  pyxdg==0.25
-  requests==2.2.1
-  six==1.8.0
-  stevedore==1.0.0
-  urllib3==1.7.1
-  virtualenv==1.11.6
-  virtualenv-clone==0.2.5
-  virtualenvwrapper==4.3.1
-  wsgiref==0.1.2
-  &#8220;`
-* One particular package that you will find to give you headaches during the installation
-  is `pygtk`. This package cannot be installed via pip. Why? Because screw you, that&#8217;s why.
-  Now you have two options.
-  + Follow the steps given [here](https://gist.github.com/ches/1094799) to install `pygtk` 
-    inside a virtualenv. However, you will find that doing this over and over again would
-    be tedious.
-  + What about the package that has been installed system-wide? Could we possibly use it?
-    Well, it turns out we can! The next step details on this method.  
-    PS: If you don&#8217;t have it installed system-wide, do it bruh. Use your favorite package manager,
-    I&#8217;m not judgin&#8217;.
-* If you listened to me two steps ago and didn&#8217;t fall asleep - the reason I said that
-  one must keep a minimal set of site packages is because these shall be incorporated
-  into the virtualenv. These are the absolute bare-minimum requirements that every
-  virtualenv will get. Now issue the following command in your terminal, in whichever
-  directory you&#8217;ve readied for this purpose -:
-
-  &#8220;` bash [virtualenv]
-  mkproject &#8211;system-site-packages myenv
-  &#8220;`
-
-  Substitute myenv with any name you wish. And voila, you have your newly commissioned
-  virtualenv.
-* What does this have to do with `pygtk`, you ask? Well, since it was system-wide,
-  it gets incorporated into your virtualenv and you don&#8217;t have to bother about it.
-
-And that&#8217;s that folks! In the next post, we shall set up Postgres as Tryton uses
-Postgres databases. Following that, we shall learn how to actually install Tryton, 
-both the client and the server.
+  <footer>
+    <p class="meta">
+      
   
 
-]]></content>
-  </entry>
+<span class="byline author vcard">Posted by <span class="fn">Pritish Chakraborty</span></span>
+
+      
+
+
+
+
+
+
+
+
   
-</feed>
+
+
+<time datetime="2014-11-02T19:22:17+05:30" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/tryton/'>tryton</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example/" data-via="Crank7" data-counturl="http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/10/24/overcoming-sd-card-write-restrictions/" title="Previous Post: Overcoming SD Card Write Restrictions">&laquo; Overcoming SD Card Write Restrictions</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  <section>
+  <h1><a href="#">pritishc.com</a></h1>
+  <p>Welcome to my website. <a href="https://google.com/+PritishChakraborty08">Pritish Chakraborty</a> here!</p>
+  <p>To know more about me, check out my <a href="/about/">about</a> page. For stuff I work on, check out my GitHub page <a href="https://github.com/PritishC">here</a>.</p>
+  <p>DISCLAIMER: Most of the stuff on this blog, other than stuff sourced from outside, is my personal opinion. If you don&#8217;t like what you see, you are free to browse to a different page!</p>
+  <div class="social-icons">
+    
+
+    
+
+    
+  <a href="https://google.com/+PritishChakraborty08"><img src="/images/social/googleplus.png" alt="Google+" /></a>
+
+
+    
+  <a href="https://github.com/PritishC"><img src="/images/social/github.png" alt="Github" /></a>
+
+
+    
+  <a href="https://twitter.com/Crank7"><img src="/images/social/twitter.png" alt="Twitter" /></a>
+
+
+    <a href="/atom.xml"><img src="/images/social/rss.png" alt="RSS" /></a>
+  </div>
+</section>
+
+  <section>
+  <h1>Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/02/tryton-module-basics-and-programming-example/">Tryton Module Basics and Programming Example</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/24/overcoming-sd-card-write-restrictions/">Overcoming SD Card Write Restrictions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/22/an-ode-to-nokia/">An Ode to Nokia</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/21/beginning-tryton/">Beginning Tryton</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/19/postgres-setup/">Postgres Setup</a>
+      </li>
+    
+  </ul>
+</section>
+
+  
+    <section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/android'>android (1)</a></li><li><a href='/blog/categories/electronics'>electronics (1)</a></li><li><a href='/blog/categories/general'>general (2)</a></li><li><a href='/blog/categories/kitkat'>kitkat (1)</a></li><li><a href='/blog/categories/postgresql'>postgresql (1)</a></li><li><a href='/blog/categories/tryton'>tryton (4)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/PritishC">@PritishC</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'PritishC',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Pritish Chakraborty -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+<p>
+<span class="credit">Powered by <a href="http://octopress.org">Octopress</a> using the <a href="https://github.com/fapper/classic-martinb">classic-martinb</a> theme</span>
+</p>
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'pritishc';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example/';
+        var disqus_url = 'http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
