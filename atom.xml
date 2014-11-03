@@ -4,7 +4,7 @@
   <title><![CDATA[Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2014-11-03T12:32:39+05:30</updated>
+  <updated>2014-11-03T12:40:07+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -571,7 +571,7 @@ usually done when we change or add a model(s) in that module.</p>
 <p>And now we should have a fully functional module in Tryton. Check it out by running
 the Tryton client.</p>
 
-<p>I hope you enjoyed reading this post as much as I did writing it, folks! Until
+<p>I hope everyone enjoyed reading this post as much as I did writing it. Until
 next time then.</p>
 ]]></content>
   </entry>
