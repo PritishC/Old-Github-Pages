@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tryton | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/tryton/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2014-11-03T12:40:07+05:30</updated>
+  <updated>2014-11-03T12:55:03+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -267,7 +267,8 @@ If you think about it, after all, it is an employee who has a designation!
 
 Our first field in `Employee` is a selection field - the user can select from the
 options that we present to them. The options are written as a list of two-tuples.
-Each two-tuple is of the format `(name_of_option, option_string_to_be_displayed)`.
+Each two-tuple is of the format `(option_name, option_string)`.
+
 The other options provided to the field type constructor are the name of the field
 to be displayed, the option of making the field mandatory or required, the possible
 states of the field and other fields that this one may depend on. We&#8217;ll get to
