@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Github | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/github/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2015-01-25T18:39:04+05:30</updated>
+  <updated>2015-01-25T18:49:30+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -50,7 +50,7 @@ committed.
 Once the install is complete, close your current command prompt and re-open it.
 You should now be using ZSH. You can customize your configuration by editing
 the `.zshrc` file, which is present at the home folder (`$HOME`). I&#8217;ll leave
-that bit out to the reader to experimet with stuff like themes.
+that bit out to the reader to experiment with stuff like themes.
 
 ## Scenario-I: Basic Git Setup.
 
