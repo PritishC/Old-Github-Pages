@@ -4,7 +4,7 @@
   <title><![CDATA[Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2015-01-25T11:10:26+05:30</updated>
+  <updated>2015-01-25T18:39:04+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -12,6 +12,210 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Development Cheatsheet @ Openlabs]]></title>
+    <link href="http://PritishC.github.io/blog/2015/01/25/development-cheatsheet/"/>
+    <updated>2015-01-25T11:12:33+05:30</updated>
+    <id>http://PritishC.github.io/blog/2015/01/25/development-cheatsheet</id>
+    <content type="html"><![CDATA[<p>The target audience of this article is the new arrivals at our company, and I
+will try to make it as easy as possible on them. This assumes a basic knowledge
+of Git/GitHub (and also knowing the difference between the two) and will follow
+a scenario-based approach.</p>
+
+<!--more-->
+
+
+<h2>Ground Zero: Install ZSH/Oh-My-ZSH</h2>
+
+<p>This should be done before anything else, mainly because ZSH is an awesome shell
+and is very customizable. Here&rsquo;s a screenshot of my ZSH shell (I use the cloud
+theme) -:</p>
+
+<p><img src="http://PritishC.github.io/images/zsh.png" /></p>
+
+<p>Note how the branch name is shown in square-brackets and the lightning symbol
+signifies that a change has occurred in some file(s) which may or may not be
+committed.</p>
+
+<figure class='code'><figcaption><span>zero</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install zsh curl
+</span><span class='line'>Installing...
+</span><span class='line'><span class="nv">$ </span>curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh <span class="p">|</span> sh
+</span><span class='line'>Installing... <span class="o">(</span>you may be prompted to answer a few questions<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once the install is complete, close your current command prompt and re-open it.
+You should now be using ZSH. You can customize your configuration by editing
+the <code>.zshrc</code> file, which is present at the home folder (<code>$HOME</code>). I&rsquo;ll leave
+that bit out to the reader to experimet with stuff like themes.</p>
+
+<h2>Scenario-I: Basic Git Setup.</h2>
+
+<p>To begin working on one of the company repositories, first fork the repo on GitHub
+and then use the following commands on your terminal (assuming your SSH keys
+have already been setup) -:</p>
+
+<figure class='code'><figcaption><span>scenario-I</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone git@github.com:&lt;your-username&gt;/&lt;repo-name&gt;
+</span><span class='line'>Cloning...
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> &lt;repo-name&gt;
+</span><span class='line'><span class="nv">$ </span>git remote add openlabs git@github.com:openlabs/&lt;repo-name&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can run <code>git remote -vv</code> to check the names of your remotes. At this point,
+you should have the remotes &lsquo;origin&rsquo; and &lsquo;openlabs&rsquo; for your cloned repository.</p>
+
+<h2>Scenario-II: Writing A Feature/Hotfix</h2>
+
+<p>All work is usually based off of the develop branch, and so, you will checkout
+your new branch off develop. There may be cases when you will have to checkout
+off a version branch - that is described in the next scenario.</p>
+
+<p>You can prefix your branch name with &lsquo;feature&rsquo; or &lsquo;fix&rsquo; depending on whether
+it is a feature to be added or a fix to be made. Branch naming is completely
+your choice, I only try provide a useful convention here.</p>
+
+<p>For example, you wish to add a feature and your task ID is 0000. You will do so
+as follows -:</p>
+
+<figure class='code'><figcaption><span>scenario-II</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git branch
+</span><span class='line'>* develop
+</span><span class='line'><span class="nv">$ </span>git checkout -b feature/task-0000
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you&rsquo;re on the <code>feature/task-0000</code> branch, as the ZSH branch indicator should
+tell you. You can do some work, and then commit it.</p>
+
+<figure class='code'><figcaption><span>scenario-II</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git status
+</span><span class='line'>Shows files which are being tracked, are staged <span class="k">for</span> commit or are not staged.
+</span><span class='line'><span class="nv">$ </span>gst
+</span><span class='line'>Shorthand <span class="k">for</span> the above which works with zsh.
+</span><span class='line'><span class="nv">$ </span>git add &lt;filenames&gt;
+</span><span class='line'><span class="nv">$ </span>git commit
+</span><span class='line'>Write your commit message and use VI shortcuts to save the message, i.e., :wq
+</span><span class='line'>If you have nano configured as your editor instead, use that.
+</span><span class='line'>Commit messages should be brief yet descriptive, and neatly written.
+</span><span class='line'><span class="nv">$ </span>git config --global push.simple
+</span><span class='line'>Needs to be <span class="nb">set </span>only once.
+</span><span class='line'><span class="nv">$ </span>git push -uvf origin
+</span><span class='line'>This pushes your current branch to the origin remote <span class="o">(</span>which is your fork<span class="o">)</span>.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can open a pull request from GitHub on the openlabs remote. Make sure
+to get your work reviewed.</p>
+
+<h2>Scenario-IIA: Writing A Feature For Version Branches</h2>
+
+<p>Sometimes, you may need to write features not for develop but for an earlier
+version branch. In this case, you may do a <code>git fetch openlabs</code> to get the branch
+data as is required. For example, some of our repositories are being moved to
+v3.4, which becomes the develop branch. v3.2 gets a branch named <code>3.2</code>.</p>
+
+<p>In this case, you need to checkout off of the 3.2 branch instead of develop, and
+your PR should be sent on the 3.2 branch. The commands are the same, except
+the branch you are checking out off changes.</p>
+
+<h2>Scenario-III: Rebase To Keep Up</h2>
+
+<p>Rebasing is an important part of using git repositories. In a team environment,
+you will have to rebase often to keep up with the latest changes, as you will
+not be the only one pushing features and fixes to the openlabs remote.</p>
+
+<p>It is advisable that before you checkout off of develop, you should do a rebase
+as follows -:</p>
+
+<figure class='code'><figcaption><span>scenario-III</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git pull --rebase openlabs branch:branch
+</span><span class='line'>Rebasing...
+</span><span class='line'>May or may not introduce merge conflicts.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>branch</code> here may either be develop or a version branch, as was explained earlier.</p>
+
+<p>To resolve merge conflicts, you will need to search for files which have the
+<code>&gt;&gt;&gt;HEAD</code> symbol appearing in them. I usually do this with the <code>grep</code> command.
+Take a look at the latest version of the files from GitHub and modify your
+local files accordingly. Be careful not to omit any code that was not added by
+you.</p>
+
+<p>Once you are done editing your local files, do a <code>git add</code> on them, and then run
+<code>git rebase --continue</code>.</p>
+
+<h2>Bonus Scenario: Protect Your Slack/HipChat From Attack!</h2>
+
+<p>One of the fun parts of being at Openlabs is that we advise our colleagues
+not to leave their systems unlocked. If you leave your system on, you are fair
+game for us :D.</p>
+
+<p>Leaving your system on may or may not lead to one of the following -:</p>
+
+<ul>
+<li>Silly messages appearing on your HipChat/Slack, on the Water Cooler.</li>
+<li>Declarations of coming out of the closet on your Facebook (if we know you well
+enough).</li>
+<li>Messed up configurations, and so on.</li>
+</ul>
+
+
+<p>Vanilla Ubuntu users can use the Ctrl+L shortcut to lock their systems quickly.
+For those who cannot use this shortcut for whatever reason (for example, Lubuntu
+does not have such a shortcut), they may install <code>xscreensaver</code> using their
+package manager and use this little script I made -:</p>
+
+<figure class='code'><figcaption><span>sample .logoutscript  (.logoutscript)</span> <a href='http://PritishC.github.io/downloads/code/.logoutscript'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ps cax <span class="p">|</span> grep xscreensaver &gt; /dev/null
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span><span class='line'>  xscreensaver -no-splash <span class="p">&amp;</span>
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'>xscreensaver-command -lock
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>grep</code> returns useful exit codes which can be used to find out whether <code>xscreensaver</code>
+is running or not. If it is not running, it is made to run. Henceforth, the
+lock command is applied.</p>
+
+<p>You may save this script to your home directory and then run <code>sh ~/.logoutscript</code>
+whenever you need to get away from your system!</p>
+
+<p>PS: I will update this as more use cases come to mind.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Tryton Module Basics and Programming Example]]></title>
@@ -920,65 +1124,6 @@ the default. One could remove this field if they wished.</p>
 
 <p>Congratulations, you&rsquo;ve created your very first Tryton database. Now you can login
 to it and install the necessary Tryton modules.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Postgres Setup]]></title>
-    <link href="http://PritishC.github.io/blog/2014/10/19/postgres-setup/"/>
-    <updated>2014-10-19T20:27:55+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/10/19/postgres-setup</id>
-    <content type="html"><![CDATA[<p>This article offers a simple introduction to PostgreSQL and how to install it.
-It is necessary for Tryton. In effect, this article is merely filler, and one can
-skip it if one wishes so.</p>
-
-<!--more-->
-
-
-<p><a href="http://www.postgresql.org/">PostgreSQL</a> is an open-source ORDBMS which is a hardcore
-programmer&rsquo;s paradise. Since it is community-developed, it adheres to strict standards
-and supports DB best practices. For more information, Google is your friend.</p>
-
-<p>Now the installation of Postgres on your setup depends on the operating system you
-have installed. For most Linux distros, Postgres has a distro-specific bundle which
-can easily be installed using the particular package manager. It is usually advised
-to install this distro-specific bundle rather then going down the generic route.</p>
-
-<p>I had faced several problems setting up Postgres on Linux Mint because I downloaded
-and executed the generic bundle. You can find some mention of those problems here
-at the <a href="https://github.com/PritishC/nereid-erms/wiki">wiki</a> of a project which I
-wrote as part of a company induction task. I am currently on Lubuntu, and this
-time, I used the package manager. Lesson learned.</p>
-
-<p>Another thing you ideally should do is install <a href="http://www.pgadmin.org/">PGAdmin</a>.
-It is a very useful tool for management and administration of your databases. You
-might often have to view a specific table inside the DB that you create for Tryton.</p>
-
-<p>For Debian derivatives such as mine,</p>
-
-<figure class='code'><figcaption><span>bash snippet</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install postgresql postgresql-contrib
-</span><span class='line'><span class="nv">$ </span>sudo apt-get install pgadmin3
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There is also the <code>postgres</code> user setup. After one is done installing the above,
-one should fire up a terminal and set the <code>postgres</code> user&rsquo;s password.</p>
-
-<figure class='code'><figcaption><span>postgres user</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u postgres psql postgres
-</span><span class='line'><span class="nv">$ </span><span class="se">\p</span>assword postgres
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Equivalently, one could do <code>sudo su - postgres</code> to get into the postgres account,
-and then run <code>psql -u postgres -h localhost</code> or something similar.
-The second line in the above snippet sets a password for the postgres database
-role.</p>
-
-<p>And that&rsquo;s that. Soon, we shall be on a functioning Tryton setup!</p>
 ]]></content>
   </entry>
   
