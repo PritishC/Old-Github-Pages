@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tryton | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/tryton/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2015-01-25T19:13:10+05:30</updated>
+  <updated>2015-04-07T12:43:20+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -938,13 +938,23 @@ to the workflow.
   directory you&#8217;ve readied for this purpose -:
 
   &#8220;` bash [virtualenv]
-  mkproject &#8211;system-site-packages myenv
+  mkproject myenv
   &#8220;`
 
   Substitute myenv with any name you wish. And voila, you have your newly commissioned
   virtualenv.
-* What does this have to do with `pygtk`, you ask? Well, since it was system-wide,
-  it gets incorporated into your virtualenv and you don&#8217;t have to bother about it.
+* After the virtualenv is created, use the `toggleglobalsitepackages` switch from inside
+  it to enable pygtk. Since pygtk was installed system-wide (global site packages), it gets
+  incorporated into your virtualenv and you don&#8217;t have to bother about it.
+
+* What this does is create a project folder at the location specified by the `$PROJECT_HOME`
+  variable, which you must have specified during your virtualenvwrapper installation. You can
+  now clone your GitHub/etc repositories inside this folder and install their requirements.
+
+* This kind of project organization allows you to easily clone the repositories
+  which constitute the requirements of a particular repository and make changes in them.
+  For example, `nereid-webshop` depends on `nereid-cart-b2c`. If you need to send a patch
+  on the latter, you can clone it inside the project folder you created for webshop.
 
 And that&#8217;s that folks! In the next post, we shall set up Postgres as Tryton uses
 Postgres databases. Following that, we shall learn how to actually install Tryton, 

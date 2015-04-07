@@ -163,13 +163,21 @@ into the virtualenv. These are the absolute bare-minimum requirements that every
 virtualenv will get. Now issue the following command in your terminal, in whichever
 directory you&rsquo;ve readied for this purpose -:</p>
 
-<pre><code class="bash [virtualenv]">mkproject --system-site-packages myenv
+<pre><code class="bash [virtualenv]">mkproject myenv
 </code></pre>
 
 <p>Substitute myenv with any name you wish. And voila, you have your newly commissioned
 virtualenv.</p></li>
-<li>What does this have to do with <code>pygtk</code>, you ask? Well, since it was system-wide,
-it gets incorporated into your virtualenv and you don&rsquo;t have to bother about it.</li>
+<li><p>After the virtualenv is created, use the <code>toggleglobalsitepackages</code> switch from inside
+it to enable pygtk. Since pygtk was installed system-wide (global site packages), it gets
+incorporated into your virtualenv and you don&rsquo;t have to bother about it.</p></li>
+<li><p>What this does is create a project folder at the location specified by the <code>$PROJECT_HOME</code>
+variable, which you must have specified during your virtualenvwrapper installation. You can
+now clone your GitHub/etc repositories inside this folder and install their requirements.</p></li>
+<li><p>This kind of project organization allows you to easily clone the repositories
+which constitute the requirements of a particular repository and make changes in them.
+For example, <code>nereid-webshop</code> depends on <code>nereid-cart-b2c</code>. If you need to send a patch
+on the latter, you can clone it inside the project folder you created for webshop.</p></li>
 </ul>
 
 
@@ -270,6 +278,10 @@ both the client and the server.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/03/08/analyzing-stuff-with-google-analytics/">Analyzing Stuff With Google Analytics</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/01/25/development-cheatsheet/">Development Cheatsheet @ Openlabs</a>
       </li>
     
@@ -283,10 +295,6 @@ both the client and the server.</p>
     
       <li class="post">
         <a href="/blog/2014/10/22/an-ode-to-nokia/">An Ode to Nokia</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/21/beginning-tryton/">Beginning Tryton</a>
       </li>
     
   </ul>
