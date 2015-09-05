@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Django | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/django/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2015-09-03T23:26:14+05:30</updated>
+  <updated>2015-09-05T13:11:28+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -394,6 +394,7 @@ Dockerfile -:
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
+<span class='line-number'>18</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># Set nginx base image</span>
 </span><span class='line'>FROM nginx
 </span><span class='line'>
@@ -403,13 +404,14 @@ Dockerfile -:
 </span><span class='line'><span class="c"># Copy custom configuration file from the current directory</span>
 </span><span class='line'>COPY nginx.conf /etc/nginx/nginx.conf
 </span><span class='line'>
-</span><span class='line'>COPY container_ip.sh /root/container_ip.sh
+</span><span class='line'><span class="c"># Uncomment the commented Dockerfile lines below when pushing to AWS</span>
+</span><span class='line'><span class="c"># COPY container_ip.sh /root/container_ip.sh</span>
 </span><span class='line'>
 </span><span class='line'><span class="c"># Get django container&#39;s IP and put it in nginx.conf</span>
-</span><span class='line'>RUN /root/container_ip.sh
+</span><span class='line'><span class="c"># RUN /root/container_ip.sh</span>
 </span><span class='line'>
 </span><span class='line'><span class="c"># Reload the damn nginx service</span>
-</span><span class='line'>CMD <span class="o">[</span><span class="s2">&quot;service&quot;</span>, <span class="s2">&quot;nginx&quot;</span>, <span class="s2">&quot;restart&quot;</span><span class="o">]</span>
+</span><span class='line'><span class="c"># CMD [&quot;service&quot;, &quot;nginx&quot;, &quot;restart&quot;]</span>
 </span><span class='line'>CMD /usr/sbin/nginx -g <span class="s2">&quot;daemon off;&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 

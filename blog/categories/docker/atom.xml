@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Docker | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/docker/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2015-09-03T23:26:14+05:30</updated>
+  <updated>2015-09-05T13:11:28+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -12,6 +12,491 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Docker Is Awesome - Part II]]></title>
+    <link href="http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii/"/>
+    <updated>2015-09-04T22:56:15+05:30</updated>
+    <id>http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii</id>
+    <content type="html"><![CDATA[This is Part 2 of the 'Docker Is Awesome' mini-series. You can catch Part 1
+over [here](/blog/2015/09/03/docker-is-awesome/).
+
+In this article, I'll explain how to use docker-machine, docker-compose and
+docker-engine to deploy your setup on your local machine as well as to AWS.
+
+<!--more-->
+
+It is imperative to first understand what this trinity of tools does. docker-engine is the basic component - it is used to create, manipulate and delete
+one-off containers. On the command line, one can invoke it by typing just
+`docker`.
+
+docker-compose is a tool built on top of docker-engine which allows us to
+run multi-container systems. In our setup, we have three services - django,
+postgres and nginx. Each runs in their own container, and compose lets us
+coordinate them. The docker-compose reference urges us not to use it in
+production *yet*, but it&#8217;s pretty good, so screw that!
+
+docker-machine is a tool used to create and provision Docker hosts. This
+provisioning can be done either on your local machine or on a cloud provider;
+it supports quite a few of them, including AWS and DigitalOcean.
+
+Here are the contents of the `rebuild_docker.sh` file -:
+
+<figure class='code'><figcaption><span>rebuild_docker.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>docker-compose build
+</span><span class='line'>docker-compose up -d
+</span><span class='line'>docker-compose ps
+</span></code></pre></td></tr></table></div></figure>
+
+The `build` option builds each service specified in the `docker-compose.yml` file.
+The `up -d` option creates and starts the containers given in that list. Finally,
+`ps` lets us see each running container, what command they&#8217;re running and what
+their status is (exit codes if there were any errors).
+
+With all that out of the way, let us begin!
+
+## Local Machine Setup
+
+Let&#8217;s create a docker-machine host for our local machine. We will be using the Virtualbox
+driver to get that running.
+
+<figure class='code'><figcaption><span>docker-machine local</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-machine create -d virtulabox dev<span class="p">;</span>
+</span><span class='line'>Creating VirtualBox VM...
+</span><span class='line'>Creating SSH key...
+</span><span class='line'>Starting VirtualBox VM...
+</span><span class='line'>Starting VM...
+</span><span class='line'>To see how to connect Docker to this machine, run: docker-machine env dev
+</span></code></pre></td></tr></table></div></figure>
+
+Well, since it tells us to -:
+
+<figure class='code'><figcaption><span>docker-machine local</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-machine env dev
+</span><span class='line'><span class="nb">export </span><span class="nv">DOCKER_TLS_VERIFY</span><span class="o">=</span><span class="s2">&quot;1&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">DOCKER_HOST</span><span class="o">=</span><span class="s2">&quot;tcp://192.168.99.100:2376&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">DOCKER_CERT_PATH</span><span class="o">=</span><span class="s2">&quot;/home/pritishc/.docker/machine/machines/dev&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">DOCKER_MACHINE_NAME</span><span class="o">=</span><span class="s2">&quot;dev&quot;</span>
+</span><span class='line'><span class="c"># Run this command to configure your shell: </span>
+</span><span class='line'><span class="c"># eval &quot;$(docker-machine env dev)&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+A bunch of environment variables, hrm. Run the `eval` command as given to set those up.
+Now we have a running docker host on our local. Check out the ip of the machine since
+you will be needing that later -:
+
+<figure class='code'><figcaption><span>docker-machine local</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-machine ip dev
+</span><span class='line'>192.168.99.100
+</span></code></pre></td></tr></table></div></figure>
+
+Now we can run the contents of `rebuild_docker.sh` to build, create/start and list our
+containers in one go. Note that the building process is initially quite slow; especially
+on your local machine. The results of this build will be cached, making each subsequent
+build much faster. However, **if you tinker with the Dockerfile of a service (like django),
+the lines after the line you tinkered with will not be cached, and will be built again**.
+
+Here&#8217;s what it looks like when the builds are cached -:
+
+<figure class='code'><figcaption><span>docker-machine local cached build</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>postgres uses an image, skipping
+</span><span class='line'>Building django...
+</span><span class='line'>Step <span class="m">0</span> : FROM ubuntu:14.04
+</span><span class='line'> ---&gt; 91e54dfb1179
+</span><span class='line'>Step <span class="m">1</span> : ENV DJANGO_CONFIGURATION Docker
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 6c23847d177e
+</span><span class='line'>Step <span class="m">2</span> : RUN apt-get update
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 37ceafd99c8b
+</span><span class='line'>Step <span class="m">3</span> : RUN apt-get install -y ca-certificates git-core ssh nodejs npm python-pip libpq-dev python-dev
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; ca6793a2add5
+</span><span class='line'>Step <span class="m">4</span> : RUN ln -s /usr/bin/nodejs /usr/bin/node
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; f9311c741b62
+</span><span class='line'>Step <span class="m">5</span> : ENV HOME /root
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; b0f6dbd6a6fa
+</span><span class='line'>Step <span class="m">6</span> : ADD ssh/ /root/.ssh/
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 1a50ee500dba
+</span><span class='line'>Step <span class="m">7</span> : RUN chmod <span class="m">600</span> /root/.ssh/*
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 475bf637fea7
+</span><span class='line'>Step <span class="m">8</span> : RUN ssh-keyscan bitbucket.org &gt; /root/.ssh/known_hosts
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 1bc79f8a33a0
+</span><span class='line'>Step <span class="m">9</span> : WORKDIR /usr/src/app
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 6922edc704da
+</span><span class='line'>Step <span class="m">10</span> : RUN git clone git@bitbucket.org:me/repo.git
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 29160d78c443
+</span><span class='line'>Step <span class="m">11</span> : WORKDIR /usr/src/app/repo
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; ca03b1e414cc
+</span><span class='line'>Step <span class="m">12</span> : RUN pip install -r requirements.txt
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 56fb3e85c03c
+</span><span class='line'>Step <span class="m">13</span> : RUN npm install -g bower
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; e5660af6e528
+</span><span class='line'>Step <span class="m">14</span> : RUN bower --allow-root install
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; d8b0d8cf33e6
+</span><span class='line'>Step <span class="m">15</span> : ENV AWS_ACCESS_KEY youcanttouchthis
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 057f430aa52d
+</span><span class='line'>Step <span class="m">16</span> : ENV AWS_SECRET_ACCESS_KEY secretsauce
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 68291ffdbd6c
+</span><span class='line'>Step <span class="m">17</span> : ENV S3_BUCKET_NAME datbuckettho
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 2ba6884067d2
+</span><span class='line'>Step <span class="m">18</span> : ENV DB_NAME postgres
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 951c81446ee1
+</span><span class='line'>Step <span class="m">19</span> : ENV DB_USER postgres
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; b85ead2a75e3
+</span><span class='line'>Step <span class="m">20</span> : ENV DB_PASS postgres
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 475c43341026
+</span><span class='line'>Step <span class="m">21</span> : ENV DB_SERVICE postgres
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 4cc910cd2a51
+</span><span class='line'>Step <span class="m">22</span> : ADD ./static/admin /usr/src/app/repo/static/admin
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; d70e3dd5c885
+</span><span class='line'>Step <span class="m">23</span> : WORKDIR /usr/src/app/repo/project
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 255623db8059
+</span><span class='line'>Step <span class="m">24</span> : CMD gunicorn project.wsgi -w <span class="m">2</span> -b 0.0.0.0:8000 --log-level -
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 55a7c489cb3e
+</span><span class='line'>Successfully built 55a7c489cb3e
+</span><span class='line'>Building nginx...
+</span><span class='line'>Step <span class="m">0</span> : FROM nginx
+</span><span class='line'> ---&gt; cd3cf76a61ee
+</span><span class='line'>Step <span class="m">1</span> : MAINTAINER Pritish Chakraborty
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 73affa8810c3
+</span><span class='line'>Step <span class="m">2</span> : COPY nginx.conf /etc/nginx/nginx.conf
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 3b73ef0ef3e8
+</span><span class='line'>Step <span class="m">3</span> : COPY container_ip.sh /root/container_ip.sh
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; b3fbe36b0674
+</span><span class='line'>Step <span class="m">4</span> : RUN /root/container_ip.sh
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 5df4fe6c5403
+</span><span class='line'>Step <span class="m">5</span> : CMD service nginx restart
+</span><span class='line'> ---&gt; Running in 642215ba03c6
+</span><span class='line'> ---&gt; 4d2df9239cb3
+</span><span class='line'>Removing intermediate container 642215ba03c6
+</span><span class='line'>Step <span class="m">6</span> : CMD /usr/sbin/nginx -g <span class="s2">&quot;daemon off;&quot;</span>
+</span><span class='line'> ---&gt; Running in 5bdc232c1761
+</span><span class='line'> ---&gt; 2d55cf5df93b
+</span><span class='line'>Removing intermediate container 5bdc232c1761
+</span><span class='line'>Successfully built 2d55cf5df93b
+</span><span class='line'>projectdocker_postgres_1 is up-to-date
+</span><span class='line'>projectdocker_django_1 is up-to-date
+</span><span class='line'>Recreating projectdocker_nginx_1...
+</span><span class='line'>      Name             Command             State              Ports
+</span><span class='line'>-------------------------------------------------------------------------
+</span><span class='line'>projectdocker_dja   gunicorn           Up                 8000/tcp
+</span><span class='line'>ngo_1              project.wsgi -w <span class="m">2</span>
+</span><span class='line'>                   ...
+</span><span class='line'>projectdocker_ngi   /bin/sh -c         Up                 443/tcp, 0.0.0.0
+</span><span class='line'>nx_1               /usr/sbin/nginx                       :80-&gt;80/tcp
+</span><span class='line'>                   ...
+</span><span class='line'>projectdocker_pos   /docker-           Up                 5432/tcp
+</span><span class='line'>tgres_1            entrypoint.sh
+</span><span class='line'>                   postgres
+</span></code></pre></td></tr></table></div></figure>
+
+Pretty neat, huh? You can browse to the ip given by docker-machine in your
+browser and check your website out in all its glory!
+
+A couple more things - suppose some service breaks unexpectedly. You can
+check out the logs using -:
+
+<figure class='code'><figcaption><span>docker-compose logs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-compose logs &lt;servicename&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+If you want to check out the contents of your container, run -:
+
+<figure class='code'><figcaption><span>docker-compose run</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-compose run &lt;servicename&gt; bash
+</span></code></pre></td></tr></table></div></figure>
+
+## AWS Setup
+
+This is it. The biggie. This is the part where you get to see your app running
+on the cloud. We&#8217;re going to deploy our multi-container setup to Amazon EC2. But
+first, we&#8217;re going to have to prepare a few things.
+
+* Create a Virtual Private Cloud instance (VPC) which your EC2 instance will use.
+This can be done from the VPC Management Console. If you signed up on the free-tier,
+you might have a VPC instance running from the beginning. If not, create one!
+Here&#8217;s what it looks like -:
+
+<img src="/images/AWS_VPC.png" title="'AWS VPC'" >
+
+<img src="/images/AWS_VPC_Subnets.png" title="'AWS VPC Subnets'" >
+
+When creating a VPC, keep the tenancy as &#8216;default&#8217; and an example of a CIDR block
+that you could choose is 172.31.0.0/16, where /16 is the subnet mask. Amazon does
+the rest for you.
+
+* With the VPC and its subnets (if there are none, create a public subnet) created,
+we need to assign some security groups. First, according to Amazon&#8217;s [documentation](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenario1.html),
+make a security group (call it whatever you like) and add the rules as follows -:
+
+<img src="/images/AWS_SG_1.png" title="'AWS Security Group Inbound Rules'" >
+
+<img src="/images/AWS_SG_2.png" title="'AWS Security Group Outbound Rules'" >
+
+In the inbound rules, IP ranges that I pixelized are my own. In these specific rules,
+you&#8217;d select &#8216;My Own IP&#8217; when creating them. Finally, add the security group to your
+VPC.
+
+* With the VPC set up, go to the Identity Access Management console (IAM), and
+generate a pair of credentials for docker-machine to use when setting up your EC2
+box. I wasn&#8217;t able to figure out the security groups that this set of IAM credentials
+should&#8217;ve had, so I gave it FullAdministratorAccess - this is usually not advisable.
+Also note that the set of credentials which I put in my django Dockerfile are **not**
+the same as these.
+
+Now we can provision our docker host on AWS. Do it with this command -:
+
+<figure class='code'><figcaption><span>docker-machine AWS</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>docker-machine create <span class="se">\ </span>
+</span><span class='line'>--driver amazonec2 <span class="se">\</span>
+</span><span class='line'>--amazonec2-access-key nicekeym8 <span class="se">\</span>
+</span><span class='line'>--amazonec2-secret-key oososecret <span class="se">\</span>
+</span><span class='line'>--amazonec2-vpc-id vpc-id <span class="se">\</span>
+</span><span class='line'>--amazonec2-region some-region <span class="se">\</span>
+</span><span class='line'>--amazonec2-zone zone-letter <span class="se">\</span>
+</span><span class='line'>ec2box
+</span></code></pre></td></tr></table></div></figure>
+
+You can get the information from the VPC management console. This command takes a
+while to execute, but when it is done, you&#8217;ll have to run the `eval` command like
+we did for our local setup, to point docker-machine to our AWS host.
+
+Once the machine is provisioned, go check it out on your EC2 management console -:
+
+<img src="/images/AWS_EC2.png" title="'AWS EC2'" >
+
+There&#8217;s still a bit of security group editing to do. Now when you check out your
+VPC, you will find that it has a new group called `docker-machine`. Edit this group
+and add the following inbound rule -:
+
+<img src="/images/AWS_VPC_dockermachine.png" title="'docker-machine Rules'" >
+
+Add this TCP rule for your own IP.
+
+Now you can browse to the ip given by `docker-machine ip ec2box`/the one listed on
+your EC2 instances page, and examine your webapp on the cloud at leisure!
+Pat yourself on the back, you did it. Or not&#8230;
+
+## What About Nginx?
+
+Ah, so you *did* read my previous article carefully. If I&#8217;m right, you&#8217;ll find
+that nginx is giving you weird errors (most likely a 502).
+
+The last bit of trickery that I added to the nginx Dockerfile revolves around this
+file - `container_ip.sh`. Its contents are as follows -:
+
+<figure class='code'><figcaption><span>container_ip.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># The awk command gets the IP for the django container from /etc/hosts</span>
+</span><span class='line'><span class="c"># The sed command replaces the placeholder in nginx conf with this IP</span>
+</span><span class='line'><span class="c"># Finally, the config placeholder is replaced with the IP</span>
+</span><span class='line'><span class="nv">ip</span><span class="o">=</span><span class="sb">`</span>awk <span class="s1">&#39;/django/ {print $1; exit}&#39;</span> /etc/hosts<span class="sb">`</span><span class="p">;</span> sed -i <span class="s2">&quot;s//$ip/g&quot;</span> /etc/nginx/nginx.conf
+</span></code></pre></td></tr></table></div></figure>
+
+And the said placeholder is put in like this -:
+
+
+<figure class='code'><figcaption><span>nginx config</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>location / <span class="o">{</span>
+</span><span class='line'>    proxy_pass http://<span class="o">{{</span>container_ip<span class="o">}}</span>:8000<span class="p">;</span>
+</span><span class='line'>    proxy_set_header   Host <span class="nv">$host</span><span class="p">;</span>
+</span><span class='line'>    proxy_set_header   X-Real-IP <span class="nv">$remote_addr</span><span class="p">;</span>
+</span><span class='line'>    proxy_set_header   X-Forwarded-For <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+</span><span class='line'>    proxy_set_header   X-Forwarded-Host <span class="nv">$server_name</span><span class="p">;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+`{{container_ip}}` is in place of &#8216;django&#8217;, which is replaced by the actual IP given in
+the `/etc/hosts` file of the nginx container - you can confirm this for yourself by running
+bash on the nginx container and running the awk and sed commands.
+
+You might want to put `container_ip.sh` in the nginx directory so that docker can
+find it when performing the ADD operation.
+
+And now, run the following commands to recreate the nginx container -:
+
+<figure class='code'><figcaption><span>nginx recreation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-compose build --no-cache nginx
+</span><span class='line'><span class="nv">$ </span>docker-compose up -d
+</span></code></pre></td></tr></table></div></figure>
+
+And there you have it. Give it a bit of time for AWS to iron everything out, and with
+luck, you&#8217;ll be able to play with your webapp on the cloud.
+
+Hope you enjoyed this article :) I&#8217;ll write another one soon for that django-storages +
+Amazon S3 setup of mine.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Docker Is Awesome - Part I]]></title>
@@ -394,6 +879,7 @@ Dockerfile -:
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
+<span class='line-number'>18</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># Set nginx base image</span>
 </span><span class='line'>FROM nginx
 </span><span class='line'>
@@ -403,13 +889,14 @@ Dockerfile -:
 </span><span class='line'><span class="c"># Copy custom configuration file from the current directory</span>
 </span><span class='line'>COPY nginx.conf /etc/nginx/nginx.conf
 </span><span class='line'>
-</span><span class='line'>COPY container_ip.sh /root/container_ip.sh
+</span><span class='line'><span class="c"># Uncomment the commented Dockerfile lines below when pushing to AWS</span>
+</span><span class='line'><span class="c"># COPY container_ip.sh /root/container_ip.sh</span>
 </span><span class='line'>
 </span><span class='line'><span class="c"># Get django container&#39;s IP and put it in nginx.conf</span>
-</span><span class='line'>RUN /root/container_ip.sh
+</span><span class='line'><span class="c"># RUN /root/container_ip.sh</span>
 </span><span class='line'>
 </span><span class='line'><span class="c"># Reload the damn nginx service</span>
-</span><span class='line'>CMD <span class="o">[</span><span class="s2">&quot;service&quot;</span>, <span class="s2">&quot;nginx&quot;</span>, <span class="s2">&quot;restart&quot;</span><span class="o">]</span>
+</span><span class='line'><span class="c"># CMD [&quot;service&quot;, &quot;nginx&quot;, &quot;restart&quot;]</span>
 </span><span class='line'>CMD /usr/sbin/nginx -g <span class="s2">&quot;daemon off;&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
