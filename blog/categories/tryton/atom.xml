@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tryton | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/tryton/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2015-09-06T18:47:36+05:30</updated>
+  <updated>2015-09-06T19:05:07+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -21,6 +21,9 @@
     <content type="html"><![CDATA[This article will cover the basics of developing a module for Tryton. After having
 gone through the setup, it is finally time to make your own module. This might
 turn out to be a longer post than all my previous ones, so hang in there.
+
+*Note*: This article is to some extent *deprecated* - it was written with Tryton
+v3.2 in mind.
 
 <!--more-->
 
