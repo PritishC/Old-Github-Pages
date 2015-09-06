@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2015-09-05T13:30:18+05:30</updated>
+  <updated>2015-09-06T13:35:23+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -61,6 +61,18 @@ card from the internal memory (I haven&#8217;t tested this as of yet).
 Or you could just root. That too.
 
 
+
+<div id="discourse-comments"></div>
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2014/10/24/overcoming-sd-card-write-restrictions/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
 ]]></content>
   </entry>
   

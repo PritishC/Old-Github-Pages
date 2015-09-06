@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Virtualenv | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/virtualenv/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2015-09-05T13:30:18+05:30</updated>
+  <updated>2015-09-06T13:35:23+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -107,6 +107,18 @@ Postgres databases. Following that, we shall learn how to actually install Tryto
 both the client and the server.
   
 
+
+<div id="discourse-comments"></div>
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
 ]]></content>
   </entry>
   

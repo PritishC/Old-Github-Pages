@@ -4,7 +4,7 @@
   <title><![CDATA[Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2015-09-05T13:30:18+05:30</updated>
+  <updated>2015-09-06T13:35:23+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -515,6 +515,21 @@ luck, you&rsquo;ll be able to play with your webapp on the cloud.</p>
 
 <p>Hope you enjoyed this article :) I&rsquo;ll write another one soon for that django-storages +
 Amazon S3 setup of mine.</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
 ]]></content>
   </entry>
   
@@ -1094,6 +1109,21 @@ when we deploy on AWS.</p>
 first, on my local machine (virtualbox driver), and then on AWS. I&rsquo;ll add a bonus command
 to deploy to DigitalOcean for shits and giggles.
 Coming soon!</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/09/03/docker-is-awesome/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
 ]]></content>
   </entry>
   
@@ -1367,6 +1397,21 @@ a double form submission - an edge case which I was able to consistently reprodu
 the webshop source at your leisure - it is open-source, and we encourage good pull requests.</p>
 
 <p>My next article will be on one of my favourite tools - Elasticsearch :-).</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/03/08/analyzing-stuff-with-google-analytics/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
 ]]></content>
   </entry>
   
@@ -1571,6 +1616,21 @@ lock command is applied.</p>
 whenever you need to get away from your system!</p>
 
 <p>PS: I will update this as more use cases come to mind.</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/01/25/development-cheatsheet/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
 ]]></content>
   </entry>
   
@@ -2135,6 +2195,21 @@ the Tryton client.</p>
 
 <p>I hope everyone enjoyed reading this post as much as I did writing it. Until
 next time then.</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
 ]]></content>
   </entry>
   

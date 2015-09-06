@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Nginx | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/nginx/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2015-09-05T13:30:18+05:30</updated>
+  <updated>2015-09-06T13:35:23+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -495,6 +495,18 @@ luck, you&#8217;ll be able to play with your webapp on the cloud.
 
 Hope you enjoyed this article :) I&#8217;ll write another one soon for that django-storages +
 Amazon S3 setup of mine.
+
+<div id="discourse-comments"></div>
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
 ]]></content>
   </entry>
   
@@ -1065,6 +1077,18 @@ The second part of this post will deal with the actual commands needed to deploy
 first, on my local machine (virtualbox driver), and then on AWS. I&#8217;ll add a bonus command
 to deploy to DigitalOcean for shits and giggles.
 Coming soon!
+
+<div id="discourse-comments"></div>
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/09/03/docker-is-awesome/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
 ]]></content>
   </entry>
   

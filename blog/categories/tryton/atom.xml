@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tryton | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/tryton/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2015-09-05T13:30:18+05:30</updated>
+  <updated>2015-09-06T13:35:23+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -565,6 +565,18 @@ the Tryton client.
 
 I hope everyone enjoyed reading this post as much as I did writing it. Until
 next time then.
+
+<div id="discourse-comments"></div>
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
 ]]></content>
   </entry>
   
@@ -807,6 +819,18 @@ the default. One could remove this field if they wished.
 
 Congratulations, you&#8217;ve created your very first Tryton database. Now you can login
 to it and install the necessary Tryton modules.
+
+<div id="discourse-comments"></div>
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2014/10/21/beginning-tryton/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
 ]]></content>
   </entry>
   
@@ -864,6 +888,18 @@ role.
 
 And that&#8217;s that. Soon, we shall be on a functioning Tryton setup!
 
+
+<div id="discourse-comments"></div>
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2014/10/19/postgres-setup/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
 ]]></content>
   </entry>
   
@@ -961,6 +997,18 @@ Postgres databases. Following that, we shall learn how to actually install Tryto
 both the client and the server.
   
 
+
+<div id="discourse-comments"></div>
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
 ]]></content>
   </entry>
   
