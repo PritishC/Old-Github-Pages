@@ -1,46 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://PritishC.github.io/blog/2015/09/06/uploading-with-django-and-amazon-s3/</loc>
-    <lastmod>2015-09-06T17:20:49+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii/</loc>
-    <lastmod>2015-09-04T22:56:15+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2015/09/03/docker-is-awesome/</loc>
-    <lastmod>2015-09-03T21:56:16+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2015/03/08/analyzing-stuff-with-google-analytics/</loc>
-    <lastmod>2015-03-08T12:37:36+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2015/01/25/development-cheatsheet/</loc>
-    <lastmod>2015-01-25T11:12:33+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example/</loc>
-    <lastmod>2014-11-02T19:22:17+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2014/10/24/overcoming-sd-card-write-restrictions/</loc>
-    <lastmod>2014-10-24T13:19:42+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2014/10/22/an-ode-to-nokia/</loc>
-    <lastmod>2014-10-22T10:11:23+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>http://PritishC.github.io/blog/2014/10/21/beginning-tryton/</loc>
     <lastmod>2014-10-21T12:05:18+05:30</lastmod>
     <priority>0.8</priority>
@@ -62,31 +22,31 @@
   </url>
   <url>
     <loc>http://PritishC.github.io/blog/archives/</loc>
-    <lastmod>2015-09-06T19:54:24+05:30</lastmod>
+    <lastmod>2016-02-12T23:43:16+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://PritishC.github.io/</loc>
-    <lastmod>2015-09-06T19:54:24+05:30</lastmod>
+    <lastmod>2016-02-12T23:43:16+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://PritishC.github.io/projects/</loc>
-    <lastmod>2015-09-06T19:54:24+05:30</lastmod>
+    <loc>http://PritishC.github.io/work/</loc>
+    <lastmod>2016-02-12T23:43:16+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://PritishC.github.io/about/</loc>
-    <lastmod>2015-09-06T19:54:24+05:30</lastmod>
+    <lastmod>2016-02-12T23:43:16+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>http://PritishC.github.io/work/</loc>
-    <lastmod>2015-09-06T19:54:24+05:30</lastmod>
+    <loc>http://PritishC.github.io/projects/</loc>
+    <lastmod>2016-02-12T23:43:16+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

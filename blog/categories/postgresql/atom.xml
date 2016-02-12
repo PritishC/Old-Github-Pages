@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgresql | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2015-09-06T19:54:24+05:30</updated>
+  <updated>2016-02-12T23:43:16+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -18,67 +18,48 @@
     <link href="http://PritishC.github.io/blog/2014/10/19/postgres-setup/"/>
     <updated>2014-10-19T20:27:55+05:30</updated>
     <id>http://PritishC.github.io/blog/2014/10/19/postgres-setup</id>
-    <content type="html"><![CDATA[This article offers a simple introduction to PostgreSQL and how to install it.
+    <content type="html"><![CDATA[<p>This article offers a simple introduction to PostgreSQL and how to install it.
 It is necessary for Tryton. In effect, this article is merely filler, and one can
-skip it if one wishes so.
+skip it if one wishes so.</p>
 
-<!--more-->
+<p><a href="http://www.postgresql.org/">PostgreSQL</a> is an open-source ORDBMS which is a hardcore
+programmer&rsquo;s paradise. Since it is community-developed, it adheres to strict standards
+and supports DB best practices. For more information, Google is your friend.</p>
 
-[PostgreSQL](http://www.postgresql.org/) is an open-source ORDBMS which is a hardcore
-programmer&#8217;s paradise. Since it is community-developed, it adheres to strict standards
-and supports DB best practices. For more information, Google is your friend.
-
-Now the installation of Postgres on your setup depends on the operating system you
+<p>Now the installation of Postgres on your setup depends on the operating system you
 have installed. For most Linux distros, Postgres has a distro-specific bundle which
-can easily be installed using the particular package manager. It is usually advised 
-to install this distro-specific bundle rather then going down the generic route.
+can easily be installed using the particular package manager. It is usually advised
+to install this distro-specific bundle rather then going down the generic route.</p>
 
-I had faced several problems setting up Postgres on Linux Mint because I downloaded
-and executed the generic bundle. You can find some mention of those problems here 
-at the [wiki](https://github.com/PritishC/nereid-erms/wiki) of a project which I 
-wrote as part of a company induction task. I am currently on Lubuntu, and this 
-time, I used the package manager. Lesson learned.
+<p>I had faced several problems setting up Postgres on Linux Mint because I downloaded
+and executed the generic bundle. You can find some mention of those problems here
+at the <a href="https://github.com/PritishC/nereid-erms/wiki">wiki</a> of a project which I
+wrote as part of a company induction task. I am currently on Lubuntu, and this
+time, I used the package manager. Lesson learned.</p>
 
-Another thing you ideally should do is install [PGAdmin](http://www.pgadmin.org/). 
+<p>Another thing you ideally should do is install <a href="http://www.pgadmin.org/">PGAdmin</a>.
 It is a very useful tool for management and administration of your databases. You
-might often have to view a specific table inside the DB that you create for Tryton.
+might often have to view a specific table inside the DB that you create for Tryton.</p>
 
-For Debian derivatives such as mine, 
+<p>For Debian derivatives such as mine,</p>
 
-<figure class='code'><figcaption><span>bash snippet</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install postgresql postgresql-contrib
-</span><span class='line'><span class="nv">$ </span>sudo apt-get install pgadmin3
-</span></code></pre></td></tr></table></div></figure>
+<pre><code class="bash bash snippet">$ sudo apt-get install postgresql postgresql-contrib
+$ sudo apt-get install pgadmin3
+</code></pre>
 
-There is also the `postgres` user setup. After one is done installing the above,
-one should fire up a terminal and set the `postgres` user&#8217;s password.
+<p>There is also the <code>postgres</code> user setup. After one is done installing the above,
+one should fire up a terminal and set the <code>postgres</code> user&rsquo;s password.</p>
 
-<figure class='code'><figcaption><span>postgres user</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u postgres psql postgres
-</span><span class='line'><span class="nv">$ </span><span class="se">\p</span>assword postgres
-</span></code></pre></td></tr></table></div></figure>
+<pre><code class="bash postgres user">$ sudo -u postgres psql postgres
+$ \password postgres
+</code></pre>
 
-Equivalently, one could do `sudo su - postgres` to get into the postgres account,
-and then run `psql -u postgres -h localhost` or something similar.
-The second line in the above snippet sets a password for the postgres database 
-role.
+<p>Equivalently, one could do <code>sudo su - postgres</code> to get into the postgres account,
+and then run <code>psql -u postgres -h localhost</code> or something similar.
+The second line in the above snippet sets a password for the postgres database
+role.</p>
 
-And that&#8217;s that. Soon, we shall be on a functioning Tryton setup!
-
-
-<div id="discourse-comments"></div>
-<script type="text/javascript">
-  var discourseUrl = "http://discourse.pritishc.com/",
-      discourseEmbedUrl = "http://PritishC.github.io/blog/2014/10/19/postgres-setup/";
-
-  (function() {
-    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
-      d.src = discourseUrl + 'javascripts/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
-  })();
-</script>
+<p>And that&rsquo;s that. Soon, we shall be on a functioning Tryton setup!</p>
 ]]></content>
   </entry>
   
