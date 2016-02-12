@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Google | Pritish Chakraborty]]></title>
+  <link href="http://PritishC.github.io/blog/categories/google/atom.xml" rel="self"/>
+  <link href="http://PritishC.github.io/"/>
+  <updated>2016-02-12T23:56:36+05:30</updated>
+  <id>http://PritishC.github.io/</id>
+  <author>
+    <name><![CDATA[Pritish Chakraborty]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Analyzing Stuff With Google Analytics]]></title>
+    <link href="http://PritishC.github.io/blog/2015/03/08/analyzing-stuff-with-google-analytics/"/>
+    <updated>2015-03-08T12:37:36+05:30</updated>
+    <id>http://PritishC.github.io/blog/2015/03/08/analyzing-stuff-with-google-analytics</id>
+    <content type="html"><![CDATA[This article offers a glimpse into how we implemented Google Analytics procedures,
+such as click tracking, in our generic webstore - [Nereid Webshop](https://github.com/openlabs/nereid-webshop).
+
+<!--more-->
+
+As a beginner in Javascript, I was tasked with tracking clicks from various areas
+of the webstore, such as product pages, the search page, etc. Google&#8217;s developer
+documentation ([here](https://developers.google.com/analytics/)) is a good place
+to start. Note that we used the more recent ga.js, as opposed to the older
+analytics.js script.
+
+First we wrote our backend implementation - to fetch the details of a product.
+The basic Product model is in the core [Product](https://github.com/tryton/product) repository.
+We added a few attributes of our own in our own repos.
+
+<figure class='code'><figcaption><span>ga data method</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">ga_product_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class='line'>    <span class="sd">&#39;&#39;&#39;</span>
+</span><span class='line'><span class="sd">    Return a dictionary of the product information as expected by Google</span>
+</span><span class='line'><span class="sd">    Analytics</span>
+</span><span class='line'><span class="sd">    Other possible values for kwargs include -:</span>
+</span><span class='line'><span class="sd">    :param list: The name of the list in which this impression is to be</span>
+</span><span class='line'><span class="sd">                 recorded</span>
+</span><span class='line'><span class="sd">    :param position: Integer position of the item on the view</span>
+</span><span class='line'><span class="sd">    &#39;&#39;&#39;</span>
+</span><span class='line'>    <span class="n">rv</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="ow">or</span> <span class="nb">unicode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+</span><span class='line'>        <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+</span><span class='line'>        <span class="s">&#39;category&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">category</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="bp">None</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">rv</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">rv</span>
+</span></code></pre></td></tr></table></div></figure>
+
+Once we had that in place, we began by analyzing what parts of our webstore needed
+analytics. A typical product page contains various link-points where we could
+insert our GA attributes. Some of these could be -:
+
+* Add to cart button
+* Related product links
+* Add related products to cart button
+
+For example, in our form for adding the product to cart -:
+
+
+<figure class='code'><figcaption><span>add to cart</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">&quot;{{ url_for(&quot;</span><span class="na">nereid</span><span class="err">.</span><span class="na">cart</span><span class="err">.</span><span class="na">add_to_cart</span><span class="err">&quot;)</span> <span class="err">}}&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">id=</span><span class="s">&quot;product-buy-now&quot;</span> <span class="na">class=</span><span class="s">&quot;add-to-cart&quot;</span> <span class="na">autocomplete=</span><span class="s">&quot;off&quot;</span> <span class="na">data-ga-event-label=</span><span class="s">&quot;Add To Cart&quot;</span> <span class="na">data-ga-product-name=</span><span class="s">&quot;{{ product.name }}&quot;</span> <span class="na">data-ga-product-category=</span><span class="s">&quot;{{ product.category and product.category.name or None }}&quot;</span> <span class="na">data-ga-product-price=</span><span class="s">&quot;{{ product.sale_price()|currencyformat(request.nereid_currency.code) }}&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;csrf_token&quot;</span> <span class="na">value=</span><span class="s">&quot;{{ csrf_token() }}&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;quantity&quot;</span> <span class="na">value=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;size&quot;</span> <span class="na">id=</span><span class="s">&quot;size-id&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;product&quot;</span> <span class="na">value=</span><span class="s">&quot;{{ product.id }}&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;action&quot;</span> <span class="na">value=</span><span class="s">&quot;add&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;btn btn-primary btn-buynow btn-block btn-lg&quot;</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="err">{%</span> <span class="na">if</span> <span class="na">not</span> <span class="na">product</span><span class="err">.</span><span class="na">can_buy_from_eshop</span><span class="err">()</span> <span class="err">%}</span><span class="na">disabled</span><span class="err">{%</span> <span class="na">endif</span> <span class="err">%}</span>
+</span><span class='line'>    <span class="na">quantity=</span><span class="s">&quot;1&quot;</span> <span class="na">id=</span><span class="s">&quot;buy-now-btn&quot;</span><span class="nt">&gt;</span>Buy Now<span class="nt">&lt;/button&gt;</span>
+</span><span class='line'><span class="nt">&lt;/form&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+Similarly, we could have the following on a product link -:
+
+
+<figure class='code'><figcaption><span>product link</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{{ related_product.get_absolute_url() }}&quot;</span> <span class="na">ga-product-link</span> <span class="na">data-ga-product-list=</span><span class="s">&quot;Related Products&quot;</span> <span class="na">data-ga-event-label=</span><span class="s">&quot;Product Thumbnail&quot;</span> <span class="na">data-ga-product-id=</span><span class="s">&quot;{{ related_product.id }}&quot;</span> <span class="na">data-ga-product-name=</span><span class="s">&quot;{{ related_product.name }}&quot;</span> <span class="na">data-ga-product-category=</span><span class="s">&quot;{{ related_product.category and related_product.category.name or None }}&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;{{ CDN }}{{ related_product.default_image.transform_command().thumbnail(200, 200, &#39;a&#39;) }}&quot;</span> <span class="na">class=</span><span class="s">&quot;img margin-auto&quot;</span> <span class="na">alt=</span><span class="s">&quot;{{ related_product.name }}&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;/a&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+Note the `data-ga` prefixed attributes in the `form` tag. These are used in
+conjunction with jQuery&#8217;s data() method to fetch product attributes, to be sent
+to Google&#8217;s servers.
+
+The JS snippet for tracking product clicks is as follows (assuming GA is set up already) -:
+
+<figure class='code'><figcaption><span>product click</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="kd">function</span> <span class="p">(){</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;a[href][ga-product-link]&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">ga</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+</span><span class='line'>    <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="c1">// register safety net timeout:</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">url</span>
+</span><span class='line'>    <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">ga</span><span class="p">(</span><span class="s1">&#39;ec:addProduct&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s1">&#39;id&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-id&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="s1">&#39;name&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-name&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="s1">&#39;category&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-category&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="nx">ga</span><span class="p">(</span><span class="s1">&#39;ec:setAction&#39;</span><span class="p">,</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">list</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-list&#39;</span><span class="p">)});</span>
+</span><span class='line'>    <span class="nx">ga</span><span class="p">(</span><span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="s1">&#39;event&#39;</span><span class="p">,</span> <span class="s1">&#39;Product&#39;</span><span class="p">,</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-event-label&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s1">&#39;hitCallback&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">t</span><span class="p">);</span>
+</span><span class='line'>        <span class="c1">// redirect anyway:</span>
+</span><span class='line'>        <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">url</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+I&#8217;ll break this down step by step -:
+
+* First, we collect all those anchor tags on the page which have the `ga-product-link` attribute.
+  We register our method on the click event.
+* We need `preventDefault()` and `stopPropagation()` to temporarily disable default behaviour,
+  i.e., taking us to a different page.
+* We register a **safety net timeout**. This step is crucial - we don&#8217;t want our page
+  loading to take forever or never happen just because the data wasn&#8217;t sent to the
+  GA servers successfully.
+* We perform a `addProduct` call with product details and then use `setAction`
+  to denote that this was a product click - and send data describing the event -
+  which in this case was a click on a related product.
+* We also register a callback which clears our earlier timeout and redirects to
+  the desired location. This is in the normal case - that the data was sent successfully.
+  If the data isn&#8217;t sent, the redirect is done on timeout completion.
+
+Tracking product additions to cart was slightly trickier. We need to take care of
+form submission in the add to cart case.
+
+<figure class='code'><figcaption><span>add to cart</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.add-to-cart&#39;</span><span class="p">).</span><span class="nx">submit</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">ga</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">alreadySubmitted</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>    <span class="cm">/* The code below registers a timeout which acts</span>
+</span><span class='line'><span class="cm">     * as a safety net. The boolean alreadySubmitted is used</span>
+</span><span class='line'><span class="cm">     * to check whether the form was already submitted or not.</span>
+</span><span class='line'><span class="cm">     * It is used by the callbacks in setTimeout and GA. It is to</span>
+</span><span class='line'><span class="cm">     * avoid the specific cases where both callbacks fire, resulting</span>
+</span><span class='line'><span class="cm">     * in a double form submission.</span>
+</span><span class='line'><span class="cm">     */</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">alreadySubmitted</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">alreadySubmitted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">form</span><span class="p">.</span><span class="nx">submit</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">ga</span><span class="p">(</span><span class="s1">&#39;ec:addProduct&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s1">&#39;id&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;input[name=&#39;product&#39;]&quot;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="s1">&#39;name&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-name&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="s1">&#39;category&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-category&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="s1">&#39;price&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-price&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="s1">&#39;quantity&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;input[name=&#39;quantity&#39;]&quot;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="nx">ga</span><span class="p">(</span><span class="s1">&#39;ec:setAction&#39;</span><span class="p">,</span> <span class="s1">&#39;add&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">ga</span><span class="p">(</span><span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="s1">&#39;event&#39;</span><span class="p">,</span> <span class="s1">&#39;CartAnalytics&#39;</span><span class="p">,</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-event-label&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s1">&#39;hitCallback&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">alreadySubmitted</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>        <span class="nx">alreadySubmitted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="c1">// Submit anyway</span>
+</span><span class='line'>        <span class="nx">form</span><span class="p">.</span><span class="nx">submit</span><span class="p">();</span>
+</span><span class='line'>      <span class="p">}});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+In this case, nearly everything is the same, except the use of a boolean - `alreadySubmitted`.
+This boolean is checked in both cases - when the data is sent succesfully to the GA servers,
+and when it is not and form submission should not be delayed, and *also* to prevent
+a double form submission - an edge case which I was able to consistently reproduce.
+
+We also implemented product removal from cart in a similar manner. You can peruse
+the webshop source at your leisure - it is open-source, and we encourage good pull requests.
+
+My next article will be on one of my favourite tools - Elasticsearch :-).
+
+<div id="discourse-comments"></div>
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/03/08/analyzing-stuff-with-google-analytics/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+]]></content>
+  </entry>
+  
+</feed>

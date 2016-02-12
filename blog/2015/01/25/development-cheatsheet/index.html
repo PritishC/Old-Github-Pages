@@ -1,0 +1,493 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Development Cheatsheet @ Openlabs - Pritish Chakraborty</title>
+  <meta name="author" content="Pritish Chakraborty">
+
+  
+  <meta name="description" content="The target audience of this article is the new arrivals at our company, and I
+will try to make it as easy as possible on them. This assumes a basic &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://PritishC.github.io/blog/2015/01/25/development-cheatsheet">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Pritish Chakraborty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-56615772-1']);
+    _gaq.push(['_setDomainName', 'pritishc.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><div class="header-left">
+  <hgroup>
+  <h1><a href="/">Pritish Chakraborty</a></h1>
+  
+  <div class="subtitle">
+    <h2>Work and Everything Else</h2>
+  </div>
+  
+  </hgroup>
+  
+</div>
+
+<div class="header-right">
+  <ul class="main-navigation">
+ <div> 
+  <li><a href="/">blog</a></li></div><div class="spacer"></div>
+     <div> 
+  <li><a href="/projects">projects</a></li></div><div class="spacer"></div>
+       <div> 
+  <li><a href="/work">work</a></li></div><div class="spacer"></div>
+         <div> 
+  <li><a href="/about">about</a></li></div>
+</ul>
+  
+
+</div>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Development Cheatsheet @ Openlabs</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-25T11:12:33+05:30" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The target audience of this article is the new arrivals at our company, and I
+will try to make it as easy as possible on them. This assumes a basic knowledge
+of Git/GitHub (and also knowing the difference between the two) and will follow
+a scenario-based approach.</p>
+
+<!--more-->
+
+
+<h2>Ground Zero: Install ZSH/Oh-My-ZSH</h2>
+
+<p>This should be done before anything else, mainly because ZSH is an awesome shell
+and is very customizable. Here&rsquo;s a screenshot of my ZSH shell (I use the cloud
+theme) -:</p>
+
+<p><img src="/images/zsh.png" /></p>
+
+<p>Note how the branch name is shown in square-brackets and the lightning symbol
+signifies that a change has occurred in some file(s) which may or may not be
+committed.</p>
+
+<figure class='code'><figcaption><span>zero</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install zsh curl
+</span><span class='line'>Installing...
+</span><span class='line'><span class="nv">$ </span>curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh <span class="p">|</span> sh
+</span><span class='line'>Installing... <span class="o">(</span>you may be prompted to answer a few questions<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once the install is complete, close your current command prompt and re-open it.
+You should now be using ZSH. You can customize your configuration by editing
+the <code>.zshrc</code> file, which is present at the home folder (<code>$HOME</code>). I&rsquo;ll leave
+that bit out to the reader to experiment with stuff like themes.</p>
+
+<h2>Scenario-I: Basic Git Setup.</h2>
+
+<p>To begin working on one of the company repositories, first fork the repo on GitHub
+and then use the following commands on your terminal (assuming your SSH keys
+have already been setup) -:</p>
+
+<figure class='code'><figcaption><span>scenario-I</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone git@github.com:&lt;your-username&gt;/&lt;repo-name&gt;
+</span><span class='line'>Cloning...
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> &lt;repo-name&gt;
+</span><span class='line'><span class="nv">$ </span>git remote add openlabs git@github.com:openlabs/&lt;repo-name&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can run <code>git remote -vv</code> to check the names of your remotes. At this point,
+you should have the remotes &lsquo;origin&rsquo; and &lsquo;openlabs&rsquo; for your cloned repository.</p>
+
+<h2>Scenario-II: Writing A Feature/Hotfix</h2>
+
+<p>All work is usually based off of the develop branch, and so, you will checkout
+your new branch off develop. There may be cases when you will have to checkout
+off a version branch - that is described in the next scenario.</p>
+
+<p>You can prefix your branch name with &lsquo;feature&rsquo; or &lsquo;fix&rsquo; depending on whether
+it is a feature to be added or a fix to be made. Branch naming is completely
+your choice, I only try provide a useful convention here.</p>
+
+<p>For example, you wish to add a feature and your task ID is 0000. You will do so
+as follows -:</p>
+
+<figure class='code'><figcaption><span>scenario-II</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git branch
+</span><span class='line'>* develop
+</span><span class='line'><span class="nv">$ </span>git checkout -b feature/task-0000
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you&rsquo;re on the <code>feature/task-0000</code> branch, as the ZSH branch indicator should
+tell you. You can do some work, and then commit it.</p>
+
+<figure class='code'><figcaption><span>scenario-II</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git status
+</span><span class='line'>Shows files which are being tracked, are staged <span class="k">for</span> commit or are not staged.
+</span><span class='line'><span class="nv">$ </span>gst
+</span><span class='line'>Shorthand <span class="k">for</span> the above which works with zsh.
+</span><span class='line'><span class="nv">$ </span>git add &lt;filenames&gt;
+</span><span class='line'><span class="nv">$ </span>git commit
+</span><span class='line'>Write your commit message and use VI shortcuts to save the message, i.e., :wq
+</span><span class='line'>If you have nano configured as your editor instead, use that.
+</span><span class='line'>Commit messages should be brief yet descriptive, and neatly written.
+</span><span class='line'><span class="nv">$ </span>git config --global push.simple
+</span><span class='line'>Needs to be <span class="nb">set </span>only once.
+</span><span class='line'><span class="nv">$ </span>git push -uvf origin
+</span><span class='line'>This pushes your current branch to the origin remote <span class="o">(</span>which is your fork<span class="o">)</span>.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can open a pull request from GitHub on the openlabs remote. Make sure
+to get your work reviewed.</p>
+
+<h2>Scenario-IIA: Writing A Feature For Version Branches</h2>
+
+<p>Sometimes, you may need to write features not for develop but for an earlier
+version branch. In this case, you may do a <code>git fetch openlabs</code> to get the branch
+data as is required. For example, some of our repositories are being moved to
+v3.4, which becomes the develop branch. v3.2 gets a branch named <code>3.2</code>.</p>
+
+<p>In this case, you need to checkout off of the 3.2 branch instead of develop, and
+your PR should be sent on the 3.2 branch. The commands are the same, except
+the branch you are checking out off changes.</p>
+
+<h2>Scenario-III: Rebase To Keep Up</h2>
+
+<p>Rebasing is an important part of using git repositories. In a team environment,
+you will have to rebase often to keep up with the latest changes, as you will
+not be the only one pushing features and fixes to the openlabs remote.</p>
+
+<p>It is advisable that before you checkout off of develop, you should do a rebase
+as follows -:</p>
+
+<figure class='code'><figcaption><span>scenario-III</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git pull --rebase openlabs branch:branch
+</span><span class='line'>Rebasing...
+</span><span class='line'>May or may not introduce merge conflicts.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>branch</code> here may either be develop or a version branch, as was explained earlier.</p>
+
+<p>To resolve merge conflicts, you will need to search for files which have the
+<code>&gt;&gt;&gt;HEAD</code> symbol appearing in them. I usually do this with the <code>grep</code> command.
+Take a look at the latest version of the files from GitHub and modify your
+local files accordingly. Be careful not to omit any code that was not added by
+you.</p>
+
+<p>Once you are done editing your local files, do a <code>git add</code> on them, and then run
+<code>git rebase --continue</code>.</p>
+
+<h2>Bonus Scenario: Protect Your Slack/HipChat From Attack!</h2>
+
+<p>One of the fun parts of being at Openlabs is that we advise our colleagues
+not to leave their systems unlocked. If you leave your system on, you are fair
+game for us :D.</p>
+
+<p>Leaving your system on may or may not lead to one of the following -:</p>
+
+<ul>
+<li>Silly messages appearing on your HipChat/Slack, on the Water Cooler.</li>
+<li>Declarations of coming out of the closet on your Facebook (if we know you well
+enough).</li>
+<li>Messed up configurations, and so on.</li>
+</ul>
+
+
+<p>Vanilla Ubuntu users can use the Ctrl+L shortcut to lock their systems quickly.
+For those who cannot use this shortcut for whatever reason (for example, Lubuntu
+does not have such a shortcut), they may install <code>xscreensaver</code> using their
+package manager and use this little script I made -:</p>
+
+<p>File /Users/pritishc/Workspace/Personal/coder_blog/source/downloads/code/.logoutscript could not be found</p>
+
+<p><code>grep</code> returns useful exit codes which can be used to find out whether <code>xscreensaver</code>
+is running or not. If it is not running, it is made to run. Henceforth, the
+lock command is applied.</p>
+
+<p>You may save this script to your home directory and then run <code>sh ~/.logoutscript</code>
+whenever you need to get away from your system!</p>
+
+<p>PS: I will update this as more use cases come to mind.</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/01/25/development-cheatsheet/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Pritish Chakraborty</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-25T11:12:33+05:30" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/github/'>github</a>, <a class='category' href='/blog/categories/openlabs/'>openlabs</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://PritishC.github.io/blog/2015/01/25/development-cheatsheet/" data-via="Crank7" data-counturl="http://PritishC.github.io/blog/2015/01/25/development-cheatsheet/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/11/02/tryton-module-basics-and-programming-example/" title="Previous Post: Tryton Module Basics and Programming Example">&laquo; Tryton Module Basics and Programming Example</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/03/08/analyzing-stuff-with-google-analytics/" title="Next Post: Analyzing Stuff With Google Analytics">Analyzing Stuff With Google Analytics &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  <section>
+  <h1><a href="#">pritishc.com</a></h1>
+  <p>Welcome to my website. <a href="https://google.com/+PritishChakraborty08">Pritish Chakraborty</a> here!</p>
+  <p>To know more about me, check out my <a href="/about/">about</a> page. For stuff I work on, check out my GitHub page <a href="https://github.com/PritishC">here</a>.</p>
+  <p>My (admittedly WIP) resume can be found <a href="https://www.dropbox.com/s/m2tq4fdb91k3628/pritish_cv.pdf?dl=0">here</a>.</p>
+  <p>DISCLAIMER: Most of the stuff on this blog, other than stuff sourced from outside, is my personal opinion. If you don&#8217;t like what you see, you are free to browse to a different page!</p>
+  <div class="social-icons">
+    
+
+    
+
+    
+  <a href="https://google.com/+PritishChakraborty08"><img src="/images/social/googleplus.png" alt="Google+" /></a>
+
+
+    
+  <a href="https://github.com/PritishC"><img src="/images/social/github.png" alt="Github" /></a>
+
+
+    
+  <a href="https://twitter.com/Crank7"><img src="/images/social/twitter.png" alt="Twitter" /></a>
+
+
+    <a href="/atom.xml"><img src="/images/social/rss.png" alt="RSS" /></a>
+  </div>
+</section>
+
+  <section>
+  <h1>Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/09/06/uploading-with-django-and-amazon-s3/">Uploading With Django and Amazon S3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/04/docker-is-awesome-part-ii/">Docker Is Awesome - Part II</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/03/docker-is-awesome/">Docker Is Awesome - Part I</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/08/analyzing-stuff-with-google-analytics/">Analyzing Stuff With Google Analytics</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/25/development-cheatsheet/">Development Cheatsheet @ Openlabs</a>
+      </li>
+    
+  </ul>
+</section>
+
+  
+    <section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/android'>android (1)</a></li><li><a href='/blog/categories/angular'>angular (1)</a></li><li><a href='/blog/categories/aws'>aws (3)</a></li><li><a href='/blog/categories/devops'>devops (2)</a></li><li><a href='/blog/categories/django'>django (2)</a></li><li><a href='/blog/categories/docker'>docker (2)</a></li><li><a href='/blog/categories/electronics'>electronics (1)</a></li><li><a href='/blog/categories/general'>general (2)</a></li><li><a href='/blog/categories/github'>github (1)</a></li><li><a href='/blog/categories/google'>google (1)</a></li><li><a href='/blog/categories/kitkat'>kitkat (1)</a></li><li><a href='/blog/categories/nereid'>nereid (1)</a></li><li><a href='/blog/categories/nginx'>nginx (2)</a></li><li><a href='/blog/categories/openlabs'>openlabs (1)</a></li><li><a href='/blog/categories/postgresql'>postgresql (1)</a></li><li><a href='/blog/categories/tryton'>tryton (4)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/PritishC">@PritishC</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'PritishC',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Pritish Chakraborty -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+<p>
+<span class="credit">Powered by <a href="http://octopress.org">Octopress</a> using the <a href="https://github.com/fapper/classic-martinb">classic-martinb</a> theme</span>
+</p>
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

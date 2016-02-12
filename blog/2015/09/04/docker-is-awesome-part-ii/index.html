@@ -1,0 +1,806 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Docker Is Awesome - Part II - Pritish Chakraborty</title>
+  <meta name="author" content="Pritish Chakraborty">
+
+  
+  <meta name="description" content="This is Part 2 of the &lsquo;Docker Is Awesome&rsquo; mini-series. You can catch Part 1
+over here. In this article, I&rsquo;ll explain how to use &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Pritish Chakraborty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-56615772-1']);
+    _gaq.push(['_setDomainName', 'pritishc.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><div class="header-left">
+  <hgroup>
+  <h1><a href="/">Pritish Chakraborty</a></h1>
+  
+  <div class="subtitle">
+    <h2>Work and Everything Else</h2>
+  </div>
+  
+  </hgroup>
+  
+</div>
+
+<div class="header-right">
+  <ul class="main-navigation">
+ <div> 
+  <li><a href="/">blog</a></li></div><div class="spacer"></div>
+     <div> 
+  <li><a href="/projects">projects</a></li></div><div class="spacer"></div>
+       <div> 
+  <li><a href="/work">work</a></li></div><div class="spacer"></div>
+         <div> 
+  <li><a href="/about">about</a></li></div>
+</ul>
+  
+
+</div>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Docker Is Awesome - Part II</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-04T22:56:15+05:30" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This is Part 2 of the &lsquo;Docker Is Awesome&rsquo; mini-series. You can catch Part 1
+over <a href="/blog/2015/09/03/docker-is-awesome/">here</a>.</p>
+
+<p>In this article, I&rsquo;ll explain how to use docker-machine, docker-compose and
+docker-engine to deploy your setup on your local machine as well as to AWS.</p>
+
+<!--more-->
+
+
+<p>It is imperative to first understand what this trinity of tools does. docker-engine is the basic component - it is used to create, manipulate and delete
+one-off containers. On the command line, one can invoke it by typing just
+<code>docker</code>.</p>
+
+<p>docker-compose is a tool built on top of docker-engine which allows us to
+run multi-container systems. In our setup, we have three services - django,
+postgres and nginx. Each runs in their own container, and compose lets us
+coordinate them. The docker-compose reference urges us not to use it in
+production <em>yet</em>, but it&rsquo;s pretty good, so screw that!</p>
+
+<p>docker-machine is a tool used to create and provision Docker hosts. This
+provisioning can be done either on your local machine or on a cloud provider;
+it supports quite a few of them, including AWS and DigitalOcean.</p>
+
+<p>Here are the contents of the <code>rebuild_docker.sh</code> file -:</p>
+
+<figure class='code'><figcaption><span>rebuild_docker.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>docker-compose build
+</span><span class='line'>docker-compose up -d
+</span><span class='line'>docker-compose ps
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>build</code> option builds each service specified in the <code>docker-compose.yml</code> file.
+The <code>up -d</code> option creates and starts the containers given in that list. Finally,
+<code>ps</code> lets us see each running container, what command they&rsquo;re running and what
+their status is (exit codes if there were any errors).</p>
+
+<p>With all that out of the way, let us begin!</p>
+
+<h2>Local Machine Setup</h2>
+
+<p>Let&rsquo;s create a docker-machine host for our local machine. We will be using the Virtualbox
+driver to get that running.</p>
+
+<figure class='code'><figcaption><span>docker-machine local</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-machine create -d virtulabox dev<span class="p">;</span>
+</span><span class='line'>Creating VirtualBox VM...
+</span><span class='line'>Creating SSH key...
+</span><span class='line'>Starting VirtualBox VM...
+</span><span class='line'>Starting VM...
+</span><span class='line'>To see how to connect Docker to this machine, run: docker-machine env dev
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Well, since it tells us to -:</p>
+
+<figure class='code'><figcaption><span>docker-machine local</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-machine env dev
+</span><span class='line'><span class="nb">export </span><span class="nv">DOCKER_TLS_VERIFY</span><span class="o">=</span><span class="s2">&quot;1&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">DOCKER_HOST</span><span class="o">=</span><span class="s2">&quot;tcp://192.168.99.100:2376&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">DOCKER_CERT_PATH</span><span class="o">=</span><span class="s2">&quot;/home/pritishc/.docker/machine/machines/dev&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">DOCKER_MACHINE_NAME</span><span class="o">=</span><span class="s2">&quot;dev&quot;</span>
+</span><span class='line'><span class="c"># Run this command to configure your shell: </span>
+</span><span class='line'><span class="c"># eval &quot;$(docker-machine env dev)&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A bunch of environment variables, hrm. Run the <code>eval</code> command as given to set those up.
+Now we have a running docker host on our local. Check out the ip of the machine since
+you will be needing that later -:</p>
+
+<figure class='code'><figcaption><span>docker-machine local</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-machine ip dev
+</span><span class='line'>192.168.99.100
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we can run the contents of <code>rebuild_docker.sh</code> to build, create/start and list our
+containers in one go. Note that the building process is initially quite slow; especially
+on your local machine. The results of this build will be cached, making each subsequent
+build much faster. However, <strong>if you tinker with the Dockerfile of a service (like django),
+the lines after the line you tinkered with will not be cached, and will be built again</strong>.</p>
+
+<p>Here&rsquo;s what it looks like when the builds are cached -:</p>
+
+<figure class='code'><figcaption><span>docker-machine local cached build</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>postgres uses an image, skipping
+</span><span class='line'>Building django...
+</span><span class='line'>Step <span class="m">0</span> : FROM ubuntu:14.04
+</span><span class='line'> ---&gt; 91e54dfb1179
+</span><span class='line'>Step <span class="m">1</span> : ENV DJANGO_CONFIGURATION Docker
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 6c23847d177e
+</span><span class='line'>Step <span class="m">2</span> : RUN apt-get update
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 37ceafd99c8b
+</span><span class='line'>Step <span class="m">3</span> : RUN apt-get install -y ca-certificates git-core ssh nodejs npm python-pip libpq-dev python-dev
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; ca6793a2add5
+</span><span class='line'>Step <span class="m">4</span> : RUN ln -s /usr/bin/nodejs /usr/bin/node
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; f9311c741b62
+</span><span class='line'>Step <span class="m">5</span> : ENV HOME /root
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; b0f6dbd6a6fa
+</span><span class='line'>Step <span class="m">6</span> : ADD ssh/ /root/.ssh/
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 1a50ee500dba
+</span><span class='line'>Step <span class="m">7</span> : RUN chmod <span class="m">600</span> /root/.ssh/*
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 475bf637fea7
+</span><span class='line'>Step <span class="m">8</span> : RUN ssh-keyscan bitbucket.org &gt; /root/.ssh/known_hosts
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 1bc79f8a33a0
+</span><span class='line'>Step <span class="m">9</span> : WORKDIR /usr/src/app
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 6922edc704da
+</span><span class='line'>Step <span class="m">10</span> : RUN git clone git@bitbucket.org:me/repo.git
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 29160d78c443
+</span><span class='line'>Step <span class="m">11</span> : WORKDIR /usr/src/app/repo
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; ca03b1e414cc
+</span><span class='line'>Step <span class="m">12</span> : RUN pip install -r requirements.txt
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 56fb3e85c03c
+</span><span class='line'>Step <span class="m">13</span> : RUN npm install -g bower
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; e5660af6e528
+</span><span class='line'>Step <span class="m">14</span> : RUN bower --allow-root install
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; d8b0d8cf33e6
+</span><span class='line'>Step <span class="m">15</span> : ENV AWS_ACCESS_KEY youcanttouchthis
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 057f430aa52d
+</span><span class='line'>Step <span class="m">16</span> : ENV AWS_SECRET_ACCESS_KEY secretsauce
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 68291ffdbd6c
+</span><span class='line'>Step <span class="m">17</span> : ENV S3_BUCKET_NAME datbuckettho
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 2ba6884067d2
+</span><span class='line'>Step <span class="m">18</span> : ENV DB_NAME postgres
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 951c81446ee1
+</span><span class='line'>Step <span class="m">19</span> : ENV DB_USER postgres
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; b85ead2a75e3
+</span><span class='line'>Step <span class="m">20</span> : ENV DB_PASS postgres
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 475c43341026
+</span><span class='line'>Step <span class="m">21</span> : ENV DB_SERVICE postgres
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 4cc910cd2a51
+</span><span class='line'>Step <span class="m">22</span> : ADD ./static/admin /usr/src/app/repo/static/admin
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; d70e3dd5c885
+</span><span class='line'>Step <span class="m">23</span> : WORKDIR /usr/src/app/repo/project
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 255623db8059
+</span><span class='line'>Step <span class="m">24</span> : CMD gunicorn project.wsgi -w <span class="m">2</span> -b 0.0.0.0:8000 --log-level -
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 55a7c489cb3e
+</span><span class='line'>Successfully built 55a7c489cb3e
+</span><span class='line'>Building nginx...
+</span><span class='line'>Step <span class="m">0</span> : FROM nginx
+</span><span class='line'> ---&gt; cd3cf76a61ee
+</span><span class='line'>Step <span class="m">1</span> : MAINTAINER Pritish Chakraborty
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 73affa8810c3
+</span><span class='line'>Step <span class="m">2</span> : COPY nginx.conf /etc/nginx/nginx.conf
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 3b73ef0ef3e8
+</span><span class='line'>Step <span class="m">3</span> : COPY container_ip.sh /root/container_ip.sh
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; b3fbe36b0674
+</span><span class='line'>Step <span class="m">4</span> : RUN /root/container_ip.sh
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 5df4fe6c5403
+</span><span class='line'>Step <span class="m">5</span> : CMD service nginx restart
+</span><span class='line'> ---&gt; Running in 642215ba03c6
+</span><span class='line'> ---&gt; 4d2df9239cb3
+</span><span class='line'>Removing intermediate container 642215ba03c6
+</span><span class='line'>Step <span class="m">6</span> : CMD /usr/sbin/nginx -g <span class="s2">&quot;daemon off;&quot;</span>
+</span><span class='line'> ---&gt; Running in 5bdc232c1761
+</span><span class='line'> ---&gt; 2d55cf5df93b
+</span><span class='line'>Removing intermediate container 5bdc232c1761
+</span><span class='line'>Successfully built 2d55cf5df93b
+</span><span class='line'>projectdocker_postgres_1 is up-to-date
+</span><span class='line'>projectdocker_django_1 is up-to-date
+</span><span class='line'>Recreating projectdocker_nginx_1...
+</span><span class='line'>      Name             Command             State              Ports
+</span><span class='line'>-------------------------------------------------------------------------
+</span><span class='line'>projectdocker_dja   gunicorn           Up                 8000/tcp
+</span><span class='line'>ngo_1              project.wsgi -w <span class="m">2</span>
+</span><span class='line'>                   ...
+</span><span class='line'>projectdocker_ngi   /bin/sh -c         Up                 443/tcp, 0.0.0.0
+</span><span class='line'>nx_1               /usr/sbin/nginx                       :80-&gt;80/tcp
+</span><span class='line'>                   ...
+</span><span class='line'>projectdocker_pos   /docker-           Up                 5432/tcp
+</span><span class='line'>tgres_1            entrypoint.sh
+</span><span class='line'>                   postgres
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pretty neat, huh? You can browse to the ip given by docker-machine in your
+browser and check your website out in all its glory!</p>
+
+<p>A couple more things - suppose some service breaks unexpectedly. You can
+check out the logs using -:</p>
+
+<figure class='code'><figcaption><span>docker-compose logs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-compose logs &lt;servicename&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you want to check out the contents of your container, run -:</p>
+
+<figure class='code'><figcaption><span>docker-compose run</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-compose run &lt;servicename&gt; bash
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>AWS Setup</h2>
+
+<p>This is it. The biggie. This is the part where you get to see your app running
+on the cloud. We&rsquo;re going to deploy our multi-container setup to Amazon EC2. But
+first, we&rsquo;re going to have to prepare a few things.</p>
+
+<ul>
+<li>Create a Virtual Private Cloud instance (VPC) which your EC2 instance will use.
+This can be done from the VPC Management Console. If you signed up on the free-tier,
+you might have a VPC instance running from the beginning. If not, create one!
+Here&rsquo;s what it looks like -:</li>
+</ul>
+
+
+<p><img src="/images/AWS_VPC.png" title="'AWS VPC'" ></p>
+
+<p><img src="/images/AWS_VPC_Subnets.png" title="'AWS VPC Subnets'" ></p>
+
+<p>When creating a VPC, keep the tenancy as &lsquo;default&rsquo; and an example of a CIDR block
+that you could choose is 172.31.0.0/16, where /16 is the subnet mask. Amazon does
+the rest for you.</p>
+
+<ul>
+<li>With the VPC and its subnets (if there are none, create a public subnet) created,
+we need to assign some security groups. First, according to Amazon&rsquo;s <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenario1.html">documentation</a>,
+make a security group (call it whatever you like) and add the rules as follows -:</li>
+</ul>
+
+
+<p><img src="/images/AWS_SG_1.png" title="'AWS Security Group Inbound Rules'" ></p>
+
+<p><img src="/images/AWS_SG_2.png" title="'AWS Security Group Outbound Rules'" ></p>
+
+<p>In the inbound rules, IP ranges that I pixelized are my own. In these specific rules,
+you&rsquo;d select &lsquo;My Own IP&rsquo; when creating them. Finally, add the security group to your
+VPC.</p>
+
+<ul>
+<li>With the VPC set up, go to the Identity Access Management console (IAM), and
+generate a pair of credentials for docker-machine to use when setting up your EC2
+box. I wasn&rsquo;t able to figure out the security groups that this set of IAM credentials
+should&rsquo;ve had, so I gave it FullAdministratorAccess - this is usually not advisable.
+Also note that the set of credentials which I put in my django Dockerfile are <strong>not</strong>
+the same as these.</li>
+</ul>
+
+
+<p>Now we can provision our docker host on AWS. Do it with this command -:</p>
+
+<figure class='code'><figcaption><span>docker-machine AWS</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>docker-machine create <span class="se">\ </span>
+</span><span class='line'>--driver amazonec2 <span class="se">\</span>
+</span><span class='line'>--amazonec2-access-key nicekeym8 <span class="se">\</span>
+</span><span class='line'>--amazonec2-secret-key oososecret <span class="se">\</span>
+</span><span class='line'>--amazonec2-vpc-id vpc-id <span class="se">\</span>
+</span><span class='line'>--amazonec2-region some-region <span class="se">\</span>
+</span><span class='line'>--amazonec2-zone zone-letter <span class="se">\</span>
+</span><span class='line'>ec2box
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can get the information from the VPC management console. This command takes a
+while to execute, but when it is done, you&rsquo;ll have to run the <code>eval</code> command like
+we did for our local setup, to point docker-machine to our AWS host.</p>
+
+<p>Once the machine is provisioned, go check it out on your EC2 management console -:</p>
+
+<p><img src="/images/AWS_EC2.png" title="'AWS EC2'" ></p>
+
+<p>There&rsquo;s still a bit of security group editing to do. Now when you check out your
+VPC, you will find that it has a new group called <code>docker-machine</code>. Edit this group
+and add the following inbound rule -:</p>
+
+<p><img src="/images/AWS_VPC_dockermachine.png" title="'docker-machine Rules'" ></p>
+
+<p>Add this TCP rule for your own IP.</p>
+
+<p>Now you can browse to the ip given by <code>docker-machine ip ec2box</code>/the one listed on
+your EC2 instances page, and examine your webapp on the cloud at leisure!
+Pat yourself on the back, you did it. Or not&hellip;</p>
+
+<h2>What About Nginx?</h2>
+
+<p>Ah, so you <em>did</em> read my previous article carefully. If I&rsquo;m right, you&rsquo;ll find
+that nginx is giving you weird errors (most likely a 502).</p>
+
+<p>The last bit of trickery that I added to the nginx Dockerfile revolves around this
+file - <code>container_ip.sh</code>. Its contents are as follows -:</p>
+
+<figure class='code'><figcaption><span>container_ip.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># The awk command gets the IP for the django container from /etc/hosts</span>
+</span><span class='line'><span class="c"># The sed command replaces the placeholder in nginx conf with this IP</span>
+</span><span class='line'><span class="c"># Finally, the config placeholder is replaced with the IP</span>
+</span><span class='line'><span class="nv">ip</span><span class="o">=</span><span class="sb">`</span>awk <span class="s1">&#39;/django/ {print $1; exit}&#39;</span> /etc/hosts<span class="sb">`</span><span class="p">;</span> sed -i <span class="s2">&quot;s//$ip/g&quot;</span> /etc/nginx/nginx.conf
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the said placeholder is put in like this -:</p>
+
+<figure class='code'><figcaption><span>nginx config</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>location / <span class="o">{</span>
+</span><span class='line'>    proxy_pass http://<span class="o">{{</span>container_ip<span class="o">}}</span>:8000<span class="p">;</span>
+</span><span class='line'>    proxy_set_header   Host <span class="nv">$host</span><span class="p">;</span>
+</span><span class='line'>    proxy_set_header   X-Real-IP <span class="nv">$remote_addr</span><span class="p">;</span>
+</span><span class='line'>    proxy_set_header   X-Forwarded-For <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+</span><span class='line'>    proxy_set_header   X-Forwarded-Host <span class="nv">$server_name</span><span class="p">;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>{{container_ip}}</code> is in place of &lsquo;django&rsquo;, which is replaced by the actual IP given in
+the <code>/etc/hosts</code> file of the nginx container - you can confirm this for yourself by running
+bash on the nginx container and running the awk and sed commands.</p>
+
+<p>You might want to put <code>container_ip.sh</code> in the nginx directory so that docker can
+find it when performing the ADD operation.</p>
+
+<p>And now, run the following commands to recreate the nginx container -:</p>
+
+<figure class='code'><figcaption><span>nginx recreation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-compose build --no-cache nginx
+</span><span class='line'><span class="nv">$ </span>docker-compose up -d
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And there you have it. Give it a bit of time for AWS to iron everything out, and with
+luck, you&rsquo;ll be able to play with your webapp on the cloud.</p>
+
+<p>Hope you enjoyed this article :) I&rsquo;ll write another one soon for that django-storages +
+Amazon S3 setup of mine.</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Pritish Chakraborty</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-04T22:56:15+05:30" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/aws/'>aws</a>, <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/docker/'>docker</a>, <a class='category' href='/blog/categories/nginx/'>nginx</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii/" data-via="Crank7" data-counturl="http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/09/03/docker-is-awesome/" title="Previous Post: Docker Is Awesome - Part I">&laquo; Docker Is Awesome - Part I</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/09/06/uploading-with-django-and-amazon-s3/" title="Next Post: Uploading With Django and Amazon S3">Uploading With Django and Amazon S3 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  <section>
+  <h1><a href="#">pritishc.com</a></h1>
+  <p>Welcome to my website. <a href="https://google.com/+PritishChakraborty08">Pritish Chakraborty</a> here!</p>
+  <p>To know more about me, check out my <a href="/about/">about</a> page. For stuff I work on, check out my GitHub page <a href="https://github.com/PritishC">here</a>.</p>
+  <p>My (admittedly WIP) resume can be found <a href="https://www.dropbox.com/s/m2tq4fdb91k3628/pritish_cv.pdf?dl=0">here</a>.</p>
+  <p>DISCLAIMER: Most of the stuff on this blog, other than stuff sourced from outside, is my personal opinion. If you don&#8217;t like what you see, you are free to browse to a different page!</p>
+  <div class="social-icons">
+    
+
+    
+
+    
+  <a href="https://google.com/+PritishChakraborty08"><img src="/images/social/googleplus.png" alt="Google+" /></a>
+
+
+    
+  <a href="https://github.com/PritishC"><img src="/images/social/github.png" alt="Github" /></a>
+
+
+    
+  <a href="https://twitter.com/Crank7"><img src="/images/social/twitter.png" alt="Twitter" /></a>
+
+
+    <a href="/atom.xml"><img src="/images/social/rss.png" alt="RSS" /></a>
+  </div>
+</section>
+
+  <section>
+  <h1>Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/09/06/uploading-with-django-and-amazon-s3/">Uploading With Django and Amazon S3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/04/docker-is-awesome-part-ii/">Docker Is Awesome - Part II</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/03/docker-is-awesome/">Docker Is Awesome - Part I</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/08/analyzing-stuff-with-google-analytics/">Analyzing Stuff With Google Analytics</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/25/development-cheatsheet/">Development Cheatsheet @ Openlabs</a>
+      </li>
+    
+  </ul>
+</section>
+
+  
+    <section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/android'>android (1)</a></li><li><a href='/blog/categories/angular'>angular (1)</a></li><li><a href='/blog/categories/aws'>aws (3)</a></li><li><a href='/blog/categories/devops'>devops (2)</a></li><li><a href='/blog/categories/django'>django (2)</a></li><li><a href='/blog/categories/docker'>docker (2)</a></li><li><a href='/blog/categories/electronics'>electronics (1)</a></li><li><a href='/blog/categories/general'>general (2)</a></li><li><a href='/blog/categories/github'>github (1)</a></li><li><a href='/blog/categories/google'>google (1)</a></li><li><a href='/blog/categories/kitkat'>kitkat (1)</a></li><li><a href='/blog/categories/nereid'>nereid (1)</a></li><li><a href='/blog/categories/nginx'>nginx (2)</a></li><li><a href='/blog/categories/openlabs'>openlabs (1)</a></li><li><a href='/blog/categories/postgresql'>postgresql (1)</a></li><li><a href='/blog/categories/tryton'>tryton (4)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/PritishC">@PritishC</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'PritishC',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Pritish Chakraborty -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+<p>
+<span class="credit">Powered by <a href="http://octopress.org">Octopress</a> using the <a href="https://github.com/fapper/classic-martinb">classic-martinb</a> theme</span>
+</p>
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2016-02-12T23:43:16+05:30</updated>
+  <updated>2016-02-12T23:56:36+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -14,166 +14,1835 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Beginning Tryton]]></title>
-    <link href="http://PritishC.github.io/blog/2014/10/21/beginning-tryton/"/>
-    <updated>2014-10-21T12:05:18+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/10/21/beginning-tryton</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Postgres Setup]]></title>
-    <link href="http://PritishC.github.io/blog/2014/10/19/postgres-setup/"/>
-    <updated>2014-10-19T20:27:55+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/10/19/postgres-setup</id>
-    <content type="html"><![CDATA[<p>This article offers a simple introduction to PostgreSQL and how to install it.
-It is necessary for Tryton. In effect, this article is merely filler, and one can
-skip it if one wishes so.</p>
+    <title type="html"><![CDATA[Uploading With Django and Amazon S3]]></title>
+    <link href="http://PritishC.github.io/blog/2015/09/06/uploading-with-django-and-amazon-s3/"/>
+    <updated>2015-09-06T17:20:49+05:30</updated>
+    <id>http://PritishC.github.io/blog/2015/09/06/uploading-with-django-and-amazon-s3</id>
+    <content type="html"><![CDATA[<p>In this short post, I describe how I configured Django to upload to
+Amazon S3 instead of a regular file-system upload. It can be useful
+for production scenarios.</p>
 
-<p><a href="http://www.postgresql.org/">PostgreSQL</a> is an open-source ORDBMS which is a hardcore
-programmer&rsquo;s paradise. Since it is community-developed, it adheres to strict standards
-and supports DB best practices. For more information, Google is your friend.</p>
+<!--more-->
 
-<p>Now the installation of Postgres on your setup depends on the operating system you
-have installed. For most Linux distros, Postgres has a distro-specific bundle which
-can easily be installed using the particular package manager. It is usually advised
-to install this distro-specific bundle rather then going down the generic route.</p>
 
-<p>I had faced several problems setting up Postgres on Linux Mint because I downloaded
-and executed the generic bundle. You can find some mention of those problems here
-at the <a href="https://github.com/PritishC/nereid-erms/wiki">wiki</a> of a project which I
-wrote as part of a company induction task. I am currently on Lubuntu, and this
-time, I used the package manager. Lesson learned.</p>
+<p>We will be using the <code>django-storages</code> package to make it easier to
+upload to S3. It is always better not to reinvent the wheel, but if
+you&rsquo;d like to explore on how to do it on your own, you definitely
+should!</p>
 
-<p>Another thing you ideally should do is install <a href="http://www.pgadmin.org/">PGAdmin</a>.
-It is a very useful tool for management and administration of your databases. You
-might often have to view a specific table inside the DB that you create for Tryton.</p>
+<p>Install via pip.</p>
 
-<p>For Debian derivatives such as mine,</p>
-
-<figure class='code'><figcaption><span>bash snippet</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>django-storages</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install postgresql postgresql-contrib
-</span><span class='line'><span class="nv">$ </span>sudo apt-get install pgadmin3
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>pip install django-storages
+</span><span class='line'><span class="nv">$ </span>pip freeze <span class="p">|</span> grep django-storages &gt;&gt; requirements.txt
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>There is also the <code>postgres</code> user setup. After one is done installing the above,
-one should fire up a terminal and set the <code>postgres</code> user&rsquo;s password.</p>
+<p>I&rsquo;m assuming that you already have a virtual environment set up for your
+django project, and are installing within it.</p>
 
-<figure class='code'><figcaption><span>postgres user</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p>Now in my case, I&rsquo;ve deployed my webapp to both Heroku and <a href="http://PritishC.github.io/blog/2015/09/03/docker-is-awesome/">AWS</a>.
+I have different settings files for both, and I wanted my S3 setup to
+be respected on both configurations. To this end, we create a separate
+settings file which holds the S3 settings.</p>
+
+<figure class='code'><figcaption><span>aws_settings.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u postgres psql postgres
-</span><span class='line'><span class="nv">$ </span><span class="se">\p</span>assword postgres
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">os</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">AWS_QUERYSTRING_AUTH</span> <span class="o">=</span> <span class="bp">False</span>
+</span><span class='line'><span class="n">AWS_ACCESS_KEY_ID</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;AWS_ACCESS_KEY&#39;</span><span class="p">]</span>
+</span><span class='line'><span class="n">AWS_SECRET_ACCESS_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;AWS_SECRET_ACCESS_KEY&#39;</span><span class="p">]</span>
+</span><span class='line'><span class="n">AWS_STORAGE_BUCKET_NAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;S3_BUCKET_NAME&#39;</span><span class="p">]</span>
+</span><span class='line'><span class="n">MEDIA_URL</span> <span class="o">=</span> <span class="s">&#39;http://</span><span class="si">%s</span><span class="s">.s3.amazonaws.com/your-folder/&#39;</span> <span class="o">%</span> <span class="n">AWS_STORAGE_BUCKET_NAME</span>
+</span><span class='line'><span class="n">DEFAULT_FILE_STORAGE</span> <span class="o">=</span> <span class="s">&quot;storages.backends.s3boto.S3BotoStorage&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Equivalently, one could do <code>sudo su - postgres</code> to get into the postgres account,
-and then run <code>psql -u postgres -h localhost</code> or something similar.
-The second line in the above snippet sets a password for the postgres database
-role.</p>
+<p>In your production settings file, at the bottom, add an <code>if</code> check for
+production and import these settings. I do it by looking for a particular
+environment variable which is set only on production.</p>
 
-<p>And that&rsquo;s that. Soon, we shall be on a functioning Tryton setup!</p>
+<figure class='code'><figcaption><span>prod.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="o">...</span>
+</span><span class='line'><span class="o">...</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;ENV_VAR&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;prod&#39;</span><span class="p">:</span>
+</span><span class='line'>    <span class="kn">from</span> <span class="nn">aws_settings</span> <span class="kn">import</span> <span class="o">*</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On setting <code>DEFAULT_FILE_STORAGE</code> to <code>S3BotoStorage</code>, django-storages requires
+the set of AWS credentials which you plan to use to upload to an S3 bucket.
+If you don&rsquo;t already have them, you can go to the IAM console on AWS
+and generate them. These are the permissions I added to the security
+group which I applied on these credentials -:</p>
+
+<p><img src="http://PritishC.github.io/images/AWS_IAM_S3.png" title="'S3 Credentials Policies'" ></p>
+
+<p>The primary purpose of these credentials is to allow (in my case) an
+admin user to upload/delete images on an S3 bucket. We will let the
+public view images, but not manipulate them in any other way, nor abuse
+the system. Note the IAM ID of the credentials, as you will need it later.</p>
+
+<p><img src="http://PritishC.github.io/images/AWS_IAM_ID.png" title="'IAM User ARN or ID'" ></p>
+
+<p>Now head to the S3 management console on AWS and create a bucket.</p>
+
+<p>You will be presented with a prompt to enter the bucket name and the region
+where it should be deployed. Choose a region keeping in mind your target
+audience. You are also allowed to set up logging, with a prefix which is
+basically a &lsquo;folder&rsquo; in which log files will be stored. (It is easier to
+think of it as a folder, though that is not entirely the case)</p>
+
+<p><img src="http://PritishC.github.io/images/AWS_S3_BUCKET_1.png" title="'Create A Bucket'" ></p>
+
+<p><img src="http://PritishC.github.io/images/AWS_S3_BUCKET_2.png" title="'Logging Buckets'" ></p>
+
+<p>Once the bucket has been created, we have to configure certain permissions
+on it. This is what the Properties section of a newly created bucket
+looks like -:</p>
+
+<p><img src="http://PritishC.github.io/images/AWS_BUCKET_PROPS.png" title="'Bucket Permissions'" ></p>
+
+<p>Let&rsquo;s add a permission policy to our bucket. Click on &lsquo;Edit bucket policy&rsquo;
+and paste the following -:</p>
+
+<figure class='code'><figcaption><span>bucket policy</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;Version&quot;</span><span class="p">:</span> <span class="s2">&quot;2008-10-17&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;Statement&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="nt">&quot;Sid&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;Effect&quot;</span><span class="p">:</span> <span class="s2">&quot;Allow&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;Principal&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>              <span class="nt">&quot;AWS&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span>
+</span><span class='line'>          <span class="p">},</span>
+</span><span class='line'>          <span class="nt">&quot;Action&quot;</span><span class="p">:</span> <span class="s2">&quot;s3:GetObject&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;Resource&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>              <span class="s2">&quot;arn:aws:s3:::testbucket/*&quot;</span><span class="p">,</span>
+</span><span class='line'>              <span class="s2">&quot;arn:aws:s3:::testbucket&quot;</span>
+</span><span class='line'>          <span class="p">]</span>
+</span><span class='line'>      <span class="p">},</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="nt">&quot;Sid&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;Effect&quot;</span><span class="p">:</span> <span class="s2">&quot;Allow&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;Principal&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>              <span class="nt">&quot;AWS&quot;</span><span class="p">:</span> <span class="s2">&quot;arn:aws:iam::ID_NUMBER_HERE:root&quot;</span>
+</span><span class='line'>          <span class="p">},</span>
+</span><span class='line'>          <span class="nt">&quot;Action&quot;</span><span class="p">:</span> <span class="s2">&quot;s3:*&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;Resource&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>              <span class="s2">&quot;arn:aws:s3:::testbucket/*&quot;</span><span class="p">,</span>
+</span><span class='line'>              <span class="s2">&quot;arn:aws:s3:::testbucket&quot;</span>
+</span><span class='line'>          <span class="p">]</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is, in effect, a combination of policies. The first part of the policy
+enforces public-read, i.e., anyone can read data on the bucket. The second
+part of the policy allows any action to be performed (get, put, delete),
+but this is restricted to the user with the IAM ID as given. Paste the IAM
+ARN/ID from earlier here, and hit Save.</p>
+
+<p>In my case, I had to edit the CORS configuration, though this may not be
+necessary for you. On the same Properties > Permissions section, hit the
+&lsquo;Edit CORS Configuration&rsquo; button and paste the following -:</p>
+
+<figure class='code'><figcaption><span>cors config</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span class='line'><span class="nt">&lt;CORSConfiguration</span> <span class="na">xmlns=</span><span class="s">&quot;http://s3.amazonaws.com/doc/2006-03-01/&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;CORSRule&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;AllowedOrigin&gt;</span>*<span class="nt">&lt;/AllowedOrigin&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;AllowedMethod&gt;</span>GET<span class="nt">&lt;/AllowedMethod&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;AllowedMethod&gt;</span>POST<span class="nt">&lt;/AllowedMethod&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;MaxAgeSeconds&gt;</span>3000<span class="nt">&lt;/MaxAgeSeconds&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;AllowedHeader&gt;</span>Authorization<span class="nt">&lt;/AllowedHeader&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/CORSRule&gt;</span>
+</span><span class='line'><span class="nt">&lt;/CORSConfiguration&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This allows users from other domains to make HTTP requests (GET and POST) on
+our bucket.</p>
+
+<p>And there you have it. Now you can upload files to S3, and view them in
+your bucket. There should be an <code>uploads</code> folder (standard django stuff)
+in the bucket after your first upload.</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/09/06/uploading-with-django-and-amazon-s3/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Virtualenv Setup for Tryton]]></title>
-    <link href="http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton/"/>
-    <updated>2014-10-16T22:31:26+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton</id>
-    <content type="html"><![CDATA[<p>In this post, we shall learn how to setup a virtualenv for Tryton. Any new developer
-who wishes to develop on Tryton needs to know a few basic things.</p>
+    <title type="html"><![CDATA[Docker Is Awesome - Part II]]></title>
+    <link href="http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii/"/>
+    <updated>2015-09-04T22:56:15+05:30</updated>
+    <id>http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii</id>
+    <content type="html"><![CDATA[<p>This is Part 2 of the &lsquo;Docker Is Awesome&rsquo; mini-series. You can catch Part 1
+over <a href="http://PritishC.github.io/blog/2015/09/03/docker-is-awesome/">here</a>.</p>
 
-<p>Tryton is not for the faint-hearted. A new person can possibly take a long time to get adjusted
-to the workflow.</p>
+<p>In this article, I&rsquo;ll explain how to use docker-machine, docker-compose and
+docker-engine to deploy your setup on your local machine as well as to AWS.</p>
+
+<!--more-->
+
+
+<p>It is imperative to first understand what this trinity of tools does. docker-engine is the basic component - it is used to create, manipulate and delete
+one-off containers. On the command line, one can invoke it by typing just
+<code>docker</code>.</p>
+
+<p>docker-compose is a tool built on top of docker-engine which allows us to
+run multi-container systems. In our setup, we have three services - django,
+postgres and nginx. Each runs in their own container, and compose lets us
+coordinate them. The docker-compose reference urges us not to use it in
+production <em>yet</em>, but it&rsquo;s pretty good, so screw that!</p>
+
+<p>docker-machine is a tool used to create and provision Docker hosts. This
+provisioning can be done either on your local machine or on a cloud provider;
+it supports quite a few of them, including AWS and DigitalOcean.</p>
+
+<p>Here are the contents of the <code>rebuild_docker.sh</code> file -:</p>
+
+<figure class='code'><figcaption><span>rebuild_docker.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>docker-compose build
+</span><span class='line'>docker-compose up -d
+</span><span class='line'>docker-compose ps
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>build</code> option builds each service specified in the <code>docker-compose.yml</code> file.
+The <code>up -d</code> option creates and starts the containers given in that list. Finally,
+<code>ps</code> lets us see each running container, what command they&rsquo;re running and what
+their status is (exit codes if there were any errors).</p>
+
+<p>With all that out of the way, let us begin!</p>
+
+<h2>Local Machine Setup</h2>
+
+<p>Let&rsquo;s create a docker-machine host for our local machine. We will be using the Virtualbox
+driver to get that running.</p>
+
+<figure class='code'><figcaption><span>docker-machine local</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-machine create -d virtulabox dev<span class="p">;</span>
+</span><span class='line'>Creating VirtualBox VM...
+</span><span class='line'>Creating SSH key...
+</span><span class='line'>Starting VirtualBox VM...
+</span><span class='line'>Starting VM...
+</span><span class='line'>To see how to connect Docker to this machine, run: docker-machine env dev
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Well, since it tells us to -:</p>
+
+<figure class='code'><figcaption><span>docker-machine local</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-machine env dev
+</span><span class='line'><span class="nb">export </span><span class="nv">DOCKER_TLS_VERIFY</span><span class="o">=</span><span class="s2">&quot;1&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">DOCKER_HOST</span><span class="o">=</span><span class="s2">&quot;tcp://192.168.99.100:2376&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">DOCKER_CERT_PATH</span><span class="o">=</span><span class="s2">&quot;/home/pritishc/.docker/machine/machines/dev&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">DOCKER_MACHINE_NAME</span><span class="o">=</span><span class="s2">&quot;dev&quot;</span>
+</span><span class='line'><span class="c"># Run this command to configure your shell: </span>
+</span><span class='line'><span class="c"># eval &quot;$(docker-machine env dev)&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A bunch of environment variables, hrm. Run the <code>eval</code> command as given to set those up.
+Now we have a running docker host on our local. Check out the ip of the machine since
+you will be needing that later -:</p>
+
+<figure class='code'><figcaption><span>docker-machine local</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-machine ip dev
+</span><span class='line'>192.168.99.100
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we can run the contents of <code>rebuild_docker.sh</code> to build, create/start and list our
+containers in one go. Note that the building process is initially quite slow; especially
+on your local machine. The results of this build will be cached, making each subsequent
+build much faster. However, <strong>if you tinker with the Dockerfile of a service (like django),
+the lines after the line you tinkered with will not be cached, and will be built again</strong>.</p>
+
+<p>Here&rsquo;s what it looks like when the builds are cached -:</p>
+
+<figure class='code'><figcaption><span>docker-machine local cached build</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>postgres uses an image, skipping
+</span><span class='line'>Building django...
+</span><span class='line'>Step <span class="m">0</span> : FROM ubuntu:14.04
+</span><span class='line'> ---&gt; 91e54dfb1179
+</span><span class='line'>Step <span class="m">1</span> : ENV DJANGO_CONFIGURATION Docker
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 6c23847d177e
+</span><span class='line'>Step <span class="m">2</span> : RUN apt-get update
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 37ceafd99c8b
+</span><span class='line'>Step <span class="m">3</span> : RUN apt-get install -y ca-certificates git-core ssh nodejs npm python-pip libpq-dev python-dev
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; ca6793a2add5
+</span><span class='line'>Step <span class="m">4</span> : RUN ln -s /usr/bin/nodejs /usr/bin/node
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; f9311c741b62
+</span><span class='line'>Step <span class="m">5</span> : ENV HOME /root
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; b0f6dbd6a6fa
+</span><span class='line'>Step <span class="m">6</span> : ADD ssh/ /root/.ssh/
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 1a50ee500dba
+</span><span class='line'>Step <span class="m">7</span> : RUN chmod <span class="m">600</span> /root/.ssh/*
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 475bf637fea7
+</span><span class='line'>Step <span class="m">8</span> : RUN ssh-keyscan bitbucket.org &gt; /root/.ssh/known_hosts
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 1bc79f8a33a0
+</span><span class='line'>Step <span class="m">9</span> : WORKDIR /usr/src/app
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 6922edc704da
+</span><span class='line'>Step <span class="m">10</span> : RUN git clone git@bitbucket.org:me/repo.git
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 29160d78c443
+</span><span class='line'>Step <span class="m">11</span> : WORKDIR /usr/src/app/repo
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; ca03b1e414cc
+</span><span class='line'>Step <span class="m">12</span> : RUN pip install -r requirements.txt
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 56fb3e85c03c
+</span><span class='line'>Step <span class="m">13</span> : RUN npm install -g bower
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; e5660af6e528
+</span><span class='line'>Step <span class="m">14</span> : RUN bower --allow-root install
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; d8b0d8cf33e6
+</span><span class='line'>Step <span class="m">15</span> : ENV AWS_ACCESS_KEY youcanttouchthis
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 057f430aa52d
+</span><span class='line'>Step <span class="m">16</span> : ENV AWS_SECRET_ACCESS_KEY secretsauce
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 68291ffdbd6c
+</span><span class='line'>Step <span class="m">17</span> : ENV S3_BUCKET_NAME datbuckettho
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 2ba6884067d2
+</span><span class='line'>Step <span class="m">18</span> : ENV DB_NAME postgres
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 951c81446ee1
+</span><span class='line'>Step <span class="m">19</span> : ENV DB_USER postgres
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; b85ead2a75e3
+</span><span class='line'>Step <span class="m">20</span> : ENV DB_PASS postgres
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 475c43341026
+</span><span class='line'>Step <span class="m">21</span> : ENV DB_SERVICE postgres
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 4cc910cd2a51
+</span><span class='line'>Step <span class="m">22</span> : ADD ./static/admin /usr/src/app/repo/static/admin
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; d70e3dd5c885
+</span><span class='line'>Step <span class="m">23</span> : WORKDIR /usr/src/app/repo/project
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 255623db8059
+</span><span class='line'>Step <span class="m">24</span> : CMD gunicorn project.wsgi -w <span class="m">2</span> -b 0.0.0.0:8000 --log-level -
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 55a7c489cb3e
+</span><span class='line'>Successfully built 55a7c489cb3e
+</span><span class='line'>Building nginx...
+</span><span class='line'>Step <span class="m">0</span> : FROM nginx
+</span><span class='line'> ---&gt; cd3cf76a61ee
+</span><span class='line'>Step <span class="m">1</span> : MAINTAINER Pritish Chakraborty
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 73affa8810c3
+</span><span class='line'>Step <span class="m">2</span> : COPY nginx.conf /etc/nginx/nginx.conf
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 3b73ef0ef3e8
+</span><span class='line'>Step <span class="m">3</span> : COPY container_ip.sh /root/container_ip.sh
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; b3fbe36b0674
+</span><span class='line'>Step <span class="m">4</span> : RUN /root/container_ip.sh
+</span><span class='line'> ---&gt; Using cache
+</span><span class='line'> ---&gt; 5df4fe6c5403
+</span><span class='line'>Step <span class="m">5</span> : CMD service nginx restart
+</span><span class='line'> ---&gt; Running in 642215ba03c6
+</span><span class='line'> ---&gt; 4d2df9239cb3
+</span><span class='line'>Removing intermediate container 642215ba03c6
+</span><span class='line'>Step <span class="m">6</span> : CMD /usr/sbin/nginx -g <span class="s2">&quot;daemon off;&quot;</span>
+</span><span class='line'> ---&gt; Running in 5bdc232c1761
+</span><span class='line'> ---&gt; 2d55cf5df93b
+</span><span class='line'>Removing intermediate container 5bdc232c1761
+</span><span class='line'>Successfully built 2d55cf5df93b
+</span><span class='line'>projectdocker_postgres_1 is up-to-date
+</span><span class='line'>projectdocker_django_1 is up-to-date
+</span><span class='line'>Recreating projectdocker_nginx_1...
+</span><span class='line'>      Name             Command             State              Ports
+</span><span class='line'>-------------------------------------------------------------------------
+</span><span class='line'>projectdocker_dja   gunicorn           Up                 8000/tcp
+</span><span class='line'>ngo_1              project.wsgi -w <span class="m">2</span>
+</span><span class='line'>                   ...
+</span><span class='line'>projectdocker_ngi   /bin/sh -c         Up                 443/tcp, 0.0.0.0
+</span><span class='line'>nx_1               /usr/sbin/nginx                       :80-&gt;80/tcp
+</span><span class='line'>                   ...
+</span><span class='line'>projectdocker_pos   /docker-           Up                 5432/tcp
+</span><span class='line'>tgres_1            entrypoint.sh
+</span><span class='line'>                   postgres
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pretty neat, huh? You can browse to the ip given by docker-machine in your
+browser and check your website out in all its glory!</p>
+
+<p>A couple more things - suppose some service breaks unexpectedly. You can
+check out the logs using -:</p>
+
+<figure class='code'><figcaption><span>docker-compose logs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-compose logs &lt;servicename&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you want to check out the contents of your container, run -:</p>
+
+<figure class='code'><figcaption><span>docker-compose run</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-compose run &lt;servicename&gt; bash
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>AWS Setup</h2>
+
+<p>This is it. The biggie. This is the part where you get to see your app running
+on the cloud. We&rsquo;re going to deploy our multi-container setup to Amazon EC2. But
+first, we&rsquo;re going to have to prepare a few things.</p>
 
 <ul>
-<li>Have pip/setuptools ready. Use your package manager to get pip (apt, pacman, emerge
-etc).</li>
-<li>Install virtualenvwrapper. It is essential for any serious Python developer.
-Follow the steps given in the virtualenvwrapper <a href="http://virtualenvwrapper.readthedocs.org/en/latest/install.html">docs</a>
-to setup everything - thing such as the <code>WORKON_HOME</code> variable.</li>
-<li><p>Now, before you make a virtualenv, make absolutely sure that you have a minimal
-set of site packages. Site packages are those Python packages that have been
-installed system-wide. Here is a list of packages that I have (via <code>pip freeze</code>) -:</p>
+<li>Create a Virtual Private Cloud instance (VPC) which your EC2 instance will use.
+This can be done from the VPC Management Console. If you signed up on the free-tier,
+you might have a VPC instance running from the beginning. If not, create one!
+Here&rsquo;s what it looks like -:</li>
+</ul>
 
-<pre><code class="bash global pip freeze">CDApplet==1.0
-CDBashApplet==1.0
-Cython==0.20.1post0
-apt-xapian-index==0.45
-arandr==0.1.7.1
-argparse==1.2.1
-chardet==2.0.1
-colorama==0.2.5
-defer==1.0.6
-gyp==0.1
-html5lib==0.999
-mercurial==2.8.2
-psutil==1.2.1
-pycups==1.9.66
-pycurl==7.19.3
-pygobject==3.12.0
-pysmbc==1.0.14.1
-pysqlite==2.6.3
-python-apt==0.9.3.5
-python-debian==0.1.21-nmu2ubuntu2
-python-sql==0.3
-pyxdg==0.25
-requests==2.2.1
-six==1.8.0
-stevedore==1.0.0
-urllib3==1.7.1
-virtualenv==1.11.6
-virtualenv-clone==0.2.5
-virtualenvwrapper==4.3.1
-wsgiref==0.1.2
-</code></pre></li>
-<li>One particular package that you will find to give you headaches during the installation
-is <code>pygtk</code>. This package cannot be installed via pip. Why? Because screw you, that&rsquo;s why.
-Now you have two options.
+
+<p><img src="http://PritishC.github.io/images/AWS_VPC.png" title="'AWS VPC'" ></p>
+
+<p><img src="http://PritishC.github.io/images/AWS_VPC_Subnets.png" title="'AWS VPC Subnets'" ></p>
+
+<p>When creating a VPC, keep the tenancy as &lsquo;default&rsquo; and an example of a CIDR block
+that you could choose is 172.31.0.0/16, where /16 is the subnet mask. Amazon does
+the rest for you.</p>
 
 <ul>
-<li>Follow the steps given <a href="https://gist.github.com/ches/1094799">here</a> to install <code>pygtk</code>
-inside a virtualenv. However, you will find that doing this over and over again would
-be tedious.</li>
-<li>What about the package that has been installed system-wide? Could we possibly use it?
-Well, it turns out we can! The next step details on this method.<br/>
-PS: If you don&rsquo;t have it installed system-wide, do it bruh. Use your favorite package manager,
-I&rsquo;m not judgin&#8217;.</li>
-</ul>
-</li>
-<li><p>If you listened to me two steps ago and didn&rsquo;t fall asleep - the reason I said that
-one must keep a minimal set of site packages is because these shall be incorporated
-into the virtualenv. These are the absolute bare-minimum requirements that every
-virtualenv will get. Now issue the following command in your terminal, in whichever
-directory you&rsquo;ve readied for this purpose -:</p>
-
-<pre><code class="bash [virtualenv]">mkproject --system-site-packages myenv
-</code></pre>
-
-<p>Substitute myenv with any name you wish. And voila, you have your newly commissioned
-virtualenv.</p></li>
-<li>What does this have to do with <code>pygtk</code>, you ask? Well, since it was system-wide,
-it gets incorporated into your virtualenv and you don&rsquo;t have to bother about it.</li>
+<li>With the VPC and its subnets (if there are none, create a public subnet) created,
+we need to assign some security groups. First, according to Amazon&rsquo;s <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenario1.html">documentation</a>,
+make a security group (call it whatever you like) and add the rules as follows -:</li>
 </ul>
 
 
-<p>And that&rsquo;s that folks! In the next post, we shall set up Postgres as Tryton uses
-Postgres databases. Following that, we shall learn how to actually install Tryton,
-both the client and the server.</p>
+<p><img src="http://PritishC.github.io/images/AWS_SG_1.png" title="'AWS Security Group Inbound Rules'" ></p>
+
+<p><img src="http://PritishC.github.io/images/AWS_SG_2.png" title="'AWS Security Group Outbound Rules'" ></p>
+
+<p>In the inbound rules, IP ranges that I pixelized are my own. In these specific rules,
+you&rsquo;d select &lsquo;My Own IP&rsquo; when creating them. Finally, add the security group to your
+VPC.</p>
+
+<ul>
+<li>With the VPC set up, go to the Identity Access Management console (IAM), and
+generate a pair of credentials for docker-machine to use when setting up your EC2
+box. I wasn&rsquo;t able to figure out the security groups that this set of IAM credentials
+should&rsquo;ve had, so I gave it FullAdministratorAccess - this is usually not advisable.
+Also note that the set of credentials which I put in my django Dockerfile are <strong>not</strong>
+the same as these.</li>
+</ul>
+
+
+<p>Now we can provision our docker host on AWS. Do it with this command -:</p>
+
+<figure class='code'><figcaption><span>docker-machine AWS</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>docker-machine create <span class="se">\ </span>
+</span><span class='line'>--driver amazonec2 <span class="se">\</span>
+</span><span class='line'>--amazonec2-access-key nicekeym8 <span class="se">\</span>
+</span><span class='line'>--amazonec2-secret-key oososecret <span class="se">\</span>
+</span><span class='line'>--amazonec2-vpc-id vpc-id <span class="se">\</span>
+</span><span class='line'>--amazonec2-region some-region <span class="se">\</span>
+</span><span class='line'>--amazonec2-zone zone-letter <span class="se">\</span>
+</span><span class='line'>ec2box
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can get the information from the VPC management console. This command takes a
+while to execute, but when it is done, you&rsquo;ll have to run the <code>eval</code> command like
+we did for our local setup, to point docker-machine to our AWS host.</p>
+
+<p>Once the machine is provisioned, go check it out on your EC2 management console -:</p>
+
+<p><img src="http://PritishC.github.io/images/AWS_EC2.png" title="'AWS EC2'" ></p>
+
+<p>There&rsquo;s still a bit of security group editing to do. Now when you check out your
+VPC, you will find that it has a new group called <code>docker-machine</code>. Edit this group
+and add the following inbound rule -:</p>
+
+<p><img src="http://PritishC.github.io/images/AWS_VPC_dockermachine.png" title="'docker-machine Rules'" ></p>
+
+<p>Add this TCP rule for your own IP.</p>
+
+<p>Now you can browse to the ip given by <code>docker-machine ip ec2box</code>/the one listed on
+your EC2 instances page, and examine your webapp on the cloud at leisure!
+Pat yourself on the back, you did it. Or not&hellip;</p>
+
+<h2>What About Nginx?</h2>
+
+<p>Ah, so you <em>did</em> read my previous article carefully. If I&rsquo;m right, you&rsquo;ll find
+that nginx is giving you weird errors (most likely a 502).</p>
+
+<p>The last bit of trickery that I added to the nginx Dockerfile revolves around this
+file - <code>container_ip.sh</code>. Its contents are as follows -:</p>
+
+<figure class='code'><figcaption><span>container_ip.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># The awk command gets the IP for the django container from /etc/hosts</span>
+</span><span class='line'><span class="c"># The sed command replaces the placeholder in nginx conf with this IP</span>
+</span><span class='line'><span class="c"># Finally, the config placeholder is replaced with the IP</span>
+</span><span class='line'><span class="nv">ip</span><span class="o">=</span><span class="sb">`</span>awk <span class="s1">&#39;/django/ {print $1; exit}&#39;</span> /etc/hosts<span class="sb">`</span><span class="p">;</span> sed -i <span class="s2">&quot;s//$ip/g&quot;</span> /etc/nginx/nginx.conf
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the said placeholder is put in like this -:</p>
+
+<figure class='code'><figcaption><span>nginx config</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>location / <span class="o">{</span>
+</span><span class='line'>    proxy_pass http://<span class="o">{{</span>container_ip<span class="o">}}</span>:8000<span class="p">;</span>
+</span><span class='line'>    proxy_set_header   Host <span class="nv">$host</span><span class="p">;</span>
+</span><span class='line'>    proxy_set_header   X-Real-IP <span class="nv">$remote_addr</span><span class="p">;</span>
+</span><span class='line'>    proxy_set_header   X-Forwarded-For <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+</span><span class='line'>    proxy_set_header   X-Forwarded-Host <span class="nv">$server_name</span><span class="p">;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>{{container_ip}}</code> is in place of &lsquo;django&rsquo;, which is replaced by the actual IP given in
+the <code>/etc/hosts</code> file of the nginx container - you can confirm this for yourself by running
+bash on the nginx container and running the awk and sed commands.</p>
+
+<p>You might want to put <code>container_ip.sh</code> in the nginx directory so that docker can
+find it when performing the ADD operation.</p>
+
+<p>And now, run the following commands to recreate the nginx container -:</p>
+
+<figure class='code'><figcaption><span>nginx recreation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-compose build --no-cache nginx
+</span><span class='line'><span class="nv">$ </span>docker-compose up -d
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And there you have it. Give it a bit of time for AWS to iron everything out, and with
+luck, you&rsquo;ll be able to play with your webapp on the cloud.</p>
+
+<p>Hope you enjoyed this article :) I&rsquo;ll write another one soon for that django-storages +
+Amazon S3 setup of mine.</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[The First Post]]></title>
-    <link href="http://PritishC.github.io/blog/2014/10/15/the-first-post/"/>
-    <updated>2014-10-15T22:40:55+05:30</updated>
-    <id>http://PritishC.github.io/blog/2014/10/15/the-first-post</id>
-    <content type="html"><![CDATA[<p>I will begin with some posts to get n00bs to set up Tryton properly.</p>
+    <title type="html"><![CDATA[Docker Is Awesome - Part I]]></title>
+    <link href="http://PritishC.github.io/blog/2015/09/03/docker-is-awesome/"/>
+    <updated>2015-09-03T21:56:16+05:30</updated>
+    <id>http://PritishC.github.io/blog/2015/09/03/docker-is-awesome</id>
+    <content type="html"><![CDATA[<p>It&rsquo;s been a while since I&rsquo;ve written a blog post. There&rsquo;s been lots of changes that I&rsquo;ve
+had to deal with, the big one being a change of workplace. And I realize that this post
+should&rsquo;ve been the one explaining my adventures with Elasticsearch. That will have to wait
+for a bit, my apologies!</p>
 
-<p>Stay tuned!</p>
+<p>In this article, I&rsquo;m going to explain my (possibly flawed) method of deploying a Django/Angular
+app using Docker. I&rsquo;ve wanted to learn how to deploy an app to AWS for a while, and Docker
+helped me do just that.</p>
+
+<!--more-->
+
+
+<p>I assume that the reader has a basic knowledge of the docker toolbox; if not, I&rsquo;ll explain them in brief in
+part 2. To begin with, here&rsquo;s the directory structure of my app for reference (generated using the
+lovely <code>tree</code> command on Linux) -:</p>
+
+<figure class='code'><figcaption><span>app structure</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="p">|</span>-- bower.json
+</span><span class='line'><span class="p">|</span>-- CONTRIBUTORS
+</span><span class='line'><span class="p">|</span>-- project
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- project
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- aws_settings.py <span class="o">(</span>django-storages credentials here<span class="o">)</span>
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- heroku_settings.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- __init__.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- settings.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- urls.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- views.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="sb">`</span>-- wsgi.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- manage.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- app1
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- __init__.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- permissions.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- serializers.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- services.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- tests.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="sb">`</span>-- views.py
+</span><span class='line'><span class="p">|</span>   <span class="sb">`</span>-- users
+</span><span class='line'><span class="p">|</span>       <span class="p">|</span>-- __init__.py
+</span><span class='line'><span class="p">|</span>       <span class="p">|</span>-- models.py
+</span><span class='line'><span class="p">|</span>       <span class="p">|</span>-- permissions.py
+</span><span class='line'><span class="p">|</span>       <span class="p">|</span>-- serializers.py
+</span><span class='line'><span class="p">|</span>       <span class="sb">`</span>-- views.py
+</span><span class='line'><span class="p">|</span>-- gulpfile.js
+</span><span class='line'><span class="p">|</span>-- package.json
+</span><span class='line'><span class="p">|</span>-- Procfile
+</span><span class='line'><span class="p">|</span>-- README.md
+</span><span class='line'><span class="p">|</span>-- requirements.txt
+</span><span class='line'><span class="p">|</span>-- scripts
+</span><span class='line'><span class="p">|</span>   <span class="sb">`</span>-- postInstall.sh
+</span><span class='line'><span class="p">|</span>-- static
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- javascripts
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- app.js
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- controllers
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>   <span class="sb">`</span>-- controllers.js
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- directives
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>   <span class="sb">`</span>-- directives.js
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="sb">`</span>-- services
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>       <span class="sb">`</span>-- services.js
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- partials <span class="o">(</span>angular view stuff<span class="o">)</span>
+</span><span class='line'><span class="p">|</span>   <span class="sb">`</span>-- stylesheets
+</span><span class='line'><span class="p">|</span>       <span class="sb">`</span>-- styles.css
+</span><span class='line'><span class="p">|</span>-- templates
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- index.html
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- javascripts.html
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- navbar.html
+</span><span class='line'><span class="p">|</span>   <span class="sb">`</span>-- stylesheets.html
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This follows from the nice boilerplate provided by <a href="https://github.com/brwr/thinkster-django-angular-boilerplate">thinkster.io</a> - take a look at their nifty tutorials <a href="http://thinkster.io">here</a>.</p>
+
+<p>I first stumbled across this article on <a href="https://realpython.com/blog/python/django-development-with-docker-compose-and-machine/">realpython.com</a>, which greatly piqued my interest. I realized that docker had
+moved on to becoming a suite of tools - docker itself becoming docker-engine in name. However,
+I faced issues (being a total n00b in devops) in setting up with the configuration that they
+specified, so I decided to go for something simpler. I found just what I needed in <a href="https://github.com/andrecp/django-tutorial-docker-nginx-postgres">Andre&rsquo;s</a>
+tutorial for deploying a simple Docker-Nginx-Django-Postgres setup.</p>
+
+<p>One thing I noticed in both configurations is that the code repository was bundled alongwith the docker
+stuff (needed by docker-compose) for production.
+I couldn&rsquo;t agree with that, so I decided to look up a method to clone my repository while creating
+the docker container. I then kept my code and deployment repositories separate, and found that Bitbucket
+(where my repositories are hosted) have a feature called deployment keys - SSH keys that have read-only
+access to a repository. This was exactly what I needed.</p>
+
+<p>Here is the directory structure of my docker deployment repository -:</p>
+
+<figure class='code'><figcaption><span>docker directories</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="p">|</span>-- docker-compose.yml
+</span><span class='line'><span class="p">|</span>-- Dockerfile
+</span><span class='line'><span class="p">|</span>-- ec2box.sh
+</span><span class='line'><span class="p">|</span>-- nginx
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- container_ip.sh
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- Dockerfile
+</span><span class='line'><span class="p">|</span>   <span class="sb">`</span>-- nginx.conf
+</span><span class='line'><span class="p">|</span>-- README.md
+</span><span class='line'><span class="p">|</span>-- rebuild_docker.sh
+</span><span class='line'><span class="p">|</span>-- ssh
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- bb_deploy.rsa
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- bb_deploy.rsa.pub
+</span><span class='line'><span class="p">|</span>   <span class="sb">`</span>-- config
+</span><span class='line'><span class="sb">`</span>-- static
+</span><span class='line'>    <span class="sb">`</span>-- admin
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>docker-compose.yml : The file that controls how docker-compose builds docker containers and runs them</li>
+<li>Dockerfile : The Dockerfile for the django/angular container</li>
+<li>ec2box.sh : A small script containing a single command which creates the whole setup using AWS drivers</li>
+<li>nginx - Directory containing specifics for the nginx container, where container_ip.sh is another
+small script which I needed when deploying on AWS</li>
+<li>rebuild_docker.sh : A script from Andre&rsquo;s repository for quickly build-and-up containers using docker-compose</li>
+<li>ssh : Directory containing my Bitbucket deployment key and a SSH config file</li>
+<li>static : Django admin static files</li>
+</ul>
+
+
+<p>The contents of docker-compose.yml are as follows -:</p>
+
+<figure class='code'><figcaption><span>docker-compose.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1"># Nginx</span>
+</span><span class='line'><span class="l-Scalar-Plain">nginx</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">./nginx</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">volumes_from</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">django</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">django</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="s">&quot;80:80&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># This defines a service for the Django app</span>
+</span><span class='line'><span class="c1"># Will include the Angular frontend</span>
+</span><span class='line'><span class="l-Scalar-Plain">django</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">.:/root</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">/usr/src/app</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">expose</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="s">&quot;8000&quot;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">postgres</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># This defines a service for the Postgres database</span>
+</span><span class='line'><span class="l-Scalar-Plain">postgres</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">postgres:latest</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note how the nginx container definition specifies a <code>volumes_from</code> section, of which the django
+container is a part. The host port 80 has been mapped to container port 80, as nginx requires.
+One little caveat: make sure that no other docker containers are hogging up port 80, because you
+will have a painful time trying to find out why your nginx container keeps dying on you. The <code>links</code>
+directive creates entries in the nginx container&rsquo;s <code>/etc/hosts</code> file for the django container&rsquo;s IP/hostname.
+This will come in use later when we deploy to AWS.</p>
+
+<p>The django container definition has a few small differences from the one mentioned at realpython or
+Andre&rsquo;s tutorial. We mount the volume on <code>/root</code> instead of <code>/usr/src/app</code>, because the latter does
+not exist until we clone the code repository. Additionally, we expose <code>/usr/src/app</code> as a volume, so
+that the nginx container does not run into a load of 404s when trying to serve static files. Port 8000
+is exposed as we shall be running gunicorn on that port, and there is a link to the postgres container.</p>
+
+<p>The postgres definition is not much to talk about, as it is built from an image from the docker registry
+(yes, they have a registry of known docker containers!).</p>
+
+<p>Let&rsquo;s take a look at the Dockerfile for the django container -:</p>
+
+<figure class='code'><figcaption><span>Dockerfile (django)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>FROM ubuntu:14.04
+</span><span class='line'>
+</span><span class='line'>ENV DJANGO_CONFIGURATION Docker
+</span><span class='line'>
+</span><span class='line'><span class="c"># First, we need to get git, and clone our repository</span>
+</span><span class='line'><span class="c"># Additionally, get everything else here too, such as nodejs and npm</span>
+</span><span class='line'>
+</span><span class='line'>RUN apt-get update
+</span><span class='line'>RUN apt-get install -y ca-certificates git-core ssh nodejs npm python-pip libpq-dev python-dev
+</span><span class='line'>RUN ln -s /usr/bin/nodejs /usr/bin/node
+</span><span class='line'>
+</span><span class='line'>ENV HOME /root
+</span><span class='line'>
+</span><span class='line'><span class="c"># Add custom ssh keypair - usually Bitbucket deployment keys</span>
+</span><span class='line'>ADD ssh/ /root/.ssh/
+</span><span class='line'>
+</span><span class='line'><span class="c"># Fix permissions</span>
+</span><span class='line'>RUN chmod <span class="m">600</span> /root/.ssh/*
+</span><span class='line'>
+</span><span class='line'><span class="c"># Avoid first connection host confirmation</span>
+</span><span class='line'>RUN ssh-keyscan bitbucket.org &gt; /root/.ssh/known_hosts
+</span><span class='line'>
+</span><span class='line'><span class="c"># Clone the repo</span>
+</span><span class='line'>WORKDIR /usr/src/app
+</span><span class='line'>RUN git clone git@bitbucket.org:username/repo
+</span><span class='line'>
+</span><span class='line'><span class="c"># Install requirements</span>
+</span><span class='line'>WORKDIR /usr/src/app/repo
+</span><span class='line'>RUN pip install -r requirements.txt
+</span><span class='line'>RUN npm install -g bower
+</span><span class='line'>RUN bower --allow-root install
+</span><span class='line'>
+</span><span class='line'><span class="c"># S3 Storage for django-storages</span>
+</span><span class='line'>ENV AWS_ACCESS_KEY yourkeyhere
+</span><span class='line'>ENV AWS_SECRET_ACCESS_KEY yoursecretsaucehere
+</span><span class='line'>ENV S3_BUCKET_NAME yourbucketnamehere
+</span><span class='line'>
+</span><span class='line'><span class="c"># DB Settings</span>
+</span><span class='line'>ENV DB_NAME postgres
+</span><span class='line'>ENV DB_USER postgres
+</span><span class='line'>ENV DB_PASS postgres
+</span><span class='line'>ENV DB_SERVICE postgres
+</span><span class='line'>
+</span><span class='line'><span class="c"># Add Django Admin CSS</span>
+</span><span class='line'>ADD ./static/admin /usr/src/app/repo/static/admin
+</span><span class='line'>
+</span><span class='line'>WORKDIR /usr/src/app/repo/defsec
+</span><span class='line'>CMD <span class="o">[</span><span class="s2">&quot;gunicorn&quot;</span>, <span class="s2">&quot;app.wsgi&quot;</span>, <span class="s2">&quot;-w&quot;</span>, <span class="s2">&quot;2&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;0.0.0.0:8000&quot;</span>, <span class="s2">&quot;--log-level&quot;</span>, <span class="s2">&quot;-&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>DJANGO_CONFIGURATION</code> environment variable is used in django project settings. First, we
+install all the necessary command line tools, and create a symbolic link so that nodejs plays
+well. We then add our custom keypair to the <code>.ssh</code> directory, and run a permissions fix command.
+This will allow us to clone the code repository. Before running the clone command, we run a
+<code>ssh-keyscan</code> so that the cloning process is automatic - no key passphrase prompts. Some may argue
+that this lowers security, but that is a topic for another post altogether.
+After cloning, I install all django/angular requirements using pip and bower. A few more environment
+variables are then set, first for django-storages (a topic for a soon-to-come post: how I set up
+image uploads to Amazon S3 with django-storages) and then for the postgres database. Finally,
+django admin static files are added (yes, these don&rsquo;t come out of nowhere, they need to be added
+for nginx to serve them) and run the gunicorn server.</p>
+
+<p>With that covered, let&rsquo;s check out the contents of the nginx directory. First up is the nginx
+Dockerfile -:</p>
+
+<figure class='code'><figcaption><span>nginx Dockerfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># Set nginx base image</span>
+</span><span class='line'>FROM nginx
+</span><span class='line'>
+</span><span class='line'><span class="c"># File Author / Maintainer</span>
+</span><span class='line'>MAINTAINER Pritish Chakraborty
+</span><span class='line'>
+</span><span class='line'><span class="c"># Copy custom configuration file from the current directory</span>
+</span><span class='line'>COPY nginx.conf /etc/nginx/nginx.conf
+</span><span class='line'>
+</span><span class='line'><span class="c"># Uncomment the commented Dockerfile lines below when pushing to AWS</span>
+</span><span class='line'><span class="c"># COPY container_ip.sh /root/container_ip.sh</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Get django container&#39;s IP and put it in nginx.conf</span>
+</span><span class='line'><span class="c"># RUN /root/container_ip.sh</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Reload the damn nginx service</span>
+</span><span class='line'><span class="c"># CMD [&quot;service&quot;, &quot;nginx&quot;, &quot;restart&quot;]</span>
+</span><span class='line'>CMD /usr/sbin/nginx -g <span class="s2">&quot;daemon off;&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Not much to explain here until I get to the part about deploying to AWS. Here&rsquo;s nginx.conf -:</p>
+
+<figure class='code'><figcaption><span>nginx.conf</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>worker_processes 1<span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>events <span class="o">{</span>
+</span><span class='line'>    worker_connections 1024<span class="p">;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>http <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    server <span class="o">{</span>
+</span><span class='line'>        listen 80<span class="p">;</span>
+</span><span class='line'>        server_name example.org<span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        access_log /dev/stdout<span class="p">;</span>
+</span><span class='line'>        error_log /dev/stdout info<span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        location /static/ <span class="o">{</span>
+</span><span class='line'>            <span class="nb">alias</span> /usr/src/app/repo/static<span class="p">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        location /static/javascripts/ <span class="o">{</span>
+</span><span class='line'>          default_type text/javascript<span class="p">;</span>
+</span><span class='line'>          <span class="nb">alias</span> /usr/src/app/repo/static/javascripts/<span class="p">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        location /static/stylesheets/ <span class="o">{</span>
+</span><span class='line'>          default_type text/css<span class="p">;</span>
+</span><span class='line'>          <span class="nb">alias</span> /usr/src/app/repo/static/stylesheets/<span class="p">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  location /static/bower_components/ <span class="o">{</span>
+</span><span class='line'>    types <span class="o">{</span>
+</span><span class='line'>      text/css css<span class="p">;</span>
+</span><span class='line'>      text/javascript js<span class="p">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="nb">alias</span> /usr/src/app/repo/static/bower_components/<span class="p">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  location /static/partials/ <span class="o">{</span>
+</span><span class='line'>    types <span class="o">{</span>
+</span><span class='line'>      text/html html<span class="p">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="nb">alias</span> /usr/src/app/repo/static/partials/<span class="p">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  location /static/admin/ <span class="o">{</span>
+</span><span class='line'>          <span class="nb">alias</span> /usr/src/app/repo/static/admin/<span class="p">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  location /static/admin/css <span class="o">{</span>
+</span><span class='line'>    default_type text/css<span class="p">;</span>
+</span><span class='line'>    <span class="nb">alias</span> /usr/src/app/repo/static/admin/css<span class="p">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  location /static/admin/js <span class="o">{</span>
+</span><span class='line'>    default_type text/javascript<span class="p">;</span>
+</span><span class='line'>    <span class="nb">alias</span> /usr/src/app/repo/static/admin/js<span class="p">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  location /static/admin/img <span class="o">{</span>
+</span><span class='line'>    types <span class="o">{</span>
+</span><span class='line'>      image/png png<span class="p">;</span>
+</span><span class='line'>      image/jpeg jpg<span class="p">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="nb">alias</span> /usr/src/app/repo/static/admin/img<span class="p">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        location / <span class="o">{</span>
+</span><span class='line'>            proxy_pass http://django:8000<span class="p">;</span>
+</span><span class='line'>            proxy_set_header   Host <span class="nv">$host</span><span class="p">;</span>
+</span><span class='line'>            proxy_set_header   X-Real-IP <span class="nv">$remote_addr</span><span class="p">;</span>
+</span><span class='line'>            proxy_set_header   X-Forwarded-For <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+</span><span class='line'>            proxy_set_header   X-Forwarded-Host <span class="nv">$server_name</span><span class="p">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, I had to make it very thorough about what files nginx was going to serve,
+from where, and what type mappings would the files have had. The latter had me stumped for
+a bit - I got nginx to serve all static files, but it was as if the browser didn&rsquo;t know
+what to do with them, so take note. Finally, the location directive tells nginx whom
+to proxy pass (django container service). There will be a minor change to this bit later
+when we deploy on AWS.</p>
+
+<p>The second part of this post will deal with the actual commands needed to deploy the setup;
+first, on my local machine (virtualbox driver), and then on AWS. I&rsquo;ll add a bonus command
+to deploy to DigitalOcean for shits and giggles.
+Coming soon!</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/09/03/docker-is-awesome/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Analyzing Stuff With Google Analytics]]></title>
+    <link href="http://PritishC.github.io/blog/2015/03/08/analyzing-stuff-with-google-analytics/"/>
+    <updated>2015-03-08T12:37:36+05:30</updated>
+    <id>http://PritishC.github.io/blog/2015/03/08/analyzing-stuff-with-google-analytics</id>
+    <content type="html"><![CDATA[<p>This article offers a glimpse into how we implemented Google Analytics procedures,
+such as click tracking, in our generic webstore - <a href="https://github.com/openlabs/nereid-webshop">Nereid Webshop</a>.</p>
+
+<!--more-->
+
+
+<p>As a beginner in Javascript, I was tasked with tracking clicks from various areas
+of the webstore, such as product pages, the search page, etc. Google&rsquo;s developer
+documentation (<a href="https://developers.google.com/analytics/">here</a>) is a good place
+to start. Note that we used the more recent ga.js, as opposed to the older
+analytics.js script.</p>
+
+<p>First we wrote our backend implementation - to fetch the details of a product.
+The basic Product model is in the core <a href="https://github.com/tryton/product">Product</a> repository.
+We added a few attributes of our own in our own repos.</p>
+
+<figure class='code'><figcaption><span>ga data method</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">ga_product_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class='line'>    <span class="sd">&#39;&#39;&#39;</span>
+</span><span class='line'><span class="sd">    Return a dictionary of the product information as expected by Google</span>
+</span><span class='line'><span class="sd">    Analytics</span>
+</span><span class='line'><span class="sd">    Other possible values for kwargs include -:</span>
+</span><span class='line'><span class="sd">    :param list: The name of the list in which this impression is to be</span>
+</span><span class='line'><span class="sd">                 recorded</span>
+</span><span class='line'><span class="sd">    :param position: Integer position of the item on the view</span>
+</span><span class='line'><span class="sd">    &#39;&#39;&#39;</span>
+</span><span class='line'>    <span class="n">rv</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="ow">or</span> <span class="nb">unicode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+</span><span class='line'>        <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+</span><span class='line'>        <span class="s">&#39;category&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">category</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="bp">None</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">rv</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">rv</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once we had that in place, we began by analyzing what parts of our webstore needed
+analytics. A typical product page contains various link-points where we could
+insert our GA attributes. Some of these could be -:</p>
+
+<ul>
+<li>Add to cart button</li>
+<li>Related product links</li>
+<li>Add related products to cart button</li>
+</ul>
+
+
+<p>For example, in our form for adding the product to cart -:</p>
+
+<figure class='code'><figcaption><span>add to cart</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">&quot;{{ url_for(&quot;</span><span class="na">nereid</span><span class="err">.</span><span class="na">cart</span><span class="err">.</span><span class="na">add_to_cart</span><span class="err">&quot;)</span> <span class="err">}}&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">id=</span><span class="s">&quot;product-buy-now&quot;</span> <span class="na">class=</span><span class="s">&quot;add-to-cart&quot;</span> <span class="na">autocomplete=</span><span class="s">&quot;off&quot;</span> <span class="na">data-ga-event-label=</span><span class="s">&quot;Add To Cart&quot;</span> <span class="na">data-ga-product-name=</span><span class="s">&quot;{{ product.name }}&quot;</span> <span class="na">data-ga-product-category=</span><span class="s">&quot;{{ product.category and product.category.name or None }}&quot;</span> <span class="na">data-ga-product-price=</span><span class="s">&quot;{{ product.sale_price()|currencyformat(request.nereid_currency.code) }}&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;csrf_token&quot;</span> <span class="na">value=</span><span class="s">&quot;{{ csrf_token() }}&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;quantity&quot;</span> <span class="na">value=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;size&quot;</span> <span class="na">id=</span><span class="s">&quot;size-id&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;product&quot;</span> <span class="na">value=</span><span class="s">&quot;{{ product.id }}&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;action&quot;</span> <span class="na">value=</span><span class="s">&quot;add&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;btn btn-primary btn-buynow btn-block btn-lg&quot;</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="err">{%</span> <span class="na">if</span> <span class="na">not</span> <span class="na">product</span><span class="err">.</span><span class="na">can_buy_from_eshop</span><span class="err">()</span> <span class="err">%}</span><span class="na">disabled</span><span class="err">{%</span> <span class="na">endif</span> <span class="err">%}</span>
+</span><span class='line'>    <span class="na">quantity=</span><span class="s">&quot;1&quot;</span> <span class="na">id=</span><span class="s">&quot;buy-now-btn&quot;</span><span class="nt">&gt;</span>Buy Now<span class="nt">&lt;/button&gt;</span>
+</span><span class='line'><span class="nt">&lt;/form&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Similarly, we could have the following on a product link -:</p>
+
+<figure class='code'><figcaption><span>product link</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{{ related_product.get_absolute_url() }}&quot;</span> <span class="na">ga-product-link</span> <span class="na">data-ga-product-list=</span><span class="s">&quot;Related Products&quot;</span> <span class="na">data-ga-event-label=</span><span class="s">&quot;Product Thumbnail&quot;</span> <span class="na">data-ga-product-id=</span><span class="s">&quot;{{ related_product.id }}&quot;</span> <span class="na">data-ga-product-name=</span><span class="s">&quot;{{ related_product.name }}&quot;</span> <span class="na">data-ga-product-category=</span><span class="s">&quot;{{ related_product.category and related_product.category.name or None }}&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;{{ CDN }}{{ related_product.default_image.transform_command().thumbnail(200, 200, &#39;a&#39;) }}&quot;</span> <span class="na">class=</span><span class="s">&quot;img margin-auto&quot;</span> <span class="na">alt=</span><span class="s">&quot;{{ related_product.name }}&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;/a&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note the <code>data-ga</code> prefixed attributes in the <code>form</code> tag. These are used in
+conjunction with jQuery&rsquo;s data() method to fetch product attributes, to be sent
+to Google&rsquo;s servers.</p>
+
+<p>The JS snippet for tracking product clicks is as follows (assuming GA is set up already) -:</p>
+
+<figure class='code'><figcaption><span>product click</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="kd">function</span> <span class="p">(){</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;a[href][ga-product-link]&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">ga</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+</span><span class='line'>    <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="c1">// register safety net timeout:</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">url</span>
+</span><span class='line'>    <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">ga</span><span class="p">(</span><span class="s1">&#39;ec:addProduct&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s1">&#39;id&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-id&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="s1">&#39;name&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-name&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="s1">&#39;category&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-category&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="nx">ga</span><span class="p">(</span><span class="s1">&#39;ec:setAction&#39;</span><span class="p">,</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">list</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-list&#39;</span><span class="p">)});</span>
+</span><span class='line'>    <span class="nx">ga</span><span class="p">(</span><span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="s1">&#39;event&#39;</span><span class="p">,</span> <span class="s1">&#39;Product&#39;</span><span class="p">,</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-event-label&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s1">&#39;hitCallback&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">t</span><span class="p">);</span>
+</span><span class='line'>        <span class="c1">// redirect anyway:</span>
+</span><span class='line'>        <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">url</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&rsquo;ll break this down step by step -:</p>
+
+<ul>
+<li>First, we collect all those anchor tags on the page which have the <code>ga-product-link</code> attribute.
+We register our method on the click event.</li>
+<li>We need <code>preventDefault()</code> and <code>stopPropagation()</code> to temporarily disable default behaviour,
+i.e., taking us to a different page.</li>
+<li>We register a <strong>safety net timeout</strong>. This step is crucial - we don&rsquo;t want our page
+loading to take forever or never happen just because the data wasn&rsquo;t sent to the
+GA servers successfully.</li>
+<li>We perform a <code>addProduct</code> call with product details and then use <code>setAction</code>
+to denote that this was a product click - and send data describing the event -
+which in this case was a click on a related product.</li>
+<li>We also register a callback which clears our earlier timeout and redirects to
+the desired location. This is in the normal case - that the data was sent successfully.
+If the data isn&rsquo;t sent, the redirect is done on timeout completion.</li>
+</ul>
+
+
+<p>Tracking product additions to cart was slightly trickier. We need to take care of
+form submission in the add to cart case.</p>
+
+<figure class='code'><figcaption><span>add to cart</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.add-to-cart&#39;</span><span class="p">).</span><span class="nx">submit</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">ga</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">alreadySubmitted</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>    <span class="cm">/* The code below registers a timeout which acts</span>
+</span><span class='line'><span class="cm">     * as a safety net. The boolean alreadySubmitted is used</span>
+</span><span class='line'><span class="cm">     * to check whether the form was already submitted or not.</span>
+</span><span class='line'><span class="cm">     * It is used by the callbacks in setTimeout and GA. It is to</span>
+</span><span class='line'><span class="cm">     * avoid the specific cases where both callbacks fire, resulting</span>
+</span><span class='line'><span class="cm">     * in a double form submission.</span>
+</span><span class='line'><span class="cm">     */</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">alreadySubmitted</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">alreadySubmitted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">form</span><span class="p">.</span><span class="nx">submit</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">ga</span><span class="p">(</span><span class="s1">&#39;ec:addProduct&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s1">&#39;id&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;input[name=&#39;product&#39;]&quot;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="s1">&#39;name&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-name&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="s1">&#39;category&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-category&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="s1">&#39;price&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-product-price&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="s1">&#39;quantity&#39;</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;input[name=&#39;quantity&#39;]&quot;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="nx">ga</span><span class="p">(</span><span class="s1">&#39;ec:setAction&#39;</span><span class="p">,</span> <span class="s1">&#39;add&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">ga</span><span class="p">(</span><span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="s1">&#39;event&#39;</span><span class="p">,</span> <span class="s1">&#39;CartAnalytics&#39;</span><span class="p">,</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ga-event-label&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s1">&#39;hitCallback&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">alreadySubmitted</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>        <span class="nx">alreadySubmitted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="c1">// Submit anyway</span>
+</span><span class='line'>        <span class="nx">form</span><span class="p">.</span><span class="nx">submit</span><span class="p">();</span>
+</span><span class='line'>      <span class="p">}});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, nearly everything is the same, except the use of a boolean - <code>alreadySubmitted</code>.
+This boolean is checked in both cases - when the data is sent succesfully to the GA servers,
+and when it is not and form submission should not be delayed, and <em>also</em> to prevent
+a double form submission - an edge case which I was able to consistently reproduce.</p>
+
+<p>We also implemented product removal from cart in a similar manner. You can peruse
+the webshop source at your leisure - it is open-source, and we encourage good pull requests.</p>
+
+<p>My next article will be on one of my favourite tools - Elasticsearch :-).</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/03/08/analyzing-stuff-with-google-analytics/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Development Cheatsheet @ Openlabs]]></title>
+    <link href="http://PritishC.github.io/blog/2015/01/25/development-cheatsheet/"/>
+    <updated>2015-01-25T11:12:33+05:30</updated>
+    <id>http://PritishC.github.io/blog/2015/01/25/development-cheatsheet</id>
+    <content type="html"><![CDATA[<p>The target audience of this article is the new arrivals at our company, and I
+will try to make it as easy as possible on them. This assumes a basic knowledge
+of Git/GitHub (and also knowing the difference between the two) and will follow
+a scenario-based approach.</p>
+
+<!--more-->
+
+
+<h2>Ground Zero: Install ZSH/Oh-My-ZSH</h2>
+
+<p>This should be done before anything else, mainly because ZSH is an awesome shell
+and is very customizable. Here&rsquo;s a screenshot of my ZSH shell (I use the cloud
+theme) -:</p>
+
+<p><img src="http://PritishC.github.io/images/zsh.png" /></p>
+
+<p>Note how the branch name is shown in square-brackets and the lightning symbol
+signifies that a change has occurred in some file(s) which may or may not be
+committed.</p>
+
+<figure class='code'><figcaption><span>zero</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install zsh curl
+</span><span class='line'>Installing...
+</span><span class='line'><span class="nv">$ </span>curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh <span class="p">|</span> sh
+</span><span class='line'>Installing... <span class="o">(</span>you may be prompted to answer a few questions<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once the install is complete, close your current command prompt and re-open it.
+You should now be using ZSH. You can customize your configuration by editing
+the <code>.zshrc</code> file, which is present at the home folder (<code>$HOME</code>). I&rsquo;ll leave
+that bit out to the reader to experiment with stuff like themes.</p>
+
+<h2>Scenario-I: Basic Git Setup.</h2>
+
+<p>To begin working on one of the company repositories, first fork the repo on GitHub
+and then use the following commands on your terminal (assuming your SSH keys
+have already been setup) -:</p>
+
+<figure class='code'><figcaption><span>scenario-I</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone git@github.com:&lt;your-username&gt;/&lt;repo-name&gt;
+</span><span class='line'>Cloning...
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> &lt;repo-name&gt;
+</span><span class='line'><span class="nv">$ </span>git remote add openlabs git@github.com:openlabs/&lt;repo-name&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can run <code>git remote -vv</code> to check the names of your remotes. At this point,
+you should have the remotes &lsquo;origin&rsquo; and &lsquo;openlabs&rsquo; for your cloned repository.</p>
+
+<h2>Scenario-II: Writing A Feature/Hotfix</h2>
+
+<p>All work is usually based off of the develop branch, and so, you will checkout
+your new branch off develop. There may be cases when you will have to checkout
+off a version branch - that is described in the next scenario.</p>
+
+<p>You can prefix your branch name with &lsquo;feature&rsquo; or &lsquo;fix&rsquo; depending on whether
+it is a feature to be added or a fix to be made. Branch naming is completely
+your choice, I only try provide a useful convention here.</p>
+
+<p>For example, you wish to add a feature and your task ID is 0000. You will do so
+as follows -:</p>
+
+<figure class='code'><figcaption><span>scenario-II</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git branch
+</span><span class='line'>* develop
+</span><span class='line'><span class="nv">$ </span>git checkout -b feature/task-0000
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you&rsquo;re on the <code>feature/task-0000</code> branch, as the ZSH branch indicator should
+tell you. You can do some work, and then commit it.</p>
+
+<figure class='code'><figcaption><span>scenario-II</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git status
+</span><span class='line'>Shows files which are being tracked, are staged <span class="k">for</span> commit or are not staged.
+</span><span class='line'><span class="nv">$ </span>gst
+</span><span class='line'>Shorthand <span class="k">for</span> the above which works with zsh.
+</span><span class='line'><span class="nv">$ </span>git add &lt;filenames&gt;
+</span><span class='line'><span class="nv">$ </span>git commit
+</span><span class='line'>Write your commit message and use VI shortcuts to save the message, i.e., :wq
+</span><span class='line'>If you have nano configured as your editor instead, use that.
+</span><span class='line'>Commit messages should be brief yet descriptive, and neatly written.
+</span><span class='line'><span class="nv">$ </span>git config --global push.simple
+</span><span class='line'>Needs to be <span class="nb">set </span>only once.
+</span><span class='line'><span class="nv">$ </span>git push -uvf origin
+</span><span class='line'>This pushes your current branch to the origin remote <span class="o">(</span>which is your fork<span class="o">)</span>.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can open a pull request from GitHub on the openlabs remote. Make sure
+to get your work reviewed.</p>
+
+<h2>Scenario-IIA: Writing A Feature For Version Branches</h2>
+
+<p>Sometimes, you may need to write features not for develop but for an earlier
+version branch. In this case, you may do a <code>git fetch openlabs</code> to get the branch
+data as is required. For example, some of our repositories are being moved to
+v3.4, which becomes the develop branch. v3.2 gets a branch named <code>3.2</code>.</p>
+
+<p>In this case, you need to checkout off of the 3.2 branch instead of develop, and
+your PR should be sent on the 3.2 branch. The commands are the same, except
+the branch you are checking out off changes.</p>
+
+<h2>Scenario-III: Rebase To Keep Up</h2>
+
+<p>Rebasing is an important part of using git repositories. In a team environment,
+you will have to rebase often to keep up with the latest changes, as you will
+not be the only one pushing features and fixes to the openlabs remote.</p>
+
+<p>It is advisable that before you checkout off of develop, you should do a rebase
+as follows -:</p>
+
+<figure class='code'><figcaption><span>scenario-III</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git pull --rebase openlabs branch:branch
+</span><span class='line'>Rebasing...
+</span><span class='line'>May or may not introduce merge conflicts.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>branch</code> here may either be develop or a version branch, as was explained earlier.</p>
+
+<p>To resolve merge conflicts, you will need to search for files which have the
+<code>&gt;&gt;&gt;HEAD</code> symbol appearing in them. I usually do this with the <code>grep</code> command.
+Take a look at the latest version of the files from GitHub and modify your
+local files accordingly. Be careful not to omit any code that was not added by
+you.</p>
+
+<p>Once you are done editing your local files, do a <code>git add</code> on them, and then run
+<code>git rebase --continue</code>.</p>
+
+<h2>Bonus Scenario: Protect Your Slack/HipChat From Attack!</h2>
+
+<p>One of the fun parts of being at Openlabs is that we advise our colleagues
+not to leave their systems unlocked. If you leave your system on, you are fair
+game for us :D.</p>
+
+<p>Leaving your system on may or may not lead to one of the following -:</p>
+
+<ul>
+<li>Silly messages appearing on your HipChat/Slack, on the Water Cooler.</li>
+<li>Declarations of coming out of the closet on your Facebook (if we know you well
+enough).</li>
+<li>Messed up configurations, and so on.</li>
+</ul>
+
+
+<p>Vanilla Ubuntu users can use the Ctrl+L shortcut to lock their systems quickly.
+For those who cannot use this shortcut for whatever reason (for example, Lubuntu
+does not have such a shortcut), they may install <code>xscreensaver</code> using their
+package manager and use this little script I made -:</p>
+
+<p>File /Users/pritishc/Workspace/Personal/coder_blog/source/downloads/code/.logoutscript could not be found</p>
+
+<p><code>grep</code> returns useful exit codes which can be used to find out whether <code>xscreensaver</code>
+is running or not. If it is not running, it is made to run. Henceforth, the
+lock command is applied.</p>
+
+<p>You may save this script to your home directory and then run <code>sh ~/.logoutscript</code>
+whenever you need to get away from your system!</p>
+
+<p>PS: I will update this as more use cases come to mind.</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/01/25/development-cheatsheet/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
 ]]></content>
   </entry>
   

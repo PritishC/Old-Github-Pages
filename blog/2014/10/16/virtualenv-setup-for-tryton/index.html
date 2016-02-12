@@ -32,6 +32,19 @@ who wishes to develop on Tryton needs to know a few basic things &hellip;">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
   
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-56615772-1']);
+    _gaq.push(['_setDomainName', 'pritishc.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
 
 </head>
 
@@ -95,6 +108,9 @@ who wishes to develop on Tryton needs to know a few basic things &hellip;">
 
 <div class="entry-content"><p>In this post, we shall learn how to setup a virtualenv for Tryton. Any new developer
 who wishes to develop on Tryton needs to know a few basic things.</p>
+
+<!--more-->
+
 
 <p>Tryton is not for the faint-hearted. A new person can possibly take a long time to get adjusted
 to the workflow.</p>
@@ -160,19 +176,42 @@ into the virtualenv. These are the absolute bare-minimum requirements that every
 virtualenv will get. Now issue the following command in your terminal, in whichever
 directory you&rsquo;ve readied for this purpose -:</p>
 
-<pre><code class="bash [virtualenv]">mkproject --system-site-packages myenv
+<pre><code class="bash [virtualenv]">mkproject myenv
 </code></pre>
 
 <p>Substitute myenv with any name you wish. And voila, you have your newly commissioned
 virtualenv.</p></li>
-<li>What does this have to do with <code>pygtk</code>, you ask? Well, since it was system-wide,
-it gets incorporated into your virtualenv and you don&rsquo;t have to bother about it.</li>
+<li><p>After the virtualenv is created, use the <code>toggleglobalsitepackages</code> switch from inside
+it to enable pygtk. Since pygtk was installed system-wide (global site packages), it gets
+incorporated into your virtualenv and you don&rsquo;t have to bother about it.</p></li>
+<li><p>What this does is create a project folder at the location specified by the <code>$PROJECT_HOME</code>
+variable, which you must have specified during your virtualenvwrapper installation. You can
+now clone your GitHub/etc repositories inside this folder and install their requirements.</p></li>
+<li><p>This kind of project organization allows you to easily clone the repositories
+which constitute the requirements of a particular repository and make changes in them.
+For example, <code>nereid-webshop</code> depends on <code>nereid-cart-b2c</code>. If you need to send a patch
+on the latter, you can clone it inside the project folder you created for webshop.</p></li>
 </ul>
 
 
 <p>And that&rsquo;s that folks! In the next post, we shall set up Postgres as Tryton uses
 Postgres databases. Following that, we shall learn how to actually install Tryton,
 both the client and the server.</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
 </div>
 
 
@@ -227,12 +266,6 @@ both the client and the server.</p>
   </footer>
 </article>
 
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
-
 </div>
 
 <aside class="sidebar">
@@ -268,19 +301,23 @@ both the client and the server.</p>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/10/21/beginning-tryton/">Beginning Tryton</a>
+        <a href="/blog/2015/09/06/uploading-with-django-and-amazon-s3/">Uploading With Django and Amazon S3</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/10/19/postgres-setup/">Postgres Setup</a>
+        <a href="/blog/2015/09/04/docker-is-awesome-part-ii/">Docker Is Awesome - Part II</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/10/16/virtualenv-setup-for-tryton/">Virtualenv Setup for Tryton</a>
+        <a href="/blog/2015/09/03/docker-is-awesome/">Docker Is Awesome - Part I</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/10/15/the-first-post/">The First Post</a>
+        <a href="/blog/2015/03/08/analyzing-stuff-with-google-analytics/">Analyzing Stuff With Google Analytics</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/25/development-cheatsheet/">Development Cheatsheet @ Openlabs</a>
       </li>
     
   </ul>
@@ -289,7 +326,7 @@ both the client and the server.</p>
   
     <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/general'>general (1)</a></li><li><a href='/blog/categories/postgresql'>postgresql (1)</a></li><li><a href='/blog/categories/tryton'>tryton (2)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/android'>android (1)</a></li><li><a href='/blog/categories/angular'>angular (1)</a></li><li><a href='/blog/categories/aws'>aws (3)</a></li><li><a href='/blog/categories/devops'>devops (2)</a></li><li><a href='/blog/categories/django'>django (2)</a></li><li><a href='/blog/categories/docker'>docker (2)</a></li><li><a href='/blog/categories/electronics'>electronics (1)</a></li><li><a href='/blog/categories/general'>general (2)</a></li><li><a href='/blog/categories/github'>github (1)</a></li><li><a href='/blog/categories/google'>google (1)</a></li><li><a href='/blog/categories/kitkat'>kitkat (1)</a></li><li><a href='/blog/categories/nereid'>nereid (1)</a></li><li><a href='/blog/categories/nginx'>nginx (2)</a></li><li><a href='/blog/categories/openlabs'>openlabs (1)</a></li><li><a href='/blog/categories/postgresql'>postgresql (1)</a></li><li><a href='/blog/categories/tryton'>tryton (4)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
 </section>
 
 <section>
@@ -322,7 +359,6 @@ both the client and the server.</p>
 </section>
 
 
-
   
 </aside>
 
@@ -339,22 +375,6 @@ both the client and the server.</p>
 </p>
 </footer>
   
-
-<script type="text/javascript">
-      var disqus_shortname = 'pritishc';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton/';
-        var disqus_url = 'http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
 
 
 

@@ -1,0 +1,868 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Tryton Module Basics and Programming Example - Pritish Chakraborty</title>
+  <meta name="author" content="Pritish Chakraborty">
+
+  
+  <meta name="description" content="This article will cover the basics of developing a module for Tryton. After having
+gone through the setup, it is finally time to make your own module &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Pritish Chakraborty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-56615772-1']);
+    _gaq.push(['_setDomainName', 'pritishc.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><div class="header-left">
+  <hgroup>
+  <h1><a href="/">Pritish Chakraborty</a></h1>
+  
+  <div class="subtitle">
+    <h2>Work and Everything Else</h2>
+  </div>
+  
+  </hgroup>
+  
+</div>
+
+<div class="header-right">
+  <ul class="main-navigation">
+ <div> 
+  <li><a href="/">blog</a></li></div><div class="spacer"></div>
+     <div> 
+  <li><a href="/projects">projects</a></li></div><div class="spacer"></div>
+       <div> 
+  <li><a href="/work">work</a></li></div><div class="spacer"></div>
+         <div> 
+  <li><a href="/about">about</a></li></div>
+</ul>
+  
+
+</div>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Tryton Module Basics and Programming Example</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-02T19:22:17+05:30" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This article will cover the basics of developing a module for Tryton. After having
+gone through the setup, it is finally time to make your own module. This might
+turn out to be a longer post than all my previous ones, so hang in there.</p>
+
+<p><em>Note</em>: This article is to some extent <em>deprecated</em> - it was written with Tryton
+v3.2 in mind.</p>
+
+<!--more-->
+
+
+<h2>Introduction</h2>
+
+<p>I will use the <a href="https://github.com/PritishC/nereid-erms/tree/develop">module</a> I developed as part of an initial assignment to explain.
+The Tryton <a href="http://docs.tryton.org/">documentation</a> tells us that the basic
+components of a Tryton module are its models and its views.</p>
+
+<p>The models define the backend of the application. Much like in any other ORM, they
+will map to tables in a database, which in this case is controlled by the Postgres
+server. The views are written in XML and they define what the user sees in the
+Tryton client. Views can even be inherited and this makes for a very clever design -
+<em>it supports reusability</em>.</p>
+
+<p>Each model can have a set of fields - similar to that of a table in a DB. The fields can have types such as Integer, Char, Text, etc. as well as special relationship
+types such as Many2One and One2Many. Refer the docs for more information.</p>
+
+<p>Each view is defined in the view directory and these views are brought together
+in a ModelName.xml file which is at the project&rsquo;s root.</p>
+
+<p>Now suppose we wish to build an Employee Record Management system in Tryton. The
+first thing to do is to design the models, and then we would go about designing
+the views. I designed models for an Employee, a Department and a Designation.</p>
+
+<h2>The Models</h2>
+
+<p>One may choose to have a model be stand-alone or be &lsquo;part&rsquo; of another model.
+Tryton also has an easy mechanism for models which need to be customized in down-
+stream modules, similar to inheritance. For example, I know that the Employee
+model is already present in Tryton with the <code>__name__</code> set as <code>company.employee</code>.
+I wish to customize this model and I have done so as follows -:</p>
+
+<figure class='code'><figcaption><span>employee.py  (employee.py)</span> <a href='/downloads/code/erms/employee.py'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c"># -*- coding: utf-8 -*-</span>
+</span><span class='line'><span class="sd">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="sd">    :copyright: (c) 2014 by Openlabs Technologies &amp; Consulting (P) Ltd.</span>
+</span><span class='line'><span class="sd">    :license: GPLv3, see LICENSE for more details</span>
+</span><span class='line'><span class="sd">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">trytond.model</span> <span class="kn">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">ModelSQL</span><span class="p">,</span> <span class="n">ModelView</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">trytond.pyson</span> <span class="kn">import</span> <span class="n">Eval</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">trytond.pool</span> <span class="kn">import</span> <span class="n">PoolMeta</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="s">&#39;Designation&#39;</span><span class="p">]</span>
+</span><span class='line'><span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">PoolMeta</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">STATES</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s">&#39;readonly&#39;</span><span class="p">:</span> <span class="o">~</span><span class="n">Eval</span><span class="p">(</span><span class="s">&#39;active&#39;</span><span class="p">),</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">DEPENDS</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;active&#39;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Employee</span><span class="p">:</span>
+</span><span class='line'>    <span class="s">&quot;Employee&quot;</span>
+</span><span class='line'>    <span class="n">__name__</span> <span class="o">=</span> <span class="s">&quot;company.employee&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">gender</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Selection</span><span class="p">([</span>
+</span><span class='line'>        <span class="p">(</span><span class="s">&#39;male&#39;</span><span class="p">,</span> <span class="s">&#39;M&#39;</span><span class="p">),</span>
+</span><span class='line'>        <span class="p">(</span><span class="s">&#39;female&#39;</span><span class="p">,</span> <span class="s">&#39;F&#39;</span><span class="p">),</span>
+</span><span class='line'>        <span class="p">(</span><span class="s">&#39;undefined&#39;</span><span class="p">,</span> <span class="s">&#39;N/A&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="p">],</span> <span class="s">&#39;Gender&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+</span><span class='line'>        <span class="n">states</span><span class="o">=</span><span class="n">STATES</span><span class="p">,</span> <span class="n">depends</span><span class="o">=</span><span class="n">DEPENDS</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">department</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2One</span><span class="p">(</span>
+</span><span class='line'>        <span class="s">&#39;company.department&#39;</span><span class="p">,</span> <span class="s">&#39;Department&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">states</span><span class="o">=</span><span class="n">STATES</span><span class="p">,</span>
+</span><span class='line'>        <span class="n">depends</span><span class="o">=</span><span class="n">DEPENDS</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>    <span class="n">designation</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2One</span><span class="p">(</span>
+</span><span class='line'>        <span class="s">&quot;employee.designation&quot;</span><span class="p">,</span> <span class="s">&quot;Designation&quot;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="p">[</span>
+</span><span class='line'>            <span class="p">(</span><span class="s">&#39;department&#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="n">Eval</span><span class="p">(</span><span class="s">&#39;department&#39;</span><span class="p">))</span>
+</span><span class='line'>        <span class="p">],</span> <span class="n">states</span><span class="o">=</span><span class="n">STATES</span><span class="p">,</span> <span class="n">depends</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;active&#39;</span><span class="p">,</span> <span class="s">&#39;department&#39;</span><span class="p">],</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>    <span class="n">dob</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Date</span><span class="p">(</span>
+</span><span class='line'>        <span class="s">&quot;Date of Birth&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">states</span><span class="o">=</span><span class="n">STATES</span><span class="p">,</span> <span class="n">depends</span><span class="o">=</span><span class="n">DEPENDS</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>    <span class="n">pan</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span>
+</span><span class='line'>        <span class="s">&quot;PAN&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">states</span><span class="o">=</span><span class="n">STATES</span><span class="p">,</span> <span class="n">depends</span><span class="o">=</span><span class="n">DEPENDS</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>    <span class="n">passport</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span>
+</span><span class='line'>        <span class="s">&quot;Passport Number&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">states</span><span class="o">=</span><span class="n">STATES</span><span class="p">,</span>
+</span><span class='line'>        <span class="n">depends</span><span class="o">=</span><span class="n">DEPENDS</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="bp">True</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>    <span class="n">driver_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span>
+</span><span class='line'>        <span class="s">&quot;Drivers License&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">states</span><span class="o">=</span><span class="n">STATES</span><span class="p">,</span>
+</span><span class='line'>        <span class="n">depends</span><span class="o">=</span><span class="n">DEPENDS</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>    <span class="n">active</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Boolean</span><span class="p">(</span><span class="s">&#39;Active&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">_sql_error_messages</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s">&#39;uniq_error&#39;</span><span class="p">:</span> <span class="s">&#39;This field must be unique.&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s">&#39;null_error&#39;</span><span class="p">:</span> <span class="s">&#39;This field must be not null.&#39;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">_unique</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">(</span><span class="s">&#39;pan&#39;</span><span class="p">,</span> <span class="s">&#39;UNIQUE(pan)&#39;</span><span class="p">,</span> <span class="n">_sql_error_messages</span><span class="p">[</span><span class="s">&#39;uniq_error&#39;</span><span class="p">]),</span>
+</span><span class='line'>        <span class="p">(</span><span class="s">&#39;passport&#39;</span><span class="p">,</span> <span class="s">&#39;UNIQUE(passport)&#39;</span><span class="p">,</span> <span class="n">_sql_error_messages</span><span class="p">[</span><span class="s">&#39;uniq_error&#39;</span><span class="p">]),</span>
+</span><span class='line'>        <span class="p">(</span><span class="s">&#39;driver&#39;</span><span class="p">,</span> <span class="s">&#39;UNIQUE(driver_id)&#39;</span><span class="p">,</span> <span class="n">_sql_error_messages</span><span class="p">[</span><span class="s">&#39;uniq_error&#39;</span><span class="p">])</span>
+</span><span class='line'>    <span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@classmethod</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">__setup__</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+</span><span class='line'>        <span class="nb">super</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span><span class="o">.</span><span class="n">__setup__</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">cls</span><span class="o">.</span><span class="n">_set_states_depends</span><span class="p">([</span><span class="s">&#39;party&#39;</span><span class="p">,</span> <span class="s">&#39;company&#39;</span><span class="p">])</span>
+</span><span class='line'>        <span class="n">cls</span><span class="o">.</span><span class="n">_sql_constraints</span> <span class="o">=</span> <span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">_unique</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@staticmethod</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">default_gender</span><span class="p">():</span>
+</span><span class='line'>        <span class="k">return</span> <span class="s">&#39;male&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@staticmethod</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">default_active</span><span class="p">():</span>
+</span><span class='line'>        <span class="k">return</span> <span class="bp">True</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@classmethod</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">_set_states_depends</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">arg_list</span><span class="p">):</span>
+</span><span class='line'>        <span class="sd">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="sd">        This method takes a list of model names</span>
+</span><span class='line'><span class="sd">        as arguments (eg: &#39;party&#39;) and sets their</span>
+</span><span class='line'><span class="sd">        attributes - &#39;states&#39; and &#39;depends&#39; - to</span>
+</span><span class='line'><span class="sd">        the necessary values.</span>
+</span><span class='line'><span class="sd">        &quot;&quot;&quot;</span>
+</span><span class='line'>        <span class="k">for</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">arg_list</span><span class="p">:</span>
+</span><span class='line'>            <span class="n">module</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span>
+</span><span class='line'>            <span class="n">module</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">STATES</span>
+</span><span class='line'>            <span class="n">module</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">DEPENDS</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Designation</span><span class="p">(</span><span class="n">ModelSQL</span><span class="p">,</span> <span class="n">ModelView</span><span class="p">):</span>
+</span><span class='line'>    <span class="s">&#39;Designation&#39;</span>
+</span><span class='line'>    <span class="n">__name__</span> <span class="o">=</span> <span class="s">&#39;employee.designation&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">department</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2One</span><span class="p">(</span>
+</span><span class='line'>        <span class="s">&#39;company.department&#39;</span><span class="p">,</span> <span class="s">&#39;Department&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There&rsquo;s a lot going on here, so let&rsquo;s take it step by step. We can see two models
+that we wish to be in the Employee &lsquo;namespace&rsquo;, <code>Employee</code> and <code>Designation</code>.
+If you think about it, after all, it is an employee who has a designation!</p>
+
+<p>Our first field in <code>Employee</code> is a selection field - the user can select from the
+options that we present to them. The options are written as a list of two-tuples.
+Each two-tuple is of the format <code>(option_name, option_string)</code>.</p>
+
+<p>The other options provided to the field type constructor are the name of the field
+to be displayed, the option of making the field mandatory or required, the possible
+states of the field and other fields that this one may depend on. We&rsquo;ll get to
+<code>states</code> and <code>depends</code> in a moment.</p>
+
+<p>The next field is an interesting one - it defines a many to one relationship to
+the <code>Department</code> model. This means that multiple employees can belong to a single
+department. The constructor arguments are quite simple to grasp - the <code>__name__</code>
+of the model being related with, the string to be displayed, and so on.</p>
+
+<p>The third field - <code>designation</code> - is very similar to <code>department</code>. The only difference
+here is that we have also set a domain argument. Domains are lists of three-tuples
+that can be used to form a particular selection over the records of a model.
+In this case, we wish to comb through the records of a designation and select
+those which belong to the department specified by the field <code>department</code>.<code>Eval</code>
+is a PYSON statement which gives us a boolean value. Domains are used alot when
+searching records, and they contain <a href="http://doc.tryton.org/3.4/trytond/doc/topics/pyson.html#topics-pyson"><code>PYSON</code></a> statements.</p>
+
+<p>Since we have just covered PYSON, we may as well check out those global variables
+now - <code>STATES</code> and <code>DEPENDS</code>. The former is a dict whose keys are state names,
+and whose values are PYSON statements. In this case, the <code>readonly</code> state is
+activated if we find that the <code>active</code> field of the model has been set to false.</p>
+
+<p>The rest of the fields are simple Char fields and I shall not cover them in detail.</p>
+
+<p>Let us come down to the remaining parts of the <code>Employee</code> class. <code>_sql_error_messages</code>
+is a dict whose keys are names of error messages and whose values are the strings
+to be displayed in case such an error occurs. <code>_unique</code> is a list of three-tuples
+which define some uniqueness constraints on the model table.</p>
+
+<p>The <code>__setup__</code> method is an incredibly useful classmethod. Note how I am updating
+the <code>party</code> and <code>company</code> fields of our custom Employee class (these fields are
+present in the parent Employee model, and thus, need to have their <code>states</code> and
+<code>depends</code> set, for which I have made a method) here - these fields need not be
+rewritten here. I am also setting the SQL constraints of the table here. All sorts
+of field updation and customization can be done in <code>__setup__</code>.</p>
+
+<p>The <code>default</code> methods are pretty self-explanatory - they return default values
+for a field. We also have methods such as <code>on_change</code> and <code>on_change_with</code> -
+they are quite interesting and one should browse the docs to see what they do.</p>
+
+<p>Let&rsquo;s cover one more model class - <code>Department</code>. It has a Many2One field relating
+it to the <code>Company</code> class. One may check that out here -:</p>
+
+<figure class='code'><figcaption><span>company.py  (company.py)</span> <a href='/downloads/code/erms/company.py'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c"># -*- coding: utf-8 -*-</span>
+</span><span class='line'><span class="sd">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="sd">    :copyright: (c) 2014 by Openlabs Technologies &amp; Consulting (P) Ltd.</span>
+</span><span class='line'><span class="sd">    :license: GPLv3, see LICENSE for more details</span>
+</span><span class='line'><span class="sd">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">trytond.model</span> <span class="kn">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">ModelSQL</span><span class="p">,</span> <span class="n">ModelView</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">trytond.transaction</span> <span class="kn">import</span> <span class="n">Transaction</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Department&#39;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Department</span><span class="p">(</span><span class="n">ModelSQL</span><span class="p">,</span> <span class="n">ModelView</span><span class="p">):</span>
+</span><span class='line'>    <span class="s">&#39;Department&#39;</span>
+</span><span class='line'>    <span class="n">__name__</span> <span class="o">=</span> <span class="s">&#39;company.department&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">company</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2One</span><span class="p">(</span><span class="s">&#39;company.company&#39;</span><span class="p">,</span> <span class="s">&#39;Company&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@staticmethod</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">default_company</span><span class="p">():</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">Transaction</span><span class="p">()</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;company&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note how model classes that are new to the hierarchy have to specifically inherit
+from classes such as <code>ModelSQL</code>, but classes which are already present and are
+being customized - such as <code>Employee</code> - need not have this explicit inheritance.
+The <code>__name__</code> field does this magic for us.</p>
+
+<p>Now the <code>Department</code> is a part of the <code>Company</code> model. It has a Many2One field
+relating it to <code>Company</code>. How must we obtain the company that this department
+is associated with, or more precisely, the <em>active record</em> of the <code>Company</code> model,
+for our default method?</p>
+
+<p>We do so by looking for it in the transaction context. <code>context</code> is a dict which
+has such keys.</p>
+
+<p>And that wraps up model basics! Let us now move to views.</p>
+
+<h2>The Views</h2>
+
+<p>Let&rsquo;s check out the view for our <code>Employee</code> model. The root xml is as follows -:</p>
+
+<figure class='code'><figcaption><span>employee.xml  (employee.xml)</span> <a href='/downloads/code/erms/employee.xml'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;tryton&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;data&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;record</span> <span class="na">model=</span><span class="s">&quot;ir.ui.view&quot;</span> <span class="na">id=</span><span class="s">&quot;employee_view_tree&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;model&quot;</span><span class="nt">&gt;</span>company.employee<span class="nt">&lt;/field&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;inherit&quot;</span> <span class="na">ref=</span><span class="s">&quot;company.employee_view_tree&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>employee_tree<span class="nt">&lt;/field&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/record&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;record</span> <span class="na">model=</span><span class="s">&quot;ir.ui.view&quot;</span> <span class="na">id=</span><span class="s">&quot;employee_view_form&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;model&quot;</span><span class="nt">&gt;</span>company.employee<span class="nt">&lt;/field&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;inherit&quot;</span> <span class="na">ref=</span><span class="s">&quot;company.employee_view_form&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>employee_form<span class="nt">&lt;/field&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/record&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;menuitem</span> <span class="na">parent=</span><span class="s">&quot;party.menu_party&quot;</span> <span class="na">action=</span><span class="s">&quot;company.act_employee_form&quot;</span>
+</span><span class='line'>            <span class="na">id=</span><span class="s">&quot;menu_employee_form&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/data&gt;</span>
+</span><span class='line'><span class="nt">&lt;/tryton&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Views can be of two main types - tree and form. Form views are used to enter
+data while tree views are used to display them. The first two record tags deal
+with, in a sense, instances of the model class with the <code>__name__</code> <code>ir.ui.view</code>.
+The first is for a tree and the second for a form. Note how they are inheriting
+from tree and form views which are already present in the parent Employee model.</p>
+
+<p>The <code>menuitem</code> tag allows us to create a new menu item for an existing menu. In
+this case, we add <code>Employees</code> to the <code>Party</code> menu. <code>company.act_employee_form</code> is
+predefined in the parent model and we need not worry about defining it. act stands
+for &ldquo;action&rdquo;, and the action here is to open the form view.</p>
+
+<p>We may have to define our form and tree views separately, especially if they are
+inheriting from a parent model, to add any extra details, or just to create from
+scratch. For example, here are the form and tree views which were defined in the
+employee xml -:</p>
+
+<figure class='code'><figcaption><span>form view  (employee_form.xml)</span> <a href='/downloads/code/erms/view/employee_form.xml'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;data&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;xpath</span> <span class="na">expr=</span><span class="s">&quot;/form/field[@name=&#39;company&#39;]&quot;</span> <span class="na">position=</span><span class="s">&quot;after&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;group</span> <span class="na">col=</span><span class="s">&quot;20&quot;</span> <span class="na">colspan=</span><span class="s">&quot;2&quot;</span> <span class="na">id=</span><span class="s">&quot;checkboxes&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;label</span> <span class="na">name=</span><span class="s">&quot;active&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;active&quot;</span> <span class="na">xexpand=</span><span class="s">&quot;0&quot;</span> <span class="na">width=</span><span class="s">&quot;25&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/group&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;notebook</span> <span class="na">colspan=</span><span class="s">&quot;6&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;page</span> <span class="na">string=</span><span class="s">&quot;General&quot;</span> <span class="na">id=</span><span class="s">&quot;general&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;label</span> <span class="na">name=</span><span class="s">&quot;gender&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;gender&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;label</span> <span class="na">name=</span><span class="s">&quot;designation&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;designation&quot;</span> <span class="na">widget=</span><span class="s">&quot;selection&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;label</span> <span class="na">name=</span><span class="s">&quot;department&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;department&quot;</span> <span class="na">widget=</span><span class="s">&quot;selection&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/page&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;page</span> <span class="na">string=</span><span class="s">&quot;Personal Details&quot;</span> <span class="na">id=</span><span class="s">&quot;personal&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;label</span> <span class="na">name=</span><span class="s">&quot;dob&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;dob&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;label</span> <span class="na">name=</span><span class="s">&quot;pan&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;pan&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;label</span> <span class="na">name=</span><span class="s">&quot;passport&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;passport&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;label</span> <span class="na">name=</span><span class="s">&quot;driver_id&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;driver_id&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/page&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/notebook&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/xpath&gt;</span>
+</span><span class='line'><span class="nt">&lt;/data&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>tree view  (employee_tree.xml)</span> <a href='/downloads/code/erms/view/employee_tree.xml'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;data&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;xpath</span> <span class="na">expr=</span><span class="s">&quot;/tree/field[@name=&#39;company&#39;]&quot;</span> <span class="na">position=</span><span class="s">&quot;after&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;gender&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;designation&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;department&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;dob&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;pan&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;passport&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;driver_id&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;active&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/xpath&gt;</span>
+</span><span class='line'><span class="nt">&lt;/data&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>These views use the newer xpath syntax that the Tryton community has incorporated.
+In effect, the xpath statement here tells Tryton to put our custom Employee fields
+after the company field. The active field is designated as a checkbox by putting
+it in a group for checkboxes.
+The <code>notebook</code> tag allows one to create tabs in the form view which can be used
+to categorize or classify details according to some criterion. Notebooks have
+pages which contain fields in a particular category. For example, we have two pages -
+<code>General Details</code> and <code>Personal Details</code>. The form view needs a label to show in
+Tryton for each field name. The tree view needs no such thing.</p>
+
+<p>Also, note how the <code>designation</code> and <code>department</code> fields are defined as selection
+widgets. They will appear as drop-down menus in Tryton, and the values in these
+menus will correspond to the list of active records for the <code>Designation</code> and
+<code>Department</code> models, if the user has created any. I would recommend checking out
+the other views at my project&rsquo;s github page.</p>
+
+<p>Now we are left with module boilerplate and installation.</p>
+
+<h2>Module Installation</h2>
+
+<p>We have the raw materials for our Tryton module - but we still have no idea how
+to set things up and finally install the module. My colleagues over at the company
+have created a nifty command-line application which automates the process - it
+can be found <a href="https://github.com/openlabs/trytond-cookiecutter">here</a>.</p>
+
+<p>In your project&rsquo;s root directory, clone the cookiecutter module as is given in
+the readme. We will be prompted to enter project configuration details, and these
+may be changed anytime by modifying <code>cookiecutter.json</code>.</p>
+
+<p>Once this is done, we can install our Tryton module&rsquo;s various dependencies and
+write the module to the <code>trytond/modules</code> directory by running the following
+command - <code>python setup.py install</code>. We have our Tryton database which we created
+earlier - we shall install the module using this DB.</p>
+
+<figure class='code'><figcaption><span>installing your module</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>trytond -c path/to/trytond.conf -i module_name -d db_name
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One should replace module_name with &lsquo;all&rsquo; for first time installation. The -i
+option can be replaced with -u to update a particular module. Module updation is
+usually done when we change or add a model(s) in that module.</p>
+
+<p>And now we should have a fully functional module in Tryton. Check it out by running
+the Tryton client.</p>
+
+<p>I hope everyone enjoyed reading this post as much as I did writing it. Until
+next time then.</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Pritish Chakraborty</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-02T19:22:17+05:30" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/tryton/'>tryton</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example/" data-via="Crank7" data-counturl="http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/10/24/overcoming-sd-card-write-restrictions/" title="Previous Post: Overcoming SD Card Write Restrictions">&laquo; Overcoming SD Card Write Restrictions</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/01/25/development-cheatsheet/" title="Next Post: Development Cheatsheet @ Openlabs">Development Cheatsheet @ Openlabs &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  <section>
+  <h1><a href="#">pritishc.com</a></h1>
+  <p>Welcome to my website. <a href="https://google.com/+PritishChakraborty08">Pritish Chakraborty</a> here!</p>
+  <p>To know more about me, check out my <a href="/about/">about</a> page. For stuff I work on, check out my GitHub page <a href="https://github.com/PritishC">here</a>.</p>
+  <p>My (admittedly WIP) resume can be found <a href="https://www.dropbox.com/s/m2tq4fdb91k3628/pritish_cv.pdf?dl=0">here</a>.</p>
+  <p>DISCLAIMER: Most of the stuff on this blog, other than stuff sourced from outside, is my personal opinion. If you don&#8217;t like what you see, you are free to browse to a different page!</p>
+  <div class="social-icons">
+    
+
+    
+
+    
+  <a href="https://google.com/+PritishChakraborty08"><img src="/images/social/googleplus.png" alt="Google+" /></a>
+
+
+    
+  <a href="https://github.com/PritishC"><img src="/images/social/github.png" alt="Github" /></a>
+
+
+    
+  <a href="https://twitter.com/Crank7"><img src="/images/social/twitter.png" alt="Twitter" /></a>
+
+
+    <a href="/atom.xml"><img src="/images/social/rss.png" alt="RSS" /></a>
+  </div>
+</section>
+
+  <section>
+  <h1>Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/09/06/uploading-with-django-and-amazon-s3/">Uploading With Django and Amazon S3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/04/docker-is-awesome-part-ii/">Docker Is Awesome - Part II</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/03/docker-is-awesome/">Docker Is Awesome - Part I</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/08/analyzing-stuff-with-google-analytics/">Analyzing Stuff With Google Analytics</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/25/development-cheatsheet/">Development Cheatsheet @ Openlabs</a>
+      </li>
+    
+  </ul>
+</section>
+
+  
+    <section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/android'>android (1)</a></li><li><a href='/blog/categories/angular'>angular (1)</a></li><li><a href='/blog/categories/aws'>aws (3)</a></li><li><a href='/blog/categories/devops'>devops (2)</a></li><li><a href='/blog/categories/django'>django (2)</a></li><li><a href='/blog/categories/docker'>docker (2)</a></li><li><a href='/blog/categories/electronics'>electronics (1)</a></li><li><a href='/blog/categories/general'>general (2)</a></li><li><a href='/blog/categories/github'>github (1)</a></li><li><a href='/blog/categories/google'>google (1)</a></li><li><a href='/blog/categories/kitkat'>kitkat (1)</a></li><li><a href='/blog/categories/nereid'>nereid (1)</a></li><li><a href='/blog/categories/nginx'>nginx (2)</a></li><li><a href='/blog/categories/openlabs'>openlabs (1)</a></li><li><a href='/blog/categories/postgresql'>postgresql (1)</a></li><li><a href='/blog/categories/tryton'>tryton (4)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/PritishC">@PritishC</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'PritishC',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Pritish Chakraborty -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+<p>
+<span class="credit">Powered by <a href="http://octopress.org">Octopress</a> using the <a href="https://github.com/fapper/classic-martinb">classic-martinb</a> theme</span>
+</p>
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

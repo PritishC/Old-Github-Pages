@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Overcoming SD Card Write Restrictions - Pritish Chakraborty</title>
+  <meta name="author" content="Pritish Chakraborty">
+
+  
+  <meta name="description" content="I think all of us have encountered the SD card write restrictions on Android
+KitKat devices at some time or the other. What makes it really annoying &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://PritishC.github.io/blog/2014/10/24/overcoming-sd-card-write-restrictions">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Pritish Chakraborty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-56615772-1']);
+    _gaq.push(['_setDomainName', 'pritishc.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><div class="header-left">
+  <hgroup>
+  <h1><a href="/">Pritish Chakraborty</a></h1>
+  
+  <div class="subtitle">
+    <h2>Work and Everything Else</h2>
+  </div>
+  
+  </hgroup>
+  
+</div>
+
+<div class="header-right">
+  <ul class="main-navigation">
+ <div> 
+  <li><a href="/">blog</a></li></div><div class="spacer"></div>
+     <div> 
+  <li><a href="/projects">projects</a></li></div><div class="spacer"></div>
+       <div> 
+  <li><a href="/work">work</a></li></div><div class="spacer"></div>
+         <div> 
+  <li><a href="/about">about</a></li></div>
+</ul>
+  
+
+</div>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Overcoming SD Card Write Restrictions</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-24T13:19:42+05:30" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I think all of us have encountered the SD card write restrictions on Android
+KitKat devices at some time or the other. What makes it really annoying is that
+it is necessary for security, and cannot be bypassed without root access.</p>
+
+<!--more-->
+
+
+<p>What I am going to propose here is a kind of long hack. One needs some knowledge
+of SSH/SCP file transfers to attempt this procedure.</p>
+
+<p>(If you have a SD card reader, you could just use that instead)</p>
+
+<p>First of all, install the <a href="https://play.google.com/store/apps/details?id=berserker.android.apps.sshdroid&amp;hl=en">SSHDroid</a> app on your device.
+This allows you to run a SSH server on your device, which can be accessed from
+your computer. Once this is done, just open the app to start running the server.</p>
+
+<p>It should look something like this -:</p>
+
+<p><img src="/images/sshdroid.png"/></p>
+
+<p>If you are on Linux, fire up your file manager (Nautilus/PCManFM/etc), and search
+for the option to connect to a server. For example, PCManFM has the following -:</p>
+
+<p><img src="/images/pcmanfm.png"/></p>
+
+<p>Choose the SSH/SFTP protocol, enter the server details, and connect to the server.
+The default credentials are <code>root</code> and password <code>admin</code>. Now look for the path
+<code>/sdcard</code> or <code>/sdcard0</code>. This is a symlink to the internal memory of the Android
+device.</p>
+
+<p>Now the procedure is simple: copy/move all the files that you wish to move to the SD
+card to your PC (which is connected to the SSH server). Once you are done, close
+the connection. Now connect your device via USB to get access to the SD card.
+Copy all your files to the SD card from your PC.</p>
+
+<p>And there you have it! Admittedly this is a bit long, but for someone used to
+doing it all the time, it wasn&rsquo;t much of a problem for me. If you are even more
+terminal savvy, I would suggest keeping the device connected via USB the whole
+time, and using the terminal (scp command) to transfer files directly to the SD
+card from the internal memory (I haven&rsquo;t tested this as of yet).</p>
+
+<p>Or you could just root. That too.</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "http://discourse.pritishc.com/",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2014/10/24/overcoming-sd-card-write-restrictions/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Pritish Chakraborty</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-24T13:19:42+05:30" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/android/'>android</a>, <a class='category' href='/blog/categories/kitkat/'>kitkat</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://PritishC.github.io/blog/2014/10/24/overcoming-sd-card-write-restrictions/" data-via="Crank7" data-counturl="http://PritishC.github.io/blog/2014/10/24/overcoming-sd-card-write-restrictions/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/10/22/an-ode-to-nokia/" title="Previous Post: An Ode to Nokia">&laquo; An Ode to Nokia</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/11/02/tryton-module-basics-and-programming-example/" title="Next Post: Tryton Module Basics and Programming Example">Tryton Module Basics and Programming Example &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  <section>
+  <h1><a href="#">pritishc.com</a></h1>
+  <p>Welcome to my website. <a href="https://google.com/+PritishChakraborty08">Pritish Chakraborty</a> here!</p>
+  <p>To know more about me, check out my <a href="/about/">about</a> page. For stuff I work on, check out my GitHub page <a href="https://github.com/PritishC">here</a>.</p>
+  <p>My (admittedly WIP) resume can be found <a href="https://www.dropbox.com/s/m2tq4fdb91k3628/pritish_cv.pdf?dl=0">here</a>.</p>
+  <p>DISCLAIMER: Most of the stuff on this blog, other than stuff sourced from outside, is my personal opinion. If you don&#8217;t like what you see, you are free to browse to a different page!</p>
+  <div class="social-icons">
+    
+
+    
+
+    
+  <a href="https://google.com/+PritishChakraborty08"><img src="/images/social/googleplus.png" alt="Google+" /></a>
+
+
+    
+  <a href="https://github.com/PritishC"><img src="/images/social/github.png" alt="Github" /></a>
+
+
+    
+  <a href="https://twitter.com/Crank7"><img src="/images/social/twitter.png" alt="Twitter" /></a>
+
+
+    <a href="/atom.xml"><img src="/images/social/rss.png" alt="RSS" /></a>
+  </div>
+</section>
+
+  <section>
+  <h1>Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/09/06/uploading-with-django-and-amazon-s3/">Uploading With Django and Amazon S3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/04/docker-is-awesome-part-ii/">Docker Is Awesome - Part II</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/03/docker-is-awesome/">Docker Is Awesome - Part I</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/08/analyzing-stuff-with-google-analytics/">Analyzing Stuff With Google Analytics</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/25/development-cheatsheet/">Development Cheatsheet @ Openlabs</a>
+      </li>
+    
+  </ul>
+</section>
+
+  
+    <section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/android'>android (1)</a></li><li><a href='/blog/categories/angular'>angular (1)</a></li><li><a href='/blog/categories/aws'>aws (3)</a></li><li><a href='/blog/categories/devops'>devops (2)</a></li><li><a href='/blog/categories/django'>django (2)</a></li><li><a href='/blog/categories/docker'>docker (2)</a></li><li><a href='/blog/categories/electronics'>electronics (1)</a></li><li><a href='/blog/categories/general'>general (2)</a></li><li><a href='/blog/categories/github'>github (1)</a></li><li><a href='/blog/categories/google'>google (1)</a></li><li><a href='/blog/categories/kitkat'>kitkat (1)</a></li><li><a href='/blog/categories/nereid'>nereid (1)</a></li><li><a href='/blog/categories/nginx'>nginx (2)</a></li><li><a href='/blog/categories/openlabs'>openlabs (1)</a></li><li><a href='/blog/categories/postgresql'>postgresql (1)</a></li><li><a href='/blog/categories/tryton'>tryton (4)</a></li><li><a href='/blog/categories/virtualenv'>virtualenv (1)</a></li></ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/PritishC">@PritishC</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'PritishC',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Pritish Chakraborty -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+<p>
+<span class="credit">Powered by <a href="http://octopress.org">Octopress</a> using the <a href="https://github.com/fapper/classic-martinb">classic-martinb</a> theme</span>
+</p>
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="department_view_tree">
+            <field name="model">company.department</field>
+            <field name="type">tree</field>
+            <field name="name">department_tree</field>
+        </record>
+        <record model="ir.ui.view" id="department_view_form">
+            <field name="model">company.department</field>
+            <field name="type">form</field>
+            <field name="name">department_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_department_form">
+            <field name="name">Department</field>
+            <field name="res_model">company.department</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_department_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="department_view_tree"/>
+            <field name="act_window" ref="act_department_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_department_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="department_view_form"/>
+            <field name="act_window" ref="act_department_form"/>
+        </record>
+
+        <menuitem parent="menu_employee_form" action="act_department_form"
+            id="menu_department_form"/>
+    </data>
+</tryton>
