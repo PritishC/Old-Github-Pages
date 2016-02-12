@@ -1,0 +1,4 @@
+<tree string="Designation">
+    <field name="department" />
+    <field name="name" />
+</tree>

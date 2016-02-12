@@ -1,0 +1,6 @@
+<form string="Department">
+    <label name="name"/>
+    <field name="name" />
+    <label name="company" />
+    <field name="company" /> 
+</form>

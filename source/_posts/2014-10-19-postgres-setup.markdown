@@ -10,6 +10,8 @@ This article offers a simple introduction to PostgreSQL and how to install it.
 It is necessary for Tryton. In effect, this article is merely filler, and one can
 skip it if one wishes so.
 
+<!--more-->
+
 [PostgreSQL](http://www.postgresql.org/) is an open-source ORDBMS which is a hardcore
 programmer's paradise. Since it is community-developed, it adheres to strict standards
 and supports DB best practices. For more information, Google is your friend.

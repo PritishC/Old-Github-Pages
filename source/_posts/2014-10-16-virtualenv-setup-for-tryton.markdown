@@ -9,6 +9,8 @@ categories: [tryton, virtualenv]
 In this post, we shall learn how to setup a virtualenv for Tryton. Any new developer
 who wishes to develop on Tryton needs to know a few basic things.
 
+<!--more-->
+
 Tryton is not for the faint-hearted. A new person can possibly take a long time to get adjusted
 to the workflow.
 
@@ -70,13 +72,23 @@ to the workflow.
   directory you've readied for this purpose -:
 
   ``` bash [virtualenv]
-  mkproject --system-site-packages myenv
+  mkproject myenv
   ```
 
   Substitute myenv with any name you wish. And voila, you have your newly commissioned
   virtualenv.
-* What does this have to do with `pygtk`, you ask? Well, since it was system-wide,
-  it gets incorporated into your virtualenv and you don't have to bother about it.
+* After the virtualenv is created, use the `toggleglobalsitepackages` switch from inside
+  it to enable pygtk. Since pygtk was installed system-wide (global site packages), it gets
+  incorporated into your virtualenv and you don't have to bother about it.
+
+* What this does is create a project folder at the location specified by the `$PROJECT_HOME`
+  variable, which you must have specified during your virtualenvwrapper installation. You can
+  now clone your GitHub/etc repositories inside this folder and install their requirements.
+
+* This kind of project organization allows you to easily clone the repositories
+  which constitute the requirements of a particular repository and make changes in them.
+  For example, `nereid-webshop` depends on `nereid-cart-b2c`. If you need to send a patch
+  on the latter, you can clone it inside the project folder you created for webshop.
 
 And that's that folks! In the next post, we shall set up Postgres as Tryton uses
 Postgres databases. Following that, we shall learn how to actually install Tryton, 
