@@ -4,7 +4,7 @@
   <title><![CDATA[Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2016-02-12T23:56:36+05:30</updated>
+  <updated>2016-02-13T15:24:00+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -224,7 +224,7 @@ in the bucket after your first upload.</p>
 
 
 <script type="text/javascript">
-  var discourseUrl = "http://discourse.pritishc.com/",
+  var discourseUrl = "",
       discourseEmbedUrl = "http://PritishC.github.io/blog/2015/09/06/uploading-with-django-and-amazon-s3/";
 
   (function() {
@@ -744,7 +744,7 @@ Amazon S3 setup of mine.</p>
 
 
 <script type="text/javascript">
-  var discourseUrl = "http://discourse.pritishc.com/",
+  var discourseUrl = "",
       discourseEmbedUrl = "http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii/";
 
   (function() {
@@ -1338,7 +1338,7 @@ Coming soon!</p>
 
 
 <script type="text/javascript">
-  var discourseUrl = "http://discourse.pritishc.com/",
+  var discourseUrl = "",
       discourseEmbedUrl = "http://PritishC.github.io/blog/2015/09/03/docker-is-awesome/";
 
   (function() {
@@ -1626,7 +1626,7 @@ the webshop source at your leisure - it is open-source, and we encourage good pu
 
 
 <script type="text/javascript">
-  var discourseUrl = "http://discourse.pritishc.com/",
+  var discourseUrl = "",
       discourseEmbedUrl = "http://PritishC.github.io/blog/2015/03/08/analyzing-stuff-with-google-analytics/";
 
   (function() {
@@ -1833,7 +1833,7 @@ whenever you need to get away from your system!</p>
 
 
 <script type="text/javascript">
-  var discourseUrl = "http://discourse.pritishc.com/",
+  var discourseUrl = "",
       discourseEmbedUrl = "http://PritishC.github.io/blog/2015/01/25/development-cheatsheet/";
 
   (function() {

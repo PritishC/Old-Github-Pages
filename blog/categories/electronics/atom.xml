@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Electronics | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/electronics/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2016-02-12T23:56:36+05:30</updated>
+  <updated>2016-02-13T15:24:00+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -62,7 +62,7 @@ Thanks for all the good (and shitty) times, Nokia.
 
 <div id="discourse-comments"></div>
 <script type="text/javascript">
-  var discourseUrl = "http://discourse.pritishc.com/",
+  var discourseUrl = "",
       discourseEmbedUrl = "http://PritishC.github.io/blog/2014/10/22/an-ode-to-nokia/";
 
   (function() {

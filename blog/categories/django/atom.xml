@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Django | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/django/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2016-02-12T23:56:36+05:30</updated>
+  <updated>2016-02-13T15:24:00+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -216,7 +216,7 @@ in the bucket after your first upload.
 
 <div id="discourse-comments"></div>
 <script type="text/javascript">
-  var discourseUrl = "http://discourse.pritishc.com/",
+  var discourseUrl = "",
       discourseEmbedUrl = "http://PritishC.github.io/blog/2015/09/06/uploading-with-django-and-amazon-s3/";
 
   (function() {
@@ -798,7 +798,7 @@ Coming soon!
 
 <div id="discourse-comments"></div>
 <script type="text/javascript">
-  var discourseUrl = "http://discourse.pritishc.com/",
+  var discourseUrl = "",
       discourseEmbedUrl = "http://PritishC.github.io/blog/2015/09/03/docker-is-awesome/";
 
   (function() {
