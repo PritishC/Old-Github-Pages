@@ -1,0 +1,5 @@
+ps cax | grep xscreensaver > /dev/null
+if [ $? -ne 0 ]; then
+  xscreensaver -no-splash &
+fi
+xscreensaver-command -lock
