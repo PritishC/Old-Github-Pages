@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgresql | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2016-02-13T15:24:00+05:30</updated>
+  <updated>2016-02-14T21:01:33+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -45,20 +45,18 @@ might often have to view a specific table inside the DB that you create for Tryt
 
 For Debian derivatives such as mine, 
 
-<figure class='code'><figcaption><span>bash snippet</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install postgresql postgresql-contrib
-</span><span class='line'><span class="nv">$ </span>sudo apt-get install pgadmin3
-</span></code></pre></td></tr></table></div></figure>
+&#8220;` bash bash snippet
+$ sudo apt-get install postgresql postgresql-contrib
+$ sudo apt-get install pgadmin3
+&#8220;`
 
 There is also the `postgres` user setup. After one is done installing the above,
 one should fire up a terminal and set the `postgres` user&#8217;s password.
 
-<figure class='code'><figcaption><span>postgres user</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u postgres psql postgres
-</span><span class='line'><span class="nv">$ </span><span class="se">\p</span>assword postgres
-</span></code></pre></td></tr></table></div></figure>
+&#8220;` bash postgres user
+$ sudo -u postgres psql postgres
+$ \password postgres
+&#8220;`
 
 Equivalently, one could do `sudo su - postgres` to get into the postgres account,
 and then run `psql -u postgres -h localhost` or something similar.

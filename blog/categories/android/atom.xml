@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2016-02-13T15:24:00+05:30</updated>
+  <updated>2016-02-14T21:01:33+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -35,12 +35,12 @@ your computer. Once this is done, just open the app to start running the server.
 
 It should look something like this -:
 
-<img src="/images/sshdroid.png"/>
+<img src="{{ root_url }}/images/sshdroid.png"/>
 
 If you are on Linux, fire up your file manager (Nautilus/PCManFM/etc), and search
 for the option to connect to a server. For example, PCManFM has the following -:
 
-<img src="/images/pcmanfm.png"/>
+<img src="{{ root_url }}/images/pcmanfm.png"/>
 
 Choose the SSH/SFTP protocol, enter the server details, and connect to the server.
 The default credentials are `root` and password `admin`. Now look for the path

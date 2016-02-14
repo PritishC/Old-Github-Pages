@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Openlabs | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/openlabs/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2016-02-13T15:24:00+05:30</updated>
+  <updated>2016-02-14T21:01:33+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -31,21 +31,18 @@ This should be done before anything else, mainly because ZSH is an awesome shell
 and is very customizable. Here&#8217;s a screenshot of my ZSH shell (I use the cloud
 theme) -:
 
-<img src="/images/zsh.png" />
+<img src="{{ root_url }}/images/zsh.png" />
 
 Note how the branch name is shown in square-brackets and the lightning symbol
 signifies that a change has occurred in some file(s) which may or may not be
 committed.
 
-<figure class='code'><figcaption><span>zero</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install zsh curl
-</span><span class='line'>Installing...
-</span><span class='line'><span class="nv">$ </span>curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh <span class="p">|</span> sh
-</span><span class='line'>Installing... <span class="o">(</span>you may be prompted to answer a few questions<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
+&#8220;` bash zero
+$ sudo apt-get install zsh curl
+Installing&#8230;
+$ curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
+Installing&#8230; (you may be prompted to answer a few questions)
+&#8220;`
 
 Once the install is complete, close your current command prompt and re-open it.
 You should now be using ZSH. You can customize your configuration by editing
@@ -58,15 +55,12 @@ To begin working on one of the company repositories, first fork the repo on GitH
 and then use the following commands on your terminal (assuming your SSH keys
 have already been setup) -:
 
-<figure class='code'><figcaption><span>scenario-I</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone git@github.com:&lt;your-username&gt;/&lt;repo-name&gt;
-</span><span class='line'>Cloning...
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> &lt;repo-name&gt;
-</span><span class='line'><span class="nv">$ </span>git remote add openlabs git@github.com:openlabs/&lt;repo-name&gt;
-</span></code></pre></td></tr></table></div></figure>
+&#8220;` bash scenario-I
+$ git clone git@github.com:<your-username>/<repo-name>
+Cloning&#8230;
+$ cd <repo-name>
+$ git remote add openlabs git@github.com:openlabs/<repo-name>
+&#8220;`
 
 You can run `git remote -vv` to check the names of your remotes. At this point,
 you should have the remotes &#8216;origin&#8217; and &#8216;openlabs&#8217; for your cloned repository.
@@ -84,44 +78,30 @@ your choice, I only try provide a useful convention here.
 For example, you wish to add a feature and your task ID is 0000. You will do so
 as follows -:
 
-<figure class='code'><figcaption><span>scenario-II</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git branch
-</span><span class='line'>* develop
-</span><span class='line'><span class="nv">$ </span>git checkout -b feature/task-0000
-</span></code></pre></td></tr></table></div></figure>
+&#8220;` bash scenario-II
+$ git branch
+* develop
+$ git checkout -b feature/task-0000
+&#8220;`
 
 Now you&#8217;re on the `feature/task-0000` branch, as the ZSH branch indicator should
 tell you. You can do some work, and then commit it.
 
-<figure class='code'><figcaption><span>scenario-II</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git status
-</span><span class='line'>Shows files which are being tracked, are staged <span class="k">for</span> commit or are not staged.
-</span><span class='line'><span class="nv">$ </span>gst
-</span><span class='line'>Shorthand <span class="k">for</span> the above which works with zsh.
-</span><span class='line'><span class="nv">$ </span>git add &lt;filenames&gt;
-</span><span class='line'><span class="nv">$ </span>git commit
-</span><span class='line'>Write your commit message and use VI shortcuts to save the message, i.e., :wq
-</span><span class='line'>If you have nano configured as your editor instead, use that.
-</span><span class='line'>Commit messages should be brief yet descriptive, and neatly written.
-</span><span class='line'><span class="nv">$ </span>git config --global push.simple
-</span><span class='line'>Needs to be <span class="nb">set </span>only once.
-</span><span class='line'><span class="nv">$ </span>git push -uvf origin
-</span><span class='line'>This pushes your current branch to the origin remote <span class="o">(</span>which is your fork<span class="o">)</span>.
-</span></code></pre></td></tr></table></div></figure>
+&#8220;` bash scenario-II
+$ git status
+Shows files which are being tracked, are staged for commit or are not staged.
+$ gst
+Shorthand for the above which works with zsh.
+$ git add <filenames>
+$ git commit
+Write your commit message and use VI shortcuts to save the message, i.e., :wq
+If you have nano configured as your editor instead, use that.
+Commit messages should be brief yet descriptive, and neatly written.
+$ git config &#8211;global push.simple
+Needs to be set only once.
+$ git push -uvf origin
+This pushes your current branch to the origin remote (which is your fork).
+&#8220;`
 
 Now you can open a pull request from GitHub on the openlabs remote. Make sure
 to get your work reviewed.
@@ -146,13 +126,11 @@ not be the only one pushing features and fixes to the openlabs remote.
 It is advisable that before you checkout off of develop, you should do a rebase
 as follows -:
 
-<figure class='code'><figcaption><span>scenario-III</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git pull --rebase openlabs branch:branch
-</span><span class='line'>Rebasing...
-</span><span class='line'>May or may not introduce merge conflicts.
-</span></code></pre></td></tr></table></div></figure>
+&#8220;` bash scenario-III
+$ git pull &#8211;rebase openlabs branch:branch
+Rebasing&#8230;
+May or may not introduce merge conflicts.
+&#8220;`
 
 `branch` here may either be develop or a version branch, as was explained earlier.
 
@@ -183,7 +161,7 @@ For those who cannot use this shortcut for whatever reason (for example, Lubuntu
 does not have such a shortcut), they may install `xscreensaver` using their
 package manager and use this little script I made -:
 
-File /Users/pritishc/Workspace/Personal/coder_blog/source/downloads/code/.logoutscript could not be found
+{% include_code sample .logoutscript lang:bash .logoutscript %}
 
 `grep` returns useful exit codes which can be used to find out whether `xscreensaver`
 is running or not. If it is not running, it is made to run. Henceforth, the

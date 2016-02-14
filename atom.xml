@@ -4,7 +4,7 @@
   <title><![CDATA[Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2016-02-13T15:24:00+05:30</updated>
+  <updated>2016-02-14T20:25:00+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -12,6 +12,78 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[[Review] Workaholics vs High Performers]]></title>
+    <link href="http://PritishC.github.io/blog/2016/02/13/review-workaholics-vs-high-performers/"/>
+    <updated>2016-02-13T20:13:37+05:30</updated>
+    <id>http://PritishC.github.io/blog/2016/02/13/review-workaholics-vs-high-performers</id>
+    <content type="html"><![CDATA[<p>I recently came across this article on BusinessInsider (via LinkedIn) that
+piqued my interest. It attempts to differentiate between a high performer and a
+workaholic.</p>
+
+<!--more-->
+
+
+<p>The <a href="http://www.businessinsider.in/3-Subtle-Differences-Between-Workaholics-and-High-Performers/articleshow/37269666.cms">article in question</a> brings out three points, which
+I summarize here (if you don&rsquo;t want to read the article first) -:</p>
+
+<ol>
+<li>High performers know their value. Workaholics allow others to determine their value.</li>
+<li>High performers give 100% at the right time. Workaholics give 110% all of the time.</li>
+<li>High performers do business. Workaholics are busy.</li>
+</ol>
+
+
+<p>These points raise more questions than they answer. For example -:</p>
+
+<ol>
+<li>How does one know their value? Surely it cannot be that easy being <em>not</em>
+insecure, given how rampant impostor syndrome is (atleast) in the tech industry.</li>
+<li>If one is unknowingly a workaholic, how do they become a high performer?</li>
+</ol>
+
+
+<p>I am not sure of the answer to 1, but after a discussion with a wise senior
+colleague and friend, perhaps the answer to 2 is a little clearer. He explained
+that the difference between a workaholic and a high performer becomes apparent
+when you see what they do with their time.</p>
+
+<p>A high performer (who is sure of their value) makes time for other pursuits and
+things in life. They wish to grow wholly, not just at their job. The pursuit could
+be creative, such as music, writing, or fitness-related, such as weightlifting,
+strength training, endurance training, or making time for family and friends and
+doing new things with them, etc. you get the idea. They cycle around problems in
+their head (which is probably what the OP meant by prioritization, and I&rsquo;ve seen
+my wise friend do the same effectively) and do things one at a time. <strong>They don&rsquo;t
+rush into things unless there&rsquo;s a need to</strong>.</p>
+
+<p>However, this differentiation comes with its caveats. If there is nothing else
+going on in your life, and work takes up most of it (plenty of gigs where you
+won&rsquo;t get time for anything else), the line between a workaholic and a high
+performer blurs considerably. Circumstances and conditions may not be in one&rsquo;s
+control. You might even have a job where you have to grind everyday, no other
+options given. Thus, one should probably take this article with a pinch of salt,
+and it doesn&rsquo;t seem to apply cleanly to all kinds of jobs. YMMV.</p>
+
+<p>Post what you make of all this, reader, in the comment section below!</p>
+
+<div id="discourse-comments"></div>
+
+
+<script type="text/javascript">
+  var discourseUrl = "",
+      discourseEmbedUrl = "http://PritishC.github.io/blog/2016/02/13/review-workaholics-vs-high-performers/";
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Uploading With Django and Amazon S3]]></title>
@@ -1628,213 +1700,6 @@ the webshop source at your leisure - it is open-source, and we encourage good pu
 <script type="text/javascript">
   var discourseUrl = "",
       discourseEmbedUrl = "http://PritishC.github.io/blog/2015/03/08/analyzing-stuff-with-google-analytics/";
-
-  (function() {
-    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
-      d.src = discourseUrl + 'javascripts/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
-  })();
-</script>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Development Cheatsheet @ Openlabs]]></title>
-    <link href="http://PritishC.github.io/blog/2015/01/25/development-cheatsheet/"/>
-    <updated>2015-01-25T11:12:33+05:30</updated>
-    <id>http://PritishC.github.io/blog/2015/01/25/development-cheatsheet</id>
-    <content type="html"><![CDATA[<p>The target audience of this article is the new arrivals at our company, and I
-will try to make it as easy as possible on them. This assumes a basic knowledge
-of Git/GitHub (and also knowing the difference between the two) and will follow
-a scenario-based approach.</p>
-
-<!--more-->
-
-
-<h2>Ground Zero: Install ZSH/Oh-My-ZSH</h2>
-
-<p>This should be done before anything else, mainly because ZSH is an awesome shell
-and is very customizable. Here&rsquo;s a screenshot of my ZSH shell (I use the cloud
-theme) -:</p>
-
-<p><img src="http://PritishC.github.io/images/zsh.png" /></p>
-
-<p>Note how the branch name is shown in square-brackets and the lightning symbol
-signifies that a change has occurred in some file(s) which may or may not be
-committed.</p>
-
-<figure class='code'><figcaption><span>zero</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install zsh curl
-</span><span class='line'>Installing...
-</span><span class='line'><span class="nv">$ </span>curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh <span class="p">|</span> sh
-</span><span class='line'>Installing... <span class="o">(</span>you may be prompted to answer a few questions<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once the install is complete, close your current command prompt and re-open it.
-You should now be using ZSH. You can customize your configuration by editing
-the <code>.zshrc</code> file, which is present at the home folder (<code>$HOME</code>). I&rsquo;ll leave
-that bit out to the reader to experiment with stuff like themes.</p>
-
-<h2>Scenario-I: Basic Git Setup.</h2>
-
-<p>To begin working on one of the company repositories, first fork the repo on GitHub
-and then use the following commands on your terminal (assuming your SSH keys
-have already been setup) -:</p>
-
-<figure class='code'><figcaption><span>scenario-I</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone git@github.com:&lt;your-username&gt;/&lt;repo-name&gt;
-</span><span class='line'>Cloning...
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> &lt;repo-name&gt;
-</span><span class='line'><span class="nv">$ </span>git remote add openlabs git@github.com:openlabs/&lt;repo-name&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can run <code>git remote -vv</code> to check the names of your remotes. At this point,
-you should have the remotes &lsquo;origin&rsquo; and &lsquo;openlabs&rsquo; for your cloned repository.</p>
-
-<h2>Scenario-II: Writing A Feature/Hotfix</h2>
-
-<p>All work is usually based off of the develop branch, and so, you will checkout
-your new branch off develop. There may be cases when you will have to checkout
-off a version branch - that is described in the next scenario.</p>
-
-<p>You can prefix your branch name with &lsquo;feature&rsquo; or &lsquo;fix&rsquo; depending on whether
-it is a feature to be added or a fix to be made. Branch naming is completely
-your choice, I only try provide a useful convention here.</p>
-
-<p>For example, you wish to add a feature and your task ID is 0000. You will do so
-as follows -:</p>
-
-<figure class='code'><figcaption><span>scenario-II</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git branch
-</span><span class='line'>* develop
-</span><span class='line'><span class="nv">$ </span>git checkout -b feature/task-0000
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now you&rsquo;re on the <code>feature/task-0000</code> branch, as the ZSH branch indicator should
-tell you. You can do some work, and then commit it.</p>
-
-<figure class='code'><figcaption><span>scenario-II</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git status
-</span><span class='line'>Shows files which are being tracked, are staged <span class="k">for</span> commit or are not staged.
-</span><span class='line'><span class="nv">$ </span>gst
-</span><span class='line'>Shorthand <span class="k">for</span> the above which works with zsh.
-</span><span class='line'><span class="nv">$ </span>git add &lt;filenames&gt;
-</span><span class='line'><span class="nv">$ </span>git commit
-</span><span class='line'>Write your commit message and use VI shortcuts to save the message, i.e., :wq
-</span><span class='line'>If you have nano configured as your editor instead, use that.
-</span><span class='line'>Commit messages should be brief yet descriptive, and neatly written.
-</span><span class='line'><span class="nv">$ </span>git config --global push.simple
-</span><span class='line'>Needs to be <span class="nb">set </span>only once.
-</span><span class='line'><span class="nv">$ </span>git push -uvf origin
-</span><span class='line'>This pushes your current branch to the origin remote <span class="o">(</span>which is your fork<span class="o">)</span>.
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now you can open a pull request from GitHub on the openlabs remote. Make sure
-to get your work reviewed.</p>
-
-<h2>Scenario-IIA: Writing A Feature For Version Branches</h2>
-
-<p>Sometimes, you may need to write features not for develop but for an earlier
-version branch. In this case, you may do a <code>git fetch openlabs</code> to get the branch
-data as is required. For example, some of our repositories are being moved to
-v3.4, which becomes the develop branch. v3.2 gets a branch named <code>3.2</code>.</p>
-
-<p>In this case, you need to checkout off of the 3.2 branch instead of develop, and
-your PR should be sent on the 3.2 branch. The commands are the same, except
-the branch you are checking out off changes.</p>
-
-<h2>Scenario-III: Rebase To Keep Up</h2>
-
-<p>Rebasing is an important part of using git repositories. In a team environment,
-you will have to rebase often to keep up with the latest changes, as you will
-not be the only one pushing features and fixes to the openlabs remote.</p>
-
-<p>It is advisable that before you checkout off of develop, you should do a rebase
-as follows -:</p>
-
-<figure class='code'><figcaption><span>scenario-III</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git pull --rebase openlabs branch:branch
-</span><span class='line'>Rebasing...
-</span><span class='line'>May or may not introduce merge conflicts.
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>branch</code> here may either be develop or a version branch, as was explained earlier.</p>
-
-<p>To resolve merge conflicts, you will need to search for files which have the
-<code>&gt;&gt;&gt;HEAD</code> symbol appearing in them. I usually do this with the <code>grep</code> command.
-Take a look at the latest version of the files from GitHub and modify your
-local files accordingly. Be careful not to omit any code that was not added by
-you.</p>
-
-<p>Once you are done editing your local files, do a <code>git add</code> on them, and then run
-<code>git rebase --continue</code>.</p>
-
-<h2>Bonus Scenario: Protect Your Slack/HipChat From Attack!</h2>
-
-<p>One of the fun parts of being at Openlabs is that we advise our colleagues
-not to leave their systems unlocked. If you leave your system on, you are fair
-game for us :D.</p>
-
-<p>Leaving your system on may or may not lead to one of the following -:</p>
-
-<ul>
-<li>Silly messages appearing on your HipChat/Slack, on the Water Cooler.</li>
-<li>Declarations of coming out of the closet on your Facebook (if we know you well
-enough).</li>
-<li>Messed up configurations, and so on.</li>
-</ul>
-
-
-<p>Vanilla Ubuntu users can use the Ctrl+L shortcut to lock their systems quickly.
-For those who cannot use this shortcut for whatever reason (for example, Lubuntu
-does not have such a shortcut), they may install <code>xscreensaver</code> using their
-package manager and use this little script I made -:</p>
-
-<p>File /Users/pritishc/Workspace/Personal/coder_blog/source/downloads/code/.logoutscript could not be found</p>
-
-<p><code>grep</code> returns useful exit codes which can be used to find out whether <code>xscreensaver</code>
-is running or not. If it is not running, it is made to run. Henceforth, the
-lock command is applied.</p>
-
-<p>You may save this script to your home directory and then run <code>sh ~/.logoutscript</code>
-whenever you need to get away from your system!</p>
-
-<p>PS: I will update this as more use cases come to mind.</p>
-
-<div id="discourse-comments"></div>
-
-
-<script type="text/javascript">
-  var discourseUrl = "",
-      discourseEmbedUrl = "http://PritishC.github.io/blog/2015/01/25/development-cheatsheet/";
 
   (function() {
     var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
