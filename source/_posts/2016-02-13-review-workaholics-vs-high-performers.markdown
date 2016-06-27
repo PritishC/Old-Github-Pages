@@ -1,0 +1,48 @@
+---
+layout: post
+title: "[Review] Workaholics vs High Performers"
+date: 2016-02-13 20:13:37 +0530
+comments: true
+categories: [linkedin, article review]
+---
+
+I recently came across this article on BusinessInsider (via LinkedIn) that
+piqued my interest. It attempts to differentiate between a high performer and a
+workaholic.
+
+<!--more-->
+
+The [article in question](http://www.businessinsider.in/3-Subtle-Differences-Between-Workaholics-and-High-Performers/articleshow/37269666.cms) brings out three points, which
+I summarize here (if you don't want to read the article first) -:
+
+1. High performers know their value. Workaholics allow others to determine their value.
+2. High performers give 100% at the right time. Workaholics give 110% all of the time.
+3. High performers do business. Workaholics are busy.
+
+These points raise more questions than they answer. For example -:
+
+1. How does one know their value? Surely it cannot be that easy being *not*
+insecure, given how rampant impostor syndrome is (atleast) in the tech industry.
+2. If one is unknowingly a workaholic, how do they become a high performer?
+
+I am not sure of the answer to 1, but after a discussion with a wise senior
+colleague and friend, perhaps the answer to 2 is a little clearer. He explained
+that the difference between a workaholic and a high performer becomes apparent
+when you see what they do with their time.
+
+A high performer (who is sure of their value) makes time for other pursuits and
+things in life. They wish to grow wholly, not just at their job. The pursuit could
+be creative, such as music, writing, or fitness-related, such as weightlifting,
+strength training, endurance training, or making time for family and friends and
+doing new things with them, etc. you get the idea. They cycle around problems in
+their head (which is probably what the OP meant by prioritization, and I've seen
+my wise friend do the same effectively) and do things one at a time. __They don't
+rush into things unless there's a need to__.
+
+However, this differentiation comes with its caveats. If there is nothing else
+going on in your life, and work takes up most of it (plenty of gigs where you
+won't get time for anything else), the line between a workaholic and a high
+performer blurs considerably. Circumstances and conditions may not be in one's
+control. You might even have a job where you have to grind everyday, no other
+options given. Thus, one should probably take this article with a pinch of salt,
+and it doesn't seem to apply cleanly to all kinds of jobs. YMMV.
