@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Angular | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/angular/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2016-02-14T21:01:33+05:30</updated>
+  <updated>2016-06-27T11:58:12+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -33,57 +33,105 @@ I assume that the reader has a basic knowledge of the docker toolbox; if not, I&
 part 2. To begin with, here&#8217;s the directory structure of my app for reference (generated using the
 lovely `tree` command on Linux) -:
 
-&#8220;` bash app structure
-|&#8211; bower.json
-|&#8211; CONTRIBUTORS
-|&#8211; project
-|   |&#8211; project
-|   |   |&#8211; aws_settings.py (django-storages credentials here)
-|   |   |&#8211; heroku_settings.py
-|   |   |&#8211; __init__.py
-|   |   |&#8211; settings.py
-|   |   |&#8211; urls.py
-|   |   |&#8211; views.py
-|   |   `&#8211; wsgi.py
-|   |&#8211; manage.py
-|   |&#8211; app1
-|   |   |&#8211; __init__.py
-|   |   |&#8211; permissions.py
-|   |   |&#8211; serializers.py
-|   |   |&#8211; services.py
-|   |   |&#8211; tests.py
-|   |   `&#8211; views.py
-|   `&#8211; users
-|       |&#8211; __init__.py
-|       |&#8211; models.py
-|       |&#8211; permissions.py
-|       |&#8211; serializers.py
-|       `&#8211; views.py
-|&#8211; gulpfile.js
-|&#8211; package.json
-|&#8211; Procfile
-|&#8211; README.md
-|&#8211; requirements.txt
-|&#8211; scripts
-|   `&#8211; postInstall.sh
-|&#8211; static
-|   |&#8211; javascripts
-|   |   |&#8211; app.js
-|   |   |&#8211; controllers
-|   |   |   `&#8211; controllers.js
-|   |   |&#8211; directives
-|   |   |   `&#8211; directives.js
-|   |   `&#8211; services
-|   |       `&#8211; services.js
-|   |&#8211; partials (angular view stuff)
-|   `&#8211; stylesheets
-|       `&#8211; styles.css
-|&#8211; templates
-|   |&#8211; index.html
-|   |&#8211; javascripts.html
-|   |&#8211; navbar.html
-|   `&#8211; stylesheets.html
-&#8220;`
+<figure class='code'><figcaption><span>app structure</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="p">|</span>-- bower.json
+</span><span class='line'><span class="p">|</span>-- CONTRIBUTORS
+</span><span class='line'><span class="p">|</span>-- project
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- project
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- aws_settings.py <span class="o">(</span>django-storages credentials here<span class="o">)</span>
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- heroku_settings.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- __init__.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- settings.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- urls.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- views.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="sb">`</span>-- wsgi.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- manage.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- app1
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- __init__.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- permissions.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- serializers.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- services.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- tests.py
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="sb">`</span>-- views.py
+</span><span class='line'><span class="p">|</span>   <span class="sb">`</span>-- users
+</span><span class='line'><span class="p">|</span>       <span class="p">|</span>-- __init__.py
+</span><span class='line'><span class="p">|</span>       <span class="p">|</span>-- models.py
+</span><span class='line'><span class="p">|</span>       <span class="p">|</span>-- permissions.py
+</span><span class='line'><span class="p">|</span>       <span class="p">|</span>-- serializers.py
+</span><span class='line'><span class="p">|</span>       <span class="sb">`</span>-- views.py
+</span><span class='line'><span class="p">|</span>-- gulpfile.js
+</span><span class='line'><span class="p">|</span>-- package.json
+</span><span class='line'><span class="p">|</span>-- Procfile
+</span><span class='line'><span class="p">|</span>-- README.md
+</span><span class='line'><span class="p">|</span>-- requirements.txt
+</span><span class='line'><span class="p">|</span>-- scripts
+</span><span class='line'><span class="p">|</span>   <span class="sb">`</span>-- postInstall.sh
+</span><span class='line'><span class="p">|</span>-- static
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- javascripts
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- app.js
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- controllers
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>   <span class="sb">`</span>-- controllers.js
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>-- directives
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="p">|</span>   <span class="sb">`</span>-- directives.js
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>   <span class="sb">`</span>-- services
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>       <span class="sb">`</span>-- services.js
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- partials <span class="o">(</span>angular view stuff<span class="o">)</span>
+</span><span class='line'><span class="p">|</span>   <span class="sb">`</span>-- stylesheets
+</span><span class='line'><span class="p">|</span>       <span class="sb">`</span>-- styles.css
+</span><span class='line'><span class="p">|</span>-- templates
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- index.html
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- javascripts.html
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- navbar.html
+</span><span class='line'><span class="p">|</span>   <span class="sb">`</span>-- stylesheets.html
+</span></code></pre></td></tr></table></div></figure>
 
 This follows from the nice boilerplate provided by [thinkster.io](https://github.com/brwr/thinkster-django-angular-boilerplate) - take a look at their nifty tutorials [here](http://thinkster.io).
 
@@ -102,23 +150,37 @@ access to a repository. This was exactly what I needed.
 
 Here is the directory structure of my docker deployment repository -:
 
-&#8220;` bash docker directories
-|&#8211; docker-compose.yml
-|&#8211; Dockerfile
-|&#8211; ec2box.sh
-|&#8211; nginx
-|   |&#8211; container_ip.sh
-|   |&#8211; Dockerfile
-|   `&#8211; nginx.conf
-|&#8211; README.md
-|&#8211; rebuild_docker.sh
-|&#8211; ssh
-|   |&#8211; bb_deploy.rsa
-|   |&#8211; bb_deploy.rsa.pub
-|   `&#8211; config
-`&#8211; static
-    `&#8211; admin
-&#8220;`
+<figure class='code'><figcaption><span>docker directories</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="p">|</span>-- docker-compose.yml
+</span><span class='line'><span class="p">|</span>-- Dockerfile
+</span><span class='line'><span class="p">|</span>-- ec2box.sh
+</span><span class='line'><span class="p">|</span>-- nginx
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- container_ip.sh
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- Dockerfile
+</span><span class='line'><span class="p">|</span>   <span class="sb">`</span>-- nginx.conf
+</span><span class='line'><span class="p">|</span>-- README.md
+</span><span class='line'><span class="p">|</span>-- rebuild_docker.sh
+</span><span class='line'><span class="p">|</span>-- ssh
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- bb_deploy.rsa
+</span><span class='line'><span class="p">|</span>   <span class="p">|</span>-- bb_deploy.rsa.pub
+</span><span class='line'><span class="p">|</span>   <span class="sb">`</span>-- config
+</span><span class='line'><span class="sb">`</span>-- static
+</span><span class='line'>    <span class="sb">`</span>-- admin
+</span></code></pre></td></tr></table></div></figure>
 
 * docker-compose.yml : The file that controls how docker-compose builds docker containers and runs them
 * Dockerfile : The Dockerfile for the django/angular container
@@ -131,33 +193,57 @@ small script which I needed when deploying on AWS
 
 The contents of docker-compose.yml are as follows -:
 
-&#8220;` yaml docker-compose.yml
-# Nginx
-nginx:
-    build: ./nginx
-    volumes_from:
-        - django
-    links:
-        - django
-    ports:
-        - &#8220;80:80&#8221;
-
-# This defines a service for the Django app
-# Will include the Angular frontend
-django:
-    build: .
-    volumes:
-        - .:/root
-        - /usr/src/app
-    expose:
-        - &#8220;8000&#8221;
-    links:
-        - postgres
-
-# This defines a service for the Postgres database
-postgres:
-    image: postgres:latest
-&#8220;`
+<figure class='code'><figcaption><span>docker-compose.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1"># Nginx</span>
+</span><span class='line'><span class="l-Scalar-Plain">nginx</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">./nginx</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">volumes_from</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">django</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">django</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="s">&quot;80:80&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># This defines a service for the Django app</span>
+</span><span class='line'><span class="c1"># Will include the Angular frontend</span>
+</span><span class='line'><span class="l-Scalar-Plain">django</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">.:/root</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">/usr/src/app</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">expose</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="s">&quot;8000&quot;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">postgres</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># This defines a service for the Postgres database</span>
+</span><span class='line'><span class="l-Scalar-Plain">postgres</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">postgres:latest</span>
+</span></code></pre></td></tr></table></div></figure>
 
 Note how the nginx container definition specifies a `volumes_from` section, of which the django
 container is a part. The host port 80 has been mapped to container port 80, as nginx requires.
@@ -178,56 +264,103 @@ The postgres definition is not much to talk about, as it is built from an image 
 
 Let&#8217;s take a look at the Dockerfile for the django container -:
 
-&#8220;` sh Dockerfile (django)
-FROM ubuntu:14.04
-
-ENV DJANGO_CONFIGURATION Docker
-
-# First, we need to get git, and clone our repository
-# Additionally, get everything else here too, such as nodejs and npm
-
-RUN apt-get update
-RUN apt-get install -y ca-certificates git-core ssh nodejs npm python-pip libpq-dev python-dev
-RUN ln -s /usr/bin/nodejs /usr/bin/node
-
-ENV HOME /root
-
-# Add custom ssh keypair - usually Bitbucket deployment keys
-ADD ssh/ /root/.ssh/
-
-# Fix permissions
-RUN chmod 600 /root/.ssh/*
-
-# Avoid first connection host confirmation
-RUN ssh-keyscan bitbucket.org > /root/.ssh/known_hosts
-
-# Clone the repo
-WORKDIR /usr/src/app
-RUN git clone git@bitbucket.org:username/repo
-
-# Install requirements
-WORKDIR /usr/src/app/repo
-RUN pip install -r requirements.txt
-RUN npm install -g bower
-RUN bower &#8211;allow-root install
-
-# S3 Storage for django-storages
-ENV AWS_ACCESS_KEY yourkeyhere
-ENV AWS_SECRET_ACCESS_KEY yoursecretsaucehere
-ENV S3_BUCKET_NAME yourbucketnamehere
-
-# DB Settings
-ENV DB_NAME postgres
-ENV DB_USER postgres
-ENV DB_PASS postgres
-ENV DB_SERVICE postgres
-
-# Add Django Admin CSS
-ADD ./static/admin /usr/src/app/repo/static/admin
-
-WORKDIR /usr/src/app/repo/defsec
-CMD [&#8220;gunicorn&#8221;, &#8220;app.wsgi&#8221;, &#8220;-w&#8221;, &#8220;2&#8221;, &#8220;-b&#8221;, &#8220;0.0.0.0:8000&#8221;, &#8220;&#8211;log-level&#8221;, &#8220;-&#8220;]
-&#8220;`
+<figure class='code'><figcaption><span>Dockerfile (django)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>FROM ubuntu:14.04
+</span><span class='line'>
+</span><span class='line'>ENV DJANGO_CONFIGURATION Docker
+</span><span class='line'>
+</span><span class='line'><span class="c"># First, we need to get git, and clone our repository</span>
+</span><span class='line'><span class="c"># Additionally, get everything else here too, such as nodejs and npm</span>
+</span><span class='line'>
+</span><span class='line'>RUN apt-get update
+</span><span class='line'>RUN apt-get install -y ca-certificates git-core ssh nodejs npm python-pip libpq-dev python-dev
+</span><span class='line'>RUN ln -s /usr/bin/nodejs /usr/bin/node
+</span><span class='line'>
+</span><span class='line'>ENV HOME /root
+</span><span class='line'>
+</span><span class='line'><span class="c"># Add custom ssh keypair - usually Bitbucket deployment keys</span>
+</span><span class='line'>ADD ssh/ /root/.ssh/
+</span><span class='line'>
+</span><span class='line'><span class="c"># Fix permissions</span>
+</span><span class='line'>RUN chmod <span class="m">600</span> /root/.ssh/*
+</span><span class='line'>
+</span><span class='line'><span class="c"># Avoid first connection host confirmation</span>
+</span><span class='line'>RUN ssh-keyscan bitbucket.org &gt; /root/.ssh/known_hosts
+</span><span class='line'>
+</span><span class='line'><span class="c"># Clone the repo</span>
+</span><span class='line'>WORKDIR /usr/src/app
+</span><span class='line'>RUN git clone git@bitbucket.org:username/repo
+</span><span class='line'>
+</span><span class='line'><span class="c"># Install requirements</span>
+</span><span class='line'>WORKDIR /usr/src/app/repo
+</span><span class='line'>RUN pip install -r requirements.txt
+</span><span class='line'>RUN npm install -g bower
+</span><span class='line'>RUN bower --allow-root install
+</span><span class='line'>
+</span><span class='line'><span class="c"># S3 Storage for django-storages</span>
+</span><span class='line'>ENV AWS_ACCESS_KEY yourkeyhere
+</span><span class='line'>ENV AWS_SECRET_ACCESS_KEY yoursecretsaucehere
+</span><span class='line'>ENV S3_BUCKET_NAME yourbucketnamehere
+</span><span class='line'>
+</span><span class='line'><span class="c"># DB Settings</span>
+</span><span class='line'>ENV DB_NAME postgres
+</span><span class='line'>ENV DB_USER postgres
+</span><span class='line'>ENV DB_PASS postgres
+</span><span class='line'>ENV DB_SERVICE postgres
+</span><span class='line'>
+</span><span class='line'><span class="c"># Add Django Admin CSS</span>
+</span><span class='line'>ADD ./static/admin /usr/src/app/repo/static/admin
+</span><span class='line'>
+</span><span class='line'>WORKDIR /usr/src/app/repo/defsec
+</span><span class='line'>CMD <span class="o">[</span><span class="s2">&quot;gunicorn&quot;</span>, <span class="s2">&quot;app.wsgi&quot;</span>, <span class="s2">&quot;-w&quot;</span>, <span class="s2">&quot;2&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;0.0.0.0:8000&quot;</span>, <span class="s2">&quot;--log-level&quot;</span>, <span class="s2">&quot;-&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
 
 The `DJANGO_CONFIGURATION` environment variable is used in django project settings. First, we
 install all the necessary command line tools, and create a symbolic link so that nodejs plays
@@ -244,106 +377,197 @@ for nginx to serve them) and run the gunicorn server.
 With that covered, let&#8217;s check out the contents of the nginx directory. First up is the nginx
 Dockerfile -:
 
-&#8220;` sh nginx Dockerfile
-# Set nginx base image
-FROM nginx
-
-# File Author / Maintainer
-MAINTAINER Pritish Chakraborty
-
-# Copy custom configuration file from the current directory
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Uncomment the commented Dockerfile lines below when pushing to AWS
-# COPY container_ip.sh /root/container_ip.sh
-
-# Get django container&#8217;s IP and put it in nginx.conf
-# RUN /root/container_ip.sh
-
-# Reload the damn nginx service
-# CMD [&#8220;service&#8221;, &#8220;nginx&#8221;, &#8220;restart&#8221;]
-CMD /usr/sbin/nginx -g &#8220;daemon off;&#8221;
-&#8220;`
+<figure class='code'><figcaption><span>nginx Dockerfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># Set nginx base image</span>
+</span><span class='line'>FROM nginx
+</span><span class='line'>
+</span><span class='line'><span class="c"># File Author / Maintainer</span>
+</span><span class='line'>MAINTAINER Pritish Chakraborty
+</span><span class='line'>
+</span><span class='line'><span class="c"># Copy custom configuration file from the current directory</span>
+</span><span class='line'>COPY nginx.conf /etc/nginx/nginx.conf
+</span><span class='line'>
+</span><span class='line'><span class="c"># Uncomment the commented Dockerfile lines below when pushing to AWS</span>
+</span><span class='line'><span class="c"># COPY container_ip.sh /root/container_ip.sh</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Get django container&#39;s IP and put it in nginx.conf</span>
+</span><span class='line'><span class="c"># RUN /root/container_ip.sh</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Reload the damn nginx service</span>
+</span><span class='line'><span class="c"># CMD [&quot;service&quot;, &quot;nginx&quot;, &quot;restart&quot;]</span>
+</span><span class='line'>CMD /usr/sbin/nginx -g <span class="s2">&quot;daemon off;&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 Not much to explain here until I get to the part about deploying to AWS. Here&#8217;s nginx.conf -:
 
-&#8220;` sh nginx.conf
-worker_processes 1;
-
-events {
-    worker_connections 1024;
-}
-
-http {
-
-    server {
-        listen 80;
-        server_name example.org;
-
-        access_log /dev/stdout;
-        error_log /dev/stdout info;
-
-        location /static/ {
-            alias /usr/src/app/repo/static;
-        }
-
-        location /static/javascripts/ {
-          default_type text/javascript;
-          alias /usr/src/app/repo/static/javascripts/;
-        }
-
-        location /static/stylesheets/ {
-          default_type text/css;
-          alias /usr/src/app/repo/static/stylesheets/;
-        }
-
-	location /static/bower_components/ {
-	  types {
-	    text/css css;
-	    text/javascript js;
-	  }
-	  alias /usr/src/app/repo/static/bower_components/;
-	}
-
-	location /static/partials/ {
-	  types {
-	    text/html html;
-	  }
-	  alias /usr/src/app/repo/static/partials/;
-	}
-
-	location /static/admin/ {
-          alias /usr/src/app/repo/static/admin/;
-	}
-
-	location /static/admin/css {
-	  default_type text/css;
-	  alias /usr/src/app/repo/static/admin/css;
-	}
-
-	location /static/admin/js {
-	  default_type text/javascript;
-	  alias /usr/src/app/repo/static/admin/js;
-	}
-
-	location /static/admin/img {
-	  types {
-	    image/png png;
-	    image/jpeg jpg;
-	  }
-	  alias /usr/src/app/repo/static/admin/img;
-	}
-
-        location / {
-            proxy_pass http://django:8000;
-            proxy_set_header   Host $host;
-            proxy_set_header   X-Real-IP $remote_addr;
-            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header   X-Forwarded-Host $server_name;
-        }
-    }
-}
-&#8220;`
+<figure class='code'><figcaption><span>nginx.conf</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>worker_processes 1<span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>events <span class="o">{</span>
+</span><span class='line'>    worker_connections 1024<span class="p">;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>http <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    server <span class="o">{</span>
+</span><span class='line'>        listen 80<span class="p">;</span>
+</span><span class='line'>        server_name example.org<span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        access_log /dev/stdout<span class="p">;</span>
+</span><span class='line'>        error_log /dev/stdout info<span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        location /static/ <span class="o">{</span>
+</span><span class='line'>            <span class="nb">alias</span> /usr/src/app/repo/static<span class="p">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        location /static/javascripts/ <span class="o">{</span>
+</span><span class='line'>          default_type text/javascript<span class="p">;</span>
+</span><span class='line'>          <span class="nb">alias</span> /usr/src/app/repo/static/javascripts/<span class="p">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        location /static/stylesheets/ <span class="o">{</span>
+</span><span class='line'>          default_type text/css<span class="p">;</span>
+</span><span class='line'>          <span class="nb">alias</span> /usr/src/app/repo/static/stylesheets/<span class="p">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>	location /static/bower_components/ <span class="o">{</span>
+</span><span class='line'>	  types <span class="o">{</span>
+</span><span class='line'>	    text/css css<span class="p">;</span>
+</span><span class='line'>	    text/javascript js<span class="p">;</span>
+</span><span class='line'>	  <span class="o">}</span>
+</span><span class='line'>	  <span class="nb">alias</span> /usr/src/app/repo/static/bower_components/<span class="p">;</span>
+</span><span class='line'>	<span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>	location /static/partials/ <span class="o">{</span>
+</span><span class='line'>	  types <span class="o">{</span>
+</span><span class='line'>	    text/html html<span class="p">;</span>
+</span><span class='line'>	  <span class="o">}</span>
+</span><span class='line'>	  <span class="nb">alias</span> /usr/src/app/repo/static/partials/<span class="p">;</span>
+</span><span class='line'>	<span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>	location /static/admin/ <span class="o">{</span>
+</span><span class='line'>          <span class="nb">alias</span> /usr/src/app/repo/static/admin/<span class="p">;</span>
+</span><span class='line'>	<span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>	location /static/admin/css <span class="o">{</span>
+</span><span class='line'>	  default_type text/css<span class="p">;</span>
+</span><span class='line'>	  <span class="nb">alias</span> /usr/src/app/repo/static/admin/css<span class="p">;</span>
+</span><span class='line'>	<span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>	location /static/admin/js <span class="o">{</span>
+</span><span class='line'>	  default_type text/javascript<span class="p">;</span>
+</span><span class='line'>	  <span class="nb">alias</span> /usr/src/app/repo/static/admin/js<span class="p">;</span>
+</span><span class='line'>	<span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>	location /static/admin/img <span class="o">{</span>
+</span><span class='line'>	  types <span class="o">{</span>
+</span><span class='line'>	    image/png png<span class="p">;</span>
+</span><span class='line'>	    image/jpeg jpg<span class="p">;</span>
+</span><span class='line'>	  <span class="o">}</span>
+</span><span class='line'>	  <span class="nb">alias</span> /usr/src/app/repo/static/admin/img<span class="p">;</span>
+</span><span class='line'>	<span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        location / <span class="o">{</span>
+</span><span class='line'>            proxy_pass http://django:8000<span class="p">;</span>
+</span><span class='line'>            proxy_set_header   Host <span class="nv">$host</span><span class="p">;</span>
+</span><span class='line'>            proxy_set_header   X-Real-IP <span class="nv">$remote_addr</span><span class="p">;</span>
+</span><span class='line'>            proxy_set_header   X-Forwarded-For <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+</span><span class='line'>            proxy_set_header   X-Forwarded-Host <span class="nv">$server_name</span><span class="p">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 As you can see, I had to make it very thorough about what files nginx was going to serve,
 from where, and what type mappings would the files have had. The latter had me stumped for
