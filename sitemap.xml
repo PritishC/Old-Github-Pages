@@ -1,98 +1,149 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>http://PritishC.github.io/blog/2016/02/13/review-workaholics-vs-high-performers/</loc>
-    <lastmod>2016-02-13T20:13:37+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2015/09/06/uploading-with-django-and-amazon-s3/</loc>
-    <lastmod>2015-09-06T17:20:49+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2015/09/04/docker-is-awesome-part-ii/</loc>
-    <lastmod>2015-09-04T22:56:15+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2015/09/03/docker-is-awesome/</loc>
-    <lastmod>2015-09-03T21:56:16+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2015/03/08/analyzing-stuff-with-google-analytics/</loc>
-    <lastmod>2015-03-08T12:37:36+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2015/01/25/development-cheatsheet/</loc>
-    <lastmod>2015-01-25T11:12:33+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example/</loc>
-    <lastmod>2014-11-02T19:22:17+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2014/10/24/overcoming-sd-card-write-restrictions/</loc>
-    <lastmod>2014-10-24T13:19:42+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2014/10/22/an-ode-to-nokia/</loc>
-    <lastmod>2014-10-22T10:11:23+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2014/10/21/beginning-tryton/</loc>
-    <lastmod>2014-10-21T12:05:18+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2014/10/19/postgres-setup/</loc>
-    <lastmod>2014-10-19T20:27:55+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2014/10/16/virtualenv-setup-for-tryton/</loc>
-    <lastmod>2014-10-16T22:31:26+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/2014/10/15/the-first-post/</loc>
-    <lastmod>2014-10-15T22:40:55+05:30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/blog/archives/</loc>
-    <lastmod>2016-06-27T12:21:23+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/</loc>
-    <lastmod>2016-06-27T12:21:23+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/work/</loc>
-    <lastmod>2016-06-27T12:21:23+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/about/</loc>
-    <lastmod>2016-06-27T12:21:23+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>http://PritishC.github.io/projects/</loc>
-    <lastmod>2016-06-27T12:21:23+05:30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
+<url>
+<loc>http://pritishc.github.io/blog/2017/11/11/ebay-india-a-cautionary-tale-of-pain-and-frustration/</loc>
+<lastmod>2017-11-11T14:13:04+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/2016/02/13/review-workaholics-vs-high-performers/</loc>
+<lastmod>2016-02-13T20:13:37+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/2015/09/06/uploading-with-django-and-amazon-s3/</loc>
+<lastmod>2015-09-06T17:20:49+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/2015/09/04/docker-is-awesome-part-ii/</loc>
+<lastmod>2015-09-04T22:56:15+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/2015/09/03/docker-is-awesome/</loc>
+<lastmod>2015-09-03T21:56:16+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/2015/03/08/analyzing-stuff-with-google-analytics/</loc>
+<lastmod>2015-03-08T12:37:36+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/2015/01/25/development-cheatsheet/</loc>
+<lastmod>2015-01-25T11:12:33+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/2014/11/02/tryton-module-basics-and-programming-example/</loc>
+<lastmod>2014-11-02T19:22:17+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/2014/10/24/overcoming-sd-card-write-restrictions/</loc>
+<lastmod>2014-10-24T13:19:42+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/2014/10/22/an-ode-to-nokia/</loc>
+<lastmod>2014-10-22T10:11:23+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/2014/10/21/beginning-tryton/</loc>
+<lastmod>2014-10-21T12:05:18+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/2014/10/19/postgres-setup/</loc>
+<lastmod>2014-10-19T20:27:55+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/2014/10/16/virtualenv-setup-for-tryton/</loc>
+<lastmod>2014-10-16T22:31:26+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/2014/10/15/the-first-post/</loc>
+<lastmod>2014-10-15T22:40:55+05:30</lastmod>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/archives/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/work/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/about/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/projects/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/general/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/tryton/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/virtualenv/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/postgresql/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/electronics/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/android/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/kitkat/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/github/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/openlabs/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/nereid/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/google/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/devops/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/docker/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/aws/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/django/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/angular/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/nginx/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/linkedin/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/article-review/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/ebay/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/e-commerce/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/fraud/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/xbox/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/blog/categories/microsoft/</loc>
+</url>
+<url>
+<loc>http://pritishc.github.io/posts/2/</loc>
+</url>
 </urlset>
