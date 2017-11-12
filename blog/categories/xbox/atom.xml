@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Xbox | Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/blog/categories/xbox/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2017-11-12T01:32:25+05:30</updated>
+  <updated>2017-11-12T13:32:01+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[[WIP] eBay India: A Cautionary Tale of Pain &amp; Frustration]]></title>
+    <title type="html"><![CDATA[eBay India: A Cautionary Tale of Pain &amp; Frustration]]></title>
     <link href="http://PritishC.github.io/blog/2017/11/11/ebay-india-a-cautionary-tale-of-pain-and-frustration/"/>
     <updated>2017-11-11T14:13:04+05:30</updated>
     <id>http://PritishC.github.io/blog/2017/11/11/ebay-india-a-cautionary-tale-of-pain-and-frustration</id>
@@ -27,8 +27,11 @@ online shoppers awake at night (long post ahead).
 I&#8217;m sure eBay users have been bombarded with &#8220;#REBOXED: *Try toh karke dekho*!&#8221; e-mails at some point. I&#8217;m
 not sure how well eBay are doing after their recent acquisition by Flipkart, but they&#8217;re alive still.
 The irony of them promoting refurbished items is what prompted me to write this post - almost eight months
-after I bought a (poorly) refurbished Xbox One from a seller on eBay, only to find that it was dead-on-arrival. What
-followed was months of frustration and back-and-forth with eBay India&#8217;s PaisaPay Guarantee team and
+after I bought a (poorly) refurbished Xbox One from a seller on eBay, only to find that it was dead-on-arrival.
+
+<span class='caption-wrapper'><img class='caption' src='https://d1ro8r1rbfn3jf.cloudfront.net/ms_85799/VzbXpzyQK89V5MYANoObaC4ahDWvqi/One%2Blast%2Bchance%2Bto%2Bgrab%2BEXTRA%2B10%2525%2BOff%2Bon%2BRefurbished%2BTODAY%2B-%2Bchakrabortypritish%2540gmail.com%2B-%2BGmail%2B2017-11-12%2B13-16-39.png?Expires=1510559391&Signature=D0knOFjg90w8Q6zXO7djU5hZ54VxmFvlatDr-ZcxdCJdvOj-tbeyDMpopYPPXey4kRAmdP2xPAnWL61qO~YUFw4i2lUAzTnfU8tjFCgkILIHRKaa7wlW2jpZMEMHM2xm3ZHbPsCaGj9zerXVEvUx1fHhqM3nELimasf4JnY-HgcN5qwwXNuV3reEYd2~6Bef2qwfcs-ts~ofyVrJGwb2O34nafqu8L8TUY0dQJsaX37lfUZjqk~T7t9n9AZJmSvWqZwtiJbBhxSnLF7xmIjOqjA-yDqmDpqjJxrtiXKQ340sqJlIQSHxNBA8zbPxW14dzcKKBDAB-b0XBY-j985n1A__&Key-Pair-Id=APKAJHEJJBIZWFB73RSA' width='' height='' title='Bugger off, man'><span class='caption-text'>Bugger off, man</span></span>
+
+What followed was months of frustration and back-and-forth with eBay India&#8217;s PaisaPay Guarantee team and
 Microsoft support. Amazon and Flipkart users (especially the former - their service is truly exceptional) are
 used to being coddled by their customer support teams. If you are expecting even 30% of the same, if not the exact
 same, from eBay India, **this post should make you change your mind**.
@@ -82,12 +85,49 @@ that they would say the same thing. On 25th, I received a call from eBay support
 I told them that I could not talk at the moment. They continued to send automated emails about uploading higher quality
 images on my claim page.
 
-**April 26**: I emailed them and asked them to call at a specific time in the evening. No luck.
+**April 26**: I emailed them and requested them to call at a specific time in the evening. No luck.
 
 **April 27**: Their claims team called me up and told me **that my claim was going to be rejected**. I asked to talk
 to a seniorperson but once again, they told me that the senior would say the same thing. I argued a lot but it led
 to a dead end. Perhaps I was going about it the wrong way? Perhaps I should&#8217;ve had the device replaced under warranty -
-maybe they were right. That night, I finally decided to check Microsoft&#8217;s Xbox portal and found, to my ironic amusement,
+maybe they were right?
+
+Now let&#8217;s take a breather before we dive into the spicy bits. When I asked my initial test audience to review this article,
+they (just the one guy out of this audience, actually) came up with a passionate defence of eBay, of how its workers are
+underpaid, how it has its own distinct style and identity, of how I did not read the fine print and the item description
+and deserved to fall into this hole of misery, and finally of how me expecting a better user experience after having
+used competitor sites like Amazon (and uptil recently, Flipkart) was akin to digging this hole for myself.
+
+Let&#8217;s address these comments one by one.
+
+*Workers underpaid*: While I feel for them, having been grossly underpaid at the beginning of my career, I don&#8217;t get
+how this is my fault and why this somehow excuses them into treating my case like they did.
+
+*Distinct style and identity*: Perhaps eBay should state this in bold on their website&#8217;s landing pages and mention
+that they&#8217;re only for e-commerce power users who look at the 2000s through nostalgia glasses.
+
+*Item description*: This came up because the audience pointed out that I did not immediately email the seller on their
+work email, which was mentioned near the bottom of the listing. Somehow this also meant that I did not read the item
+description. This point will be addressed entirely by the next section, after our intermission.
+
+*User experience*: I explained that the modern user generalizes e-commerce websites in their mind for ease of use. While
+the user understands that eBay is first and foremost an auction platform, they expect some basic things from these platforms -
+user experience and decent customer service. These are merely the standards that the competition has set. Not adhering to
+them is why people moved to competitors in droves in the first place. eBay didn&#8217;t get acquired because it had great
+intrinsic value, it got acquired because Flipkart thinks that it&#8217;s assembling its own version of the Avengers against the
+big bad Amazon, except none of them have superpowers and Amazon has a lot of cash.
+
+All in all, these arguments combined sound suspiciously like a *this are just how things are* argument. Maybe the next
+time you&#8217;re standing in a huge line at an old-style, inefficiently run government office, think of the guy behind the
+counter as being underpaid and deserving of your bribe money, and the office as having their own distinct identity and
+style of running things.
+
+<span class='caption-wrapper'><img class='caption' src='http://www.fakingnews.firstpost.com/wp-content/uploads/2017/07/Laughing-pics.jpg' width='' height='' title='This is just how things are, fool. It's lunch hour now, see ya later.'><span class='caption-text'>This is just how things are, fool. It&#8217;s lunch hour now, see ya later.</span></span>
+
+With all that out of the way, and me successfully coming off as a pompous, poor people hating asshole, let&#8217;s get to the
+second half of our movie, with plot twist and all.
+
+**April 27 (contd)**: That night, I finally decided to check Microsoft&#8217;s Xbox portal and found, to my ironic amusement,
 **that the device was not even under manufacturer warranty**. After all of eBay&#8217;s stonewalling, I learned that I could
 not even take the device to a Microsoft service center. 
 
@@ -122,9 +162,9 @@ device was indeed expired. I forwarded this to eBay, but at this juncture, I kne
 
 <img src="/images/xbox/microsoft/1.png">
 
-<img src="/images/xbox/microsoft/2.png">
+<span class='caption-wrapper'><img class='caption' src='/images/xbox/microsoft/2.png' width='' height='' title='Jayce and Cove were both MS support executives'><span class='caption-text'>Jayce and Cove were both MS support executives</span></span>
 
-<img src="/images/xbox/microsoft/3.png">
+<span class='caption-wrapper'><img class='caption' src='/images/xbox/microsoft/3.png' width='' height='' title='File a case - what do you think I'd been doing until then mate?'><span class='caption-text'>File a case - what do you think I&#8217;d been doing until then mate?</span></span>
 
 **May 2**: I had my final call with eBay support. I was told that my case could be forwarded back to the claims team, but
 that they would only reject it without this mythical DOA letter. I provided all the information and evidence to them one
@@ -133,17 +173,20 @@ last time, but their reply had the familiar phrases - &#8220;policy&#8221;, &#82
 After this, on the advice of my friend (last ditch effort), I contacted the seller on eBay with all the information,
 as well as a mild threat that I would take the matter to court. They never responded, and what was even funnier was that
 there were **several other people who complained about this seller on eBay&#8217;s product ratings page for various product listings**.
-Some of them had a similar complaint to mine - that the product was dysfunctional and not under warranty as claimed by the seller.
-I couldn&#8217;t fathom how this guy continued to sell on eBay, but then I figured that if eBay Guarantee was full of such *horseshit*,
-of course the guy would get away with it.
+
+When I first bought the device, there was only the one positive review on the Xbox listing, and I hadn&#8217;t bothered to look hard
+enough at the negative reviews of the seller&#8217;s other listings. There were multiple complaints of the product not being under
+warranty that would&#8217;ve raised suspicion in my mind. The Xbox complaints came later.
+
+What beats me is how this guy continued to sell on eBay after all these complaints, but then I figured that if eBay Guarantee was full of such *horseshit*, of course the guy would get away with it.
 
 <span class='caption-wrapper'><img class='caption' src='/images/xbox/xbox_seller_feedback.png' width='' height='' title='There were some hilarious negative reviews too, apart from the warranty complaints'><span class='caption-text'>There were some hilarious negative reviews too, apart from the warranty complaints</span></span>
 
-So if you happen to come across a refurbished product on eBay and decide to buy, hell, I would probably encourage you to if it&#8217;s
-a good deal. But keep in mind that -:
+So if you come across a refurbished product on eBay and decide to buy, hell, I would probably encourage you to if it&#8217;s a good deal.
+But keep in mind that -:
 
 1. The seller should have a 95% or more rating - an absolute must.
-2. The hassle that you would have to go through if you end up with a shit product - I don&#8217;t think an acquisition will change things.
+2. The hassle that you would have to go through if you end up with a shit product - I don&#8217;t think an acquisition will have changed things.
 
 Happy shopping!
 
