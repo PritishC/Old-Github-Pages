@@ -4,7 +4,7 @@
   <title><![CDATA[Pritish Chakraborty]]></title>
   <link href="http://PritishC.github.io/atom.xml" rel="self"/>
   <link href="http://PritishC.github.io/"/>
-  <updated>2017-11-13T23:40:34+05:30</updated>
+  <updated>2017-11-14T00:10:24+05:30</updated>
   <id>http://PritishC.github.io/</id>
   <author>
     <name><![CDATA[Pritish Chakraborty]]></name>
@@ -52,19 +52,22 @@ The market price at the time was 26k or so, so it seemed like a great deal.</p>
 &ldquo;Green Screen of Death&rdquo;. I had tried Microsoft&rsquo;s device reset technique to no avail. I then filed an eBay
 guarantee claim on their portal. Below is a recording of the product listing that I took (view in fullscreen mode).</p>
 
-<p><video width='700' height='400' preload='none' controls poster='http://pritishc.com/images/xbox/eBay_Xbox_listing.jpg'><source src='https://drive.google.com/uc?export=download&id=0BwmnpLMd0XH9Y1IycVFpdGdDdzQ' ></video></p>
+<p><span class='caption-wrapper'><img class='caption' src='http://PritishC.github.io/images/xbox/eBay_Xbox_listing.gif' width='1600' height='1600' title='Product Listing'><span class='caption-text'>Product Listing</span></span></p>
 
 <p><strong>April 9</strong>: I received a call from eBay&rsquo;s claims team. The guy was not in the <em>least bit</em> interested in
 resolving my issue. He kept parroting the &ldquo;fact&rdquo; that the device <strong>was under warranty, and that I should go
-to the manufacturer and get the device replaced</strong>. He repeatedly said that they would close the claim.
-It took me a few seconds to process what the <em>hell</em> was going on, but once I got my bearings, I shot back
+to the manufacturer and get the device replaced</strong>. He repeatedly said that they would close the claim.</p>
+
+<p>It took me a few seconds to process what the <em>hell</em> was going on, but once I got my bearings, I shot back
 that <strong>if the seller would&rsquo;ve specified on their listing that the device was to be non-functional/dead,
 I would&rsquo;ve not purchased it in the first place</strong>.</p>
 
 <p>This seemed to confuse the claims guy, and he put me on hold for 10 more minutes. He then reiterated that
 <strong>eBay&rsquo;s policy on refurbished items under &ldquo;warranty&rdquo; prevents them from doing anything about it</strong>, but said
 that he would not close my claim as per my request. Bear in mind that all this happened during the time I was
-getting into my car to head to office. The guy wasted a good 20-25 minutes of my time heckling me with
+getting into my car to head to office.</p>
+
+<p>The guy wasted a good 20-25 minutes of my time heckling me with
 &ldquo;close claim huehuehuehu&rdquo; and left just as unceremoniously. After this incident, my claim would go into a
 black hole for 10 days.</p>
 
@@ -74,11 +77,11 @@ probably hoping that I would give up and close it myself. I wasn&rsquo;t going t
 <p><strong>April 18</strong>: I received a customer support reply stating that they were still investigating my case and that I
 should be patient. In the meanwhile, they kept asking me to <strong>upload higher quality images of the device on their
 claims portal</strong>. I offered to give them videos that I&rsquo;d recorded of the device failing to boot, but they did not
-acknowledge it. <strong>There was no option to upload videos on their portal, almost as if it was designed to frustrate
-the customer</strong>. The portal itself looked like something out of the early 2000s. I sent these videos in emails to
-their customer service, but they ignored them each time.</p>
+acknowledge it.</p>
 
-<p><video width='700' height='400' preload='none' controls poster='http://pritishc.com/images/xbox/MOV_0311.jpg'><source src='https://drive.google.com/uc?export=download&id=1DxuPCr_Ox1j28YfVP0CHgK3AIy0V_pwr3Q' ></video></p>
+<p><strong>There was no option to upload videos on their portal, almost as if it was designed to frustrate the customer</strong>.
+The portal itself looked like something out of the early 2000s. I sent these videos in emails to their customer
+service, but they ignored them each time.</p>
 
 <p><strong>April 25</strong>: On my very first call with eBay (claims team, which is different from their support team, as I would
 come to realize later), I had also requested followup with a seniorperson, but they had refused to oblige, stating
@@ -115,9 +118,10 @@ that eBay contacts the seller as part of the resolution process, and the seller 
 <p><em>User experience</em>: I explained that the modern user generalizes e-commerce websites in their mind for ease of use. While
 the user understands that eBay is first and foremost an auction platform, they expect some basic things from these platforms -
 user experience and decent customer service. These are merely the standards that the competition has set. Not adhering to
-them is why people moved to competitors in droves in the first place. eBay didn&rsquo;t get acquired because it had great
-intrinsic value, it got acquired because Flipkart thinks that it&rsquo;s assembling its own version of the Avengers against the
-big bad Amazon, except none of them have superpowers and Amazon has a lot of cash.</p>
+them is why people moved to competitors in droves in the first place.</p>
+
+<p>eBay didn&rsquo;t get acquired because it had great intrinsic value, it got acquired because Flipkart thinks that it&rsquo;s assembling
+its own version of the Avengers against the big bad Amazon, except none of them have superpowers and Amazon has a lot of cash.</p>
 
 <p>All in all, these arguments combined sound suspiciously like a <em>this is just how things are</em> argument. Maybe the next
 time you&rsquo;re standing in a huge line at an old-style, inefficiently run government office, think of the guy behind the
@@ -135,9 +139,10 @@ not even take the device to a Microsoft service center.</p>
 
 <p>I tried emailing customer support about this several times on the Friday of that week, with proof of warranty having
 expired in 2016, but I got the same reply from multiple support team executives - <strong>that I would need to acquire a
-dead-on-arrival letter from a Microsoft service center</strong>, with the appraiser&rsquo;s contact details and address. I was going
-to find out that no one &ldquo;goes&rdquo; to a Microsoft service center - we&rsquo;re meant to request pickup-and-drop if the machine is
-under warranty. eBay was hell-bent on making this impossible for me, and I just wouldn&rsquo;t take the hint.</p>
+dead-on-arrival letter from a Microsoft service center</strong>, with the appraiser&rsquo;s contact details and address.</p>
+
+<p>I was going to find out that no one &ldquo;goes&rdquo; to a Microsoft service center - we&rsquo;re meant to request pickup-and-drop if
+the machine is under warranty. eBay was hell-bent on making this impossible for me, and I just wouldn&rsquo;t take the hint.</p>
 
 <p><strong>April 29-30</strong>: I called up eBay customer service, argued with the service executive and got through to a senior executive.
 I told this executive (Ms. Baninder, posted at eBay&rsquo;s Gujarat center) the steps I took to confirm that my device was indeed
