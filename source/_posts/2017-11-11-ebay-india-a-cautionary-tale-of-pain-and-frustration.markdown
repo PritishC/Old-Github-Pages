@@ -17,7 +17,7 @@ not sure how well eBay are doing after their recent acquisition by Flipkart, but
 The irony of them promoting refurbished items is what prompted me to write this post - almost eight months
 after I bought a (poorly) refurbished Xbox One from a seller on eBay, only to find that it was dead-on-arrival.
 
-{% imgcap https://d1ro8r1rbfn3jf.cloudfront.net/ms_85799/VzbXpzyQK89V5MYANoObaC4ahDWvqi/One%2Blast%2Bchance%2Bto%2Bgrab%2BEXTRA%2B10%2525%2BOff%2Bon%2BRefurbished%2BTODAY%2B-%2Bchakrabortypritish%2540gmail.com%2B-%2BGmail%2B2017-11-12%2B13-16-39.png?Expires=1510559391&Signature=D0knOFjg90w8Q6zXO7djU5hZ54VxmFvlatDr-ZcxdCJdvOj-tbeyDMpopYPPXey4kRAmdP2xPAnWL61qO~YUFw4i2lUAzTnfU8tjFCgkILIHRKaa7wlW2jpZMEMHM2xm3ZHbPsCaGj9zerXVEvUx1fHhqM3nELimasf4JnY-HgcN5qwwXNuV3reEYd2~6Bef2qwfcs-ts~ofyVrJGwb2O34nafqu8L8TUY0dQJsaX37lfUZjqk~T7t9n9AZJmSvWqZwtiJbBhxSnLF7xmIjOqjA-yDqmDpqjJxrtiXKQ340sqJlIQSHxNBA8zbPxW14dzcKKBDAB-b0XBY-j985n1A__&Key-Pair-Id=APKAJHEJJBIZWFB73RSA Bugger off, man %}
+{% imgcap /images/xbox/ebay_offer.png Bugger off, man %}
 
 What followed was months of frustration and back-and-forth with eBay India's PaisaPay Guarantee team and
 Microsoft support. Amazon and Flipkart users (especially the former - their service is truly exceptional) are
@@ -39,7 +39,7 @@ The market price at the time was 26k or so, so it seemed like a great deal.
 "Green Screen of Death". I had tried Microsoft's device reset technique to no avail. I then filed an eBay
 guarantee claim on their portal. Below is a recording of the product listing that I took (view in fullscreen mode).
 
-{% video https://drive.google.com/uc?export=download&id=0BwmnpLMd0XH9Y1IycVFpdGdDdzQ 700 400 https://lh5.googleusercontent.com/MnElzFvLONkv3jxJwNJW7aSOa81_sjwvbLAMIynmeVjmLgrvYLhZtSA2Vpv94OFWo6ak8I37N_KW94E=w853-h480-n-k-rw %}
+{% video https://drive.google.com/uc?export=download&id=0BwmnpLMd0XH9Y1IycVFpdGdDdzQ 700 400 https://raw.githubusercontent.com/PritishC/PritishC.github.io/master/images/xbox/eBay_Xbox_listing.jpg %}
 
 **April 9**: I received a call from eBay's claims team. The guy was not in the *least bit* interested in
 resolving my issue. He kept parroting the "fact" that the device **was under warranty, and that I should go
@@ -65,7 +65,7 @@ acknowledge it. **There was no option to upload videos on their portal, almost a
 the customer**. The portal itself looked like something out of the early 2000s. I sent these videos in emails to
 their customer service, but they ignored them each time.
 
-{% video https://drive.google.com/uc?export=download&id=1DxuPCr_Ox1j28YfVP0CHgK3AIy0V_pwr3Q 700 400 %}
+{% video https://drive.google.com/uc?export=download&id=1DxuPCr_Ox1j28YfVP0CHgK3AIy0V_pwr3Q 700 400 https://raw.githubusercontent.com/PritishC/PritishC.github.io/master/images/xbox/MOV_0311.jpg %}
 
 **April 25**: On my very first call with eBay (claims team, which is different from their support team, as I would
 come to realize later), I had also requested followup with a seniorperson, but they had refused to oblige, stating
@@ -92,11 +92,12 @@ Let's address these comments one by one.
 how this is my fault and why this somehow excuses them into treating my case like they did.
 
 *Distinct style and identity*: Perhaps eBay should state this in bold on their website's landing pages and mention
-that they're only for e-commerce power users who look at the 2000s through nostalgia glasses.
+that they're only for e-commerce power users who look at the 2000s through nostalgia goggles.
 
 *Item description*: This came up because the audience pointed out that I did not immediately email the seller on their
 work email, which was mentioned near the bottom of the listing. Somehow this also meant that I did not read the item
-description. This point will be addressed entirely by the next section, after our intermission.
+description. This point will be addressed entirely by the next section, after our intermission. There is also the fact
+that eBay contacts the seller as part of the resolution process, and the seller did not budge.
 
 *User experience*: I explained that the modern user generalizes e-commerce websites in their mind for ease of use. While
 the user understands that eBay is first and foremost an auction platform, they expect some basic things from these platforms -
@@ -105,7 +106,7 @@ them is why people moved to competitors in droves in the first place. eBay didn'
 intrinsic value, it got acquired because Flipkart thinks that it's assembling its own version of the Avengers against the
 big bad Amazon, except none of them have superpowers and Amazon has a lot of cash.
 
-All in all, these arguments combined sound suspiciously like a *this are just how things are* argument. Maybe the next
+All in all, these arguments combined sound suspiciously like a *this is just how things are* argument. Maybe the next
 time you're standing in a huge line at an old-style, inefficiently run government office, think of the guy behind the
 counter as being underpaid and deserving of your bribe money, and the office as having their own distinct identity and
 style of running things.
@@ -163,10 +164,11 @@ as well as a mild threat that I would take the matter to court. They never respo
 there were **several other people who complained about this seller on eBay's product ratings page for various product listings**.
 
 When I first bought the device, there was only the one positive review on the Xbox listing, and I hadn't bothered to look hard
-enough at the negative reviews of the seller's other listings. There were multiple complaints of the product not being under
+enough at the negative reviews of the seller's other listings. There were multiple complaints of the other products not being under
 warranty that would've raised suspicion in my mind. The Xbox complaints came later.
 
-What beats me is how this guy continued to sell on eBay after all these complaints, but then I figured that if eBay Guarantee was full of such *horseshit*, of course the guy would get away with it.
+What beats me is how this guy continued to sell on eBay after all these complaints, but then I figured that if eBay Guarantee was full of such *horseshit*, of course the guy would get away with it. When independently testing the accessories that came with the device, I found even the Xbox
+controller to be broken/not working. I didn't bother to test the Kinect module after that.
 
 {% imgcap /images/xbox/xbox_seller_feedback.png There were some hilarious negative reviews too, apart from the warranty complaints %}
 
@@ -175,5 +177,9 @@ But keep in mind that -:
 
 1. The seller should have a 95% or more rating - an absolute must.
 2. The hassle that you would have to go through if you end up with a shit product - I don't think an acquisition will have changed things.
+
+And if you're wondering what the redeeming factor of this story is, or what the ultimate payoff is - there is none. I lost a hard-earned 18,000,
+something I did not think was possible in this era of e-commerce, and learned a life lesson. Let that sink in for a minute - it's all fun and
+games until it's you on the receiving end. Think of the two points above when making purchases, and you should be fine (mostly).
 
 Happy shopping!
